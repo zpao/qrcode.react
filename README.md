@@ -31,3 +31,4 @@ prop      | type                 | default value
 `bgColor` | `string` (CSS color) | `"#FFFFFF"`
 `fgColor` | `string` (CSS color) | `"#000000"`
 
+![](qrcode.png)
