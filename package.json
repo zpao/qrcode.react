@@ -24,7 +24,7 @@
   ],
   "dependencies": {
     "qr.js": "0.0.0",
-    "react": "^0.10.0"
+    "react": "^0.11.0"
   },
   "devDependencies": {
     "browserify": "^4.2.0",
