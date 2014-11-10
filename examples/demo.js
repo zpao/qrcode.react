@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 var QRCode = require('../index');
 var React = require('react');
 
