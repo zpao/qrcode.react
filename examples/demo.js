@@ -33,70 +33,70 @@ this.state.fgColor + "\"}\n/>\n"
 
 );
     return (
-      React.DOM.div(null, 
-        React.DOM.div(null, 
-          React.DOM.label(null, 
-            "Size(px):",
-            React.DOM.br(null),
-            React.DOM.input(
-              {ref:"size",
-              type:"number",
-              onChange:this.update,
-              value:this.state.size}
+      React.createElement("div", null, 
+        React.createElement("div", null, 
+          React.createElement("label", null, 
+            "Size(px):", 
+            React.createElement("br", null), 
+            React.createElement("input", {
+              ref: "size", 
+              type: "number", 
+              onChange: this.update, 
+              value: this.state.size}
             )
           )
-        ),
-        React.DOM.div(null, 
-          React.DOM.label(null, 
-            "Background Color:",
-            React.DOM.br(null),
-            React.DOM.input(
-              {ref:"bgColor",
-              type:"color",
-              onChange:this.update,
-              value:this.state.bgColor}
+        ), 
+        React.createElement("div", null, 
+          React.createElement("label", null, 
+            "Background Color:", 
+            React.createElement("br", null), 
+            React.createElement("input", {
+              ref: "bgColor", 
+              type: "color", 
+              onChange: this.update, 
+              value: this.state.bgColor}
             )
           )
-        ),
-        React.DOM.div(null, 
-          React.DOM.label(null, 
-            "Foreground Color:",
-            React.DOM.br(null),
-            React.DOM.input(
-              {ref:"fgColor",
-              type:"color",
-              onChange:this.update,
-              value:this.state.fgColor}
+        ), 
+        React.createElement("div", null, 
+          React.createElement("label", null, 
+            "Foreground Color:", 
+            React.createElement("br", null), 
+            React.createElement("input", {
+              ref: "fgColor", 
+              type: "color", 
+              onChange: this.update, 
+              value: this.state.fgColor}
             )
           )
-        ),
-        React.DOM.div(null, 
-          React.DOM.label(null, 
-            "Value:",
-            React.DOM.br(null),
-            React.DOM.textarea(
-              {rows:"6",
-              cols:"80",
-              ref:"value",
-              onChange:this.update,
-              value:this.state.value}
+        ), 
+        React.createElement("div", null, 
+          React.createElement("label", null, 
+            "Value:", 
+            React.createElement("br", null), 
+            React.createElement("textarea", {
+              rows: "6", 
+              cols: "80", 
+              ref: "value", 
+              onChange: this.update, 
+              value: this.state.value}
             )
           )
-        ),
+        ), 
 
-        React.DOM.div(null, 
-          React.DOM.label(null, 
-            "Use it:",
-            React.DOM.br(null),
-            React.DOM.textarea( {rows:"6", cols:"80", disabled:true, value:code} )
+        React.createElement("div", null, 
+          React.createElement("label", null, 
+            "Use it:", 
+            React.createElement("br", null), 
+            React.createElement("textarea", {rows: "6", cols: "80", disabled: true, value: code})
           )
-        ),
+        ), 
 
-        QRCode(
-          {value:this.state.value,
-          size:this.state.size,
-          fgColor:this.state.fgColor,
-          bgColor:this.state.bgColor}
+        React.createElement(QRCode, {
+          value: this.state.value, 
+          size: this.state.size, 
+          fgColor: this.state.fgColor, 
+          bgColor: this.state.bgColor}
         )
       )
     );
@@ -104,6 +104,6 @@ this.state.fgColor + "\"}\n/>\n"
 });
 
 React.renderComponent(
-  Demo(null ),
+  React.createElement(Demo, null),
   document.getElementById('demo')
 );

@@ -48,10 +48,10 @@ var QRCode = React.createClass({displayName: 'QRCode',
 
   render: function() {
     return (
-      React.DOM.canvas(
-        {height:this.props.size,
-        width:this.props.size,
-        ref:"canvas"}
+      React.createElement("canvas", {
+        height: this.props.size, 
+        width: this.props.size, 
+        ref: "canvas"}
       )
     );
   }
