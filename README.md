@@ -16,6 +16,8 @@ npm install qrcode.react
 var React = require('react');
 var QRCode = require('qrcode.react');
 
+// `React.render` for `>=v0.12`,
+// otherwise use `React.renderComponent`
 React.renderComponent(
   <QRCode value="http://facebook.github.io/react/" />,
   mountNode
