@@ -101,7 +101,7 @@ var Demo = React.createClass({
   }
 });
 
-React.renderComponent(
+React.render(
   <Demo />,
   document.getElementById('demo')
 );
