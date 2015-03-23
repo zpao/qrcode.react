@@ -23,11 +23,13 @@
     "index.js"
   ],
   "dependencies": {
-    "qr.js": "0.0.0",
-    "react": "^0.12.0"
+    "qr.js": "0.0.0"
+  },
+  "peerDependencies": {
+    "react": "0.12 - 0.13"
   },
   "devDependencies": {
     "browserify": "^4.2.0",
-    "react-tools": "^0.12.0"
+    "react-tools": "^0.13.0"
   }
 }
