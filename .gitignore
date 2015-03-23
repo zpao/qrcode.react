@@ -1,2 +1,4 @@
 node_modules/
+index.js
 examples/bundle.js
+examples/demo.js
