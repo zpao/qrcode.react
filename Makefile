@@ -10,4 +10,4 @@ examples/bundle.js: index.js examples/demo.js
 	./node_modules/.bin/browserify examples/demo.js -o examples/bundle.js
 
 clean:
-	rm index.js examples/demo.js examples/bundle.js
+	rm -f index.js examples/demo.js examples/bundle.js
