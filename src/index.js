@@ -17,6 +17,10 @@ var QRCode = React.createClass({
     };
   },
 
+  shouldComponentUpdate: function(nextProps) {
+    return Object.keys(QRCode.propTypes).some((k) => this.props[k] !== nextProps[k]);
+  },
+
   componentDidMount: function() {
     this.update();
   },
