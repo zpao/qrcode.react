@@ -1,6 +1,17 @@
 var React = require('react');
 var qr = require('qr.js');
 
+function getBackingStorePixelRatio(ctx) {
+  return (
+    ctx.webkitBackingStorePixelRatio ||
+    ctx.mozBackingStorePixelRatio ||
+    ctx.msBackingStorePixelRatio ||
+    ctx.oBackingStorePixelRatio ||
+    ctx.backingStorePixelRatio ||
+    1
+  );
+}
+
 var QRCode = React.createClass({
   propTypes: {
     value: React.PropTypes.string.isRequired,
@@ -37,6 +48,9 @@ var QRCode = React.createClass({
     var cells = qrcode.modules;
     var tileW = this.props.size / cells.length;
     var tileH = this.props.size / cells.length;
+    var scale = window.devicePixelRatio / getBackingStorePixelRatio(ctx);
+    canvas.height = canvas.width = this.props.size * scale;
+    ctx.scale(scale, scale);
 
     cells.forEach(function(row, rdx) {
       row.forEach(function(cell, cdx) {
@@ -51,6 +65,7 @@ var QRCode = React.createClass({
   render: function() {
     return (
       <canvas
+        style={{height: this.props.size, width: this.props.size}}
         height={this.props.size}
         width={this.props.size}
         ref="canvas"
