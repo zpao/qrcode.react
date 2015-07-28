@@ -20,7 +20,7 @@
   },
   "license": "ISC",
   "files": [
-    "index.js"
+    "lib"
   ],
   "dependencies": {
     "qr.js": "0.0.0"
@@ -29,7 +29,7 @@
     "react": "0.12 - 0.13"
   },
   "devDependencies": {
-    "browserify": "^4.2.0",
-    "react-tools": "^0.13.0"
+    "babel": "^5.8.12",
+    "browserify": "^4.2.0"
   }
 }
