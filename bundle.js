@@ -1,19 +1,23 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-var QRCode = require('../index');
+'use strict';
+
+var QRCode = require('..');
 var React = require('react');
 
 // TODO: live update demo
-var Demo = React.createClass({displayName: "Demo",
-  getInitialState: function() {
+var Demo = React.createClass({
+  displayName: 'Demo',
+
+  getInitialState: function getInitialState() {
     return {
       value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
       size: 128,
       fgColor: '#000000',
       bgColor: '#ffffff'
-    }
+    };
   },
 
-  update: function() {
+  update: function update() {
     this.setState({
       value: this.refs.value.getDOMNode().value || '',
       size: parseInt(this.refs.size.getDOMNode().value) || 0,
@@ -22,96 +26,112 @@ var Demo = React.createClass({displayName: "Demo",
     });
   },
 
-  render: function() {
-    var code = ("\n<QRCode\n  value={\"" + 
-
-this.state.value + "\"}\n  size={" + 
-this.state.size + "}\n  bgColor={\"" + 
-this.state.bgColor + "\"}\n  fgColor={\"" + 
-this.state.fgColor + "\"}\n/>\n"
-
-);
-    return (
-      React.createElement("div", null, 
-        React.createElement("div", null, 
-          React.createElement("label", null, 
-            "Size(px):", 
-            React.createElement("br", null), 
-            React.createElement("input", {
-              ref: "size", 
-              type: "number", 
-              onChange: this.update, 
-              value: this.state.size}
-            )
-          )
-        ), 
-        React.createElement("div", null, 
-          React.createElement("label", null, 
-            "Background Color:", 
-            React.createElement("br", null), 
-            React.createElement("input", {
-              ref: "bgColor", 
-              type: "color", 
-              onChange: this.update, 
-              value: this.state.bgColor}
-            )
-          )
-        ), 
-        React.createElement("div", null, 
-          React.createElement("label", null, 
-            "Foreground Color:", 
-            React.createElement("br", null), 
-            React.createElement("input", {
-              ref: "fgColor", 
-              type: "color", 
-              onChange: this.update, 
-              value: this.state.fgColor}
-            )
-          )
-        ), 
-        React.createElement("div", null, 
-          React.createElement("label", null, 
-            "Value:", 
-            React.createElement("br", null), 
-            React.createElement("textarea", {
-              rows: "6", 
-              cols: "80", 
-              ref: "value", 
-              onChange: this.update, 
-              value: this.state.value}
-            )
-          )
-        ), 
-
-        React.createElement("div", null, 
-          React.createElement("label", null, 
-            "Use it:", 
-            React.createElement("br", null), 
-            React.createElement("textarea", {rows: "6", cols: "80", disabled: true, value: code})
-          )
-        ), 
-
-        React.createElement(QRCode, {
-          value: this.state.value, 
-          size: this.state.size, 
-          fgColor: this.state.fgColor, 
-          bgColor: this.state.bgColor}
+  render: function render() {
+    var code = '\n<QRCode\n  value={"' + this.state.value + '"}\n  size={' + this.state.size + '}\n  bgColor={"' + this.state.bgColor + '"}\n  fgColor={"' + this.state.fgColor + '"}\n/>\n';
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'div',
+        null,
+        React.createElement(
+          'label',
+          null,
+          'Size(px):',
+          React.createElement('br', null),
+          React.createElement('input', {
+            ref: "size",
+            type: "number",
+            onChange: this.update,
+            value: this.state.size
+          })
         )
-      )
+      ),
+      React.createElement(
+        'div',
+        null,
+        React.createElement(
+          'label',
+          null,
+          'Background Color:',
+          React.createElement('br', null),
+          React.createElement('input', {
+            ref: "bgColor",
+            type: "color",
+            onChange: this.update,
+            value: this.state.bgColor
+          })
+        )
+      ),
+      React.createElement(
+        'div',
+        null,
+        React.createElement(
+          'label',
+          null,
+          'Foreground Color:',
+          React.createElement('br', null),
+          React.createElement('input', {
+            ref: "fgColor",
+            type: "color",
+            onChange: this.update,
+            value: this.state.fgColor
+          })
+        )
+      ),
+      React.createElement(
+        'div',
+        null,
+        React.createElement(
+          'label',
+          null,
+          'Value:',
+          React.createElement('br', null),
+          React.createElement('textarea', {
+            rows: "6",
+            cols: "80",
+            ref: "value",
+            onChange: this.update,
+            value: this.state.value
+          })
+        )
+      ),
+      React.createElement(
+        'div',
+        null,
+        React.createElement(
+          'label',
+          null,
+          'Use it:',
+          React.createElement('br', null),
+          React.createElement('textarea', { rows: "6", cols: "80", disabled: true, value: code })
+        )
+      ),
+      React.createElement(QRCode, {
+        value: this.state.value,
+        size: this.state.size,
+        fgColor: this.state.fgColor,
+        bgColor: this.state.bgColor
+      })
     );
   }
 });
 
-React.render(
-  React.createElement(Demo, null),
-  document.getElementById('demo')
-);
+React.render(React.createElement(Demo, null), document.getElementById('demo'));
 
-},{"../index":2,"react":168}],2:[function(require,module,exports){
+},{"..":2,"react":168}],2:[function(require,module,exports){
+'use strict';
+
 var React = require('react');
 var qr = require('qr.js');
 
-var QRCode = React.createClass({displayName: "QRCode",
+function getBackingStorePixelRatio(ctx) {
+  return ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1;
+}
+
+var QRCode = React.createClass({
+  displayName: 'QRCode',
+
   propTypes: {
     value: React.PropTypes.string.isRequired,
     size: React.PropTypes.number,
@@ -119,7 +139,7 @@ var QRCode = React.createClass({displayName: "QRCode",
     fgColor: React.PropTypes.string
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function getDefaultProps() {
     return {
       size: 128,
       bgColor: '#FFFFFF',
@@ -127,15 +147,23 @@ var QRCode = React.createClass({displayName: "QRCode",
     };
   },
 
-  componentDidMount: function() {
+  shouldComponentUpdate: function shouldComponentUpdate(nextProps) {
+    var _this = this;
+
+    return Object.keys(QRCode.propTypes).some(function (k) {
+      return _this.props[k] !== nextProps[k];
+    });
+  },
+
+  componentDidMount: function componentDidMount() {
     this.update();
   },
 
-  componentDidUpdate: function() {
+  componentDidUpdate: function componentDidUpdate() {
     this.update();
   },
 
-  update: function() {
+  update: function update() {
     var qrcode = qr(this.props.value);
     var canvas = this.refs.canvas.getDOMNode();
 
@@ -143,25 +171,27 @@ var QRCode = React.createClass({displayName: "QRCode",
     var cells = qrcode.modules;
     var tileW = this.props.size / cells.length;
     var tileH = this.props.size / cells.length;
+    var scale = window.devicePixelRatio / getBackingStorePixelRatio(ctx);
+    canvas.height = canvas.width = this.props.size * scale;
+    ctx.scale(scale, scale);
 
-    cells.forEach(function(row, rdx) {
-      row.forEach(function(cell, cdx) {
+    cells.forEach(function (row, rdx) {
+      row.forEach(function (cell, cdx) {
         ctx.fillStyle = cell ? this.props.fgColor : this.props.bgColor;
-        var w = (Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW));
-        var h = (Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH));
+        var w = Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW);
+        var h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH);
         ctx.fillRect(Math.round(cdx * tileW), Math.round(rdx * tileH), w, h);
       }, this);
     }, this);
   },
 
-  render: function() {
-    return (
-      React.createElement("canvas", {
-        height: this.props.size, 
-        width: this.props.size, 
-        ref: "canvas"}
-      )
-    );
+  render: function render() {
+    return React.createElement('canvas', {
+      style: { height: this.props.size, width: this.props.size },
+      height: this.props.size,
+      width: this.props.size,
+      ref: "canvas"
+    });
   }
 });
 
