@@ -8,7 +8,7 @@
     "qrcode"
   ],
   "homepage": "http://zpao.github.io/qrcode.react",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "prepublish": "make clean && make all",
     "test": "echo \"Error: no test specified\" && exit 1"

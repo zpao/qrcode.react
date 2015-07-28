@@ -1,4 +1,4 @@
-var QRCode = require('../index');
+var QRCode = require('..');
 var React = require('react');
 
 // TODO: live update demo
@@ -105,4 +105,3 @@ React.render(
   <Demo />,
   document.getElementById('demo')
 );
-
