@@ -41,25 +41,26 @@ var QRCode = React.createClass({
   },
 
   update: function() {
-    var qrcode = qr(this.props.value);
+    var {value, size, bgColor, fgColor} = this.props;
+    var qrcode = qr(value);
     var canvas = this.refs.canvas.getDOMNode();
 
     var ctx = canvas.getContext('2d');
     var cells = qrcode.modules;
-    var tileW = this.props.size / cells.length;
-    var tileH = this.props.size / cells.length;
+    var tileW = size / cells.length;
+    var tileH = size / cells.length;
     var scale = window.devicePixelRatio / getBackingStorePixelRatio(ctx);
-    canvas.height = canvas.width = this.props.size * scale;
+    canvas.height = canvas.width = size * scale;
     ctx.scale(scale, scale);
 
     cells.forEach(function(row, rdx) {
       row.forEach(function(cell, cdx) {
-        ctx.fillStyle = cell ? this.props.fgColor : this.props.bgColor;
+        ctx.fillStyle = cell ? fgColor : bgColor;
         var w = (Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW));
         var h = (Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH));
         ctx.fillRect(Math.round(cdx * tileW), Math.round(rdx * tileH), w, h);
-      }, this);
-    }, this);
+      });
+    });
   },
 
   render: function() {
