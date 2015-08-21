@@ -6,7 +6,7 @@ lib:
 lib/index.js: lib src/index.js
 	./node_modules/.bin/babel src -d lib
 
-examples/bundle.js: lib/index.js
+examples/bundle.js: lib/index.js examples/demo.js
 	./node_modules/.bin/browserify -t babelify examples/demo.js -o examples/bundle.js
 
 clean:
