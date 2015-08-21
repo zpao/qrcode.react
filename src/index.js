@@ -17,7 +17,8 @@ var QRCode = React.createClass({
     value: React.PropTypes.string.isRequired,
     size: React.PropTypes.number,
     bgColor: React.PropTypes.string,
-    fgColor: React.PropTypes.string
+    fgColor: React.PropTypes.string,
+    logo: React.PropTypes.string
   },
 
   getDefaultProps: function() {
@@ -60,6 +61,17 @@ var QRCode = React.createClass({
         ctx.fillRect(Math.round(cdx * tileW), Math.round(rdx * tileH), w, h);
       }, this);
     }, this);
+
+    if(this.props.logo) {
+      var size = this.props.size;
+      var image = document.createElement('img');
+      image.src = this.props.logo;
+      image.onload = function () {
+          var dx = size/2 - size*0.1;
+          var dwidth = size*0.2;
+          ctx.drawImage(image, dx, dx, dwidth, dwidth);
+      }
+    }
   },
 
   render: function() {
