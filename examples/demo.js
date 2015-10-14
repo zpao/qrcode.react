@@ -1,3 +1,5 @@
+'use strict';
+
 var QRCode = require('..');
 var React = require('react');
 
@@ -8,7 +10,7 @@ var Demo = React.createClass({
       value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
       size: 128,
       fgColor: '#000000',
-      bgColor: '#ffffff'
+      bgColor: '#ffffff',
     }
   },
 
@@ -17,7 +19,7 @@ var Demo = React.createClass({
       value: this.refs.value.getDOMNode().value || '',
       size: parseInt(this.refs.size.getDOMNode().value) || 0,
       bgColor: this.refs.bgColor.getDOMNode().value,
-      fgColor: this.refs.fgColor.getDOMNode().value
+      fgColor: this.refs.fgColor.getDOMNode().value,
     });
   },
 
@@ -98,7 +100,7 @@ var Demo = React.createClass({
         />
       </div>
     );
-  }
+  },
 });
 
 React.render(

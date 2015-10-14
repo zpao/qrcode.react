@@ -1,3 +1,5 @@
+'use strict';
+
 var React = require('react');
 var qr = require('qr.js');
 
@@ -17,14 +19,14 @@ var QRCode = React.createClass({
     value: React.PropTypes.string.isRequired,
     size: React.PropTypes.number,
     bgColor: React.PropTypes.string,
-    fgColor: React.PropTypes.string
+    fgColor: React.PropTypes.string,
   },
 
   getDefaultProps: function() {
     return {
       size: 128,
       bgColor: '#FFFFFF',
-      fgColor: '#000000'
+      fgColor: '#000000',
     };
   },
 
@@ -72,7 +74,7 @@ var QRCode = React.createClass({
         ref="canvas"
       />
     );
-  }
+  },
 });
 
 module.exports = QRCode;

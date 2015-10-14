@@ -10,6 +10,7 @@
   "homepage": "http://zpao.github.io/qrcode.react",
   "main": "lib/index.js",
   "scripts": {
+    "lint": "eslint src/ examples/demo.js",
     "prepublish": "make clean && make all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,8 +30,11 @@
     "react": "0.12 - 0.13"
   },
   "devDependencies": {
-    "babel": "^5.8.12",
-    "babelify": "^6.1.3",
-    "browserify": "^4.2.0"
+    "babel": "^5.8.23",
+    "babel-eslint": "^4.1.3",
+    "babelify": "^6.3.0",
+    "browserify": "^4.2.0",
+    "eslint": "^1.6.0",
+    "eslint-plugin-react": "^3.5.1"
   }
 }
