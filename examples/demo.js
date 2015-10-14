@@ -2,6 +2,7 @@
 
 var QRCode = require('..');
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 // TODO: live update demo
 var Demo = React.createClass({
@@ -16,10 +17,10 @@ var Demo = React.createClass({
 
   update: function() {
     this.setState({
-      value: this.refs.value.getDOMNode().value || '',
-      size: parseInt(this.refs.size.getDOMNode().value) || 0,
-      bgColor: this.refs.bgColor.getDOMNode().value,
-      fgColor: this.refs.fgColor.getDOMNode().value,
+      value: this.refs.value.value || '',
+      size: parseInt(this.refs.size.value) || 0,
+      bgColor: this.refs.bgColor.value,
+      fgColor: this.refs.fgColor.value,
     });
   },
 
@@ -103,7 +104,7 @@ var Demo = React.createClass({
   },
 });
 
-React.render(
+ReactDOM.render(
   <Demo />,
   document.getElementById('demo')
 );

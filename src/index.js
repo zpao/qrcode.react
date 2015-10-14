@@ -14,6 +14,13 @@ function getBackingStorePixelRatio(ctx) {
   );
 }
 
+var getDOMNode;
+if (/^0\.14/.test(React.version)) {
+  getDOMNode = (ref) => ref;
+} else {
+  getDOMNode = (ref) => ref.getDOMNode();
+}
+
 var QRCode = React.createClass({
   propTypes: {
     value: React.PropTypes.string.isRequired,
@@ -45,7 +52,7 @@ var QRCode = React.createClass({
   update: function() {
     var {value, size, bgColor, fgColor} = this.props;
     var qrcode = qr(value);
-    var canvas = this.refs.canvas.getDOMNode();
+    var canvas = getDOMNode(this.refs.canvas);
 
     var ctx = canvas.getContext('2d');
     var cells = qrcode.modules;
