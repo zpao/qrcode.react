@@ -25,14 +25,12 @@ var Demo = React.createClass({
   },
 
   render: function() {
-    var code = `
-<QRCode
+    var code = `<QRCode
   value={"${this.state.value}"}
   size={${this.state.size}}
   bgColor={"${this.state.bgColor}"}
   fgColor={"${this.state.fgColor}"}
-/>
-`;
+/>`;
     return (
       <div>
         <div>
