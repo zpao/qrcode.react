@@ -58,7 +58,7 @@ var QRCode = React.createClass({
     var cells = qrcode.modules;
     var tileW = size / cells.length;
     var tileH = size / cells.length;
-    var scale = window.devicePixelRatio / getBackingStorePixelRatio(ctx);
+    var scale = (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx);
     canvas.height = canvas.width = size * scale;
     ctx.scale(scale, scale);
 
