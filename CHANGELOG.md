@@ -1,3 +1,6 @@
+# v0.5.2
+- Fixed bug preventing usage in IE < 11
+
 #v0.5.1
 - Extend support to React v0.14
 
