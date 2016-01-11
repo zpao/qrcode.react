@@ -25,6 +25,7 @@ var QRCode = React.createClass({
   propTypes: {
     value: React.PropTypes.string.isRequired,
     size: React.PropTypes.number,
+    level: React.PropTypes.oneOf(['L', 'M', 'Q', 'H']),
     bgColor: React.PropTypes.string,
     fgColor: React.PropTypes.string,
   },
@@ -32,6 +33,7 @@ var QRCode = React.createClass({
   getDefaultProps: function() {
     return {
       size: 128,
+      level: 'L',
       bgColor: '#FFFFFF',
       fgColor: '#000000',
     };
@@ -49,9 +51,18 @@ var QRCode = React.createClass({
     this.update();
   },
 
+  getErrorCorrectLevel: function(level) {
+    return {
+      L: 1, M: 0, Q: 3, H: 2
+    }[level];
+  },
+
   update: function() {
-    var {value, size, bgColor, fgColor} = this.props;
-    var qrcode = qr(value);
+    var {value, size, level, bgColor, fgColor} = this.props;
+    var qrcode = qr(value, {
+      errorCorrectLevel: this.getErrorCorrectLevel(level)
+    });
+
     var canvas = getDOMNode(this.refs.canvas);
 
     var ctx = canvas.getContext('2d');
