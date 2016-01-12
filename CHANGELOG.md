@@ -1,3 +1,12 @@
+## [Unreleased]
+
+### Added
+- Added support for specifying the Error Correction level (e.g. `level="H"`)
+
+### Changed
+- Default Error Correction level is now `'L'` (was implicitly `'H'`)
+
+
 ## [0.5.2] - 2015-11-20
 
 ### Fixed
