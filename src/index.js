@@ -1,7 +1,10 @@
 'use strict';
 
 var React = require('react');
-var qr = require('qr.js');
+// qr.js doesn't handle error level of zero (M) so we need to do it right,
+// thus the deep require.
+var QRCodeImpl = require('qr.js/lib/QRCode');
+var ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
 
 function getBackingStorePixelRatio(ctx) {
   return (
@@ -51,17 +54,13 @@ var QRCode = React.createClass({
     this.update();
   },
 
-  getErrorCorrectLevel: function(level) {
-    return {
-      L: 1, M: 0, Q: 3, H: 2
-    }[level];
-  },
-
   update: function() {
     var {value, size, level, bgColor, fgColor} = this.props;
-    var qrcode = qr(value, {
-      errorCorrectLevel: this.getErrorCorrectLevel(level)
-    });
+
+    // We'll use type===-1 to force QRCode to automatically pick the best type
+    var qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
+    qrcode.addData(value);
+    qrcode.make();
 
     var canvas = getDOMNode(this.refs.canvas);
 
