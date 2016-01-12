@@ -12,6 +12,7 @@ var Demo = React.createClass({
       size: 128,
       fgColor: '#000000',
       bgColor: '#ffffff',
+      level: 'L',
     }
   },
 
@@ -21,6 +22,7 @@ var Demo = React.createClass({
       size: parseInt(this.refs.size.value) || 0,
       bgColor: this.refs.bgColor.value,
       fgColor: this.refs.fgColor.value,
+      level: this.refs.level.value,
     });
   },
 
@@ -30,6 +32,7 @@ var Demo = React.createClass({
   size={${this.state.size}}
   bgColor={"${this.state.bgColor}"}
   fgColor={"${this.state.fgColor}"}
+  level={"${this.state.level}"}
 />`;
     return (
       <div>
@@ -71,6 +74,21 @@ var Demo = React.createClass({
         </div>
         <div>
           <label>
+            Error Level:
+            <br/>
+            <select
+              ref="level"
+              onChange={this.update}
+              value={this.state.level}>
+              <option value="L">L</option>
+              <option value="M">M</option>
+              <option value="Q">Q</option>
+              <option value="H">H</option>
+            </select>
+          </label>
+        </div>
+        <div>
+          <label>
             Value:
             <br/>
             <textarea
@@ -96,6 +114,7 @@ var Demo = React.createClass({
           size={this.state.size}
           fgColor={this.state.fgColor}
           bgColor={this.state.bgColor}
+          level={this.state.level}
         />
       </div>
     );
