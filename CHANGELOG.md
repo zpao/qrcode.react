@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+
+## [0.6.0] - 2016-02-02
+
 ### Added
 - Added support for specifying the Error Correction level (e.g. `level="H"`)
 
