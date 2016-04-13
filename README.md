@@ -2,17 +2,19 @@
 
 A React component to generate [QR codes](http://en.wikipedia.org/wiki/QR_code).
 
+Works with React v15+
+
 ## Installation
 
 ```sh
-npm install qrcode.react
+npm install qrcode.react.v15
 ```
 
 ## Usage
 
 ```js
 var React = require('react');
-var QRCode = require('qrcode.react');
+var QRCode = require('qrcode.react.v15');
 
 React.render(
   <QRCode value="http://facebook.github.io/react/" />,
