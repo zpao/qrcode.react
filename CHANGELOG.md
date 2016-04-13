@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.6.1] - 2016-04-13
+
+- Extended support to React v15
+
 
 ## [0.6.0] - 2016-02-02
 
