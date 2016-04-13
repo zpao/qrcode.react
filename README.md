@@ -5,7 +5,7 @@ A React component to generate [QR codes](http://en.wikipedia.org/wiki/QR_code).
 ## Installation
 
 ```sh
-npm install qrcode.react
+npm install qrcode.react.v15
 ```
 
 ## Usage
