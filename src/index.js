@@ -18,7 +18,7 @@ function getBackingStorePixelRatio(ctx) {
 }
 
 var getDOMNode;
-if (/^0\.14/.test(React.version)) {
+if (/^0\.14/.test(React.version) || React.version.split('.')[0] >= 15) {
   getDOMNode = (ref) => ref;
 } else {
   getDOMNode = (ref) => ref.getDOMNode();
