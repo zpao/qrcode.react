@@ -12,7 +12,7 @@ npm install qrcode.react.v15
 
 ```js
 var React = require('react');
-var QRCode = require('qrcode.react');
+var QRCode = require('qrcode.react.v15');
 
 React.render(
   <QRCode value="http://facebook.github.io/react/" />,
