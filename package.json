@@ -27,7 +27,7 @@
     "qr.js": "0.0.0"
   },
   "peerDependencies": {
-    "react": "0.12 - 0.14"
+    "react": "0.12 - 0.14 || ^15.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.4.0",
@@ -38,7 +38,7 @@
     "browserify": "^13.0.0",
     "eslint": "^1.6.0",
     "eslint-plugin-react": "^3.5.1",
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0"
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0"
   }
 }
