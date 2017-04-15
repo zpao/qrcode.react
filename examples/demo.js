@@ -3,9 +3,10 @@
 var QRCode = require('..');
 var React = require('react');
 var ReactDOM = require('react-dom');
+var createReactClass = require('create-react-class');
 
 // TODO: live update demo
-var Demo = React.createClass({
+var Demo = createReactClass({
   getInitialState: function() {
     return {
       value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',

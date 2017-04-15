@@ -1,6 +1,8 @@
 'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
+var PropTypes = require('prop-types');
 // qr.js doesn't handle error level of zero (M) so we need to do it right,
 // thus the deep require.
 var QRCodeImpl = require('qr.js/lib/QRCode');
@@ -27,13 +29,13 @@ if (version[0] === '0' && version[1] === '13' || version[1] === '12') {
   getDOMNode = (ref) => ref;
 }
 
-var QRCode = React.createClass({
+var QRCode = createReactClass({
   propTypes: {
-    value: React.PropTypes.string.isRequired,
-    size: React.PropTypes.number,
-    level: React.PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-    bgColor: React.PropTypes.string,
-    fgColor: React.PropTypes.string,
+    value: PropTypes.string.isRequired,
+    size: PropTypes.number,
+    level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
+    bgColor: PropTypes.string,
+    fgColor: PropTypes.string,
   },
 
   getDefaultProps: function() {
