@@ -36,9 +36,10 @@
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
+    "create-react-class": "^15.5.2",
     "eslint": "^1.6.0",
     "eslint-plugin-react": "^3.5.1",
-    "react": "^15.0.0",
-    "react-dom": "^15.0.0"
+    "react": "^15.5.3",
+    "react-dom": "^15.5.3"
   }
 }

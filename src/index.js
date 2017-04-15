@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var PropTypes = require('prop-types');
 // qr.js doesn't handle error level of zero (M) so we need to do it right,
 // thus the deep require.
 var QRCodeImpl = require('qr.js/lib/QRCode');
@@ -41,7 +42,7 @@ class QRCode extends React.Component {
   }
 
   update() {
-    var { value, size, level, bgColor, fgColor } = this.props;
+    var {value, size, level, bgColor, fgColor} = this.props;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     var qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -71,7 +72,7 @@ class QRCode extends React.Component {
   render() {
     return (
       <canvas
-        style={{ height: this.props.size, width: this.props.size }}
+        style={{height: this.props.size, width: this.props.size}}
         height={this.props.size}
         width={this.props.size}
         ref="canvas"
@@ -81,11 +82,11 @@ class QRCode extends React.Component {
 }
 
 QRCode.propTypes = {
-  value: React.PropTypes.string.isRequired,
-  size: React.PropTypes.number,
-  level: React.PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-  bgColor: React.PropTypes.string,
-  fgColor: React.PropTypes.string,
+  value: PropTypes.string.isRequired,
+  size: PropTypes.number,
+  level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
+  bgColor: PropTypes.string,
+  fgColor: PropTypes.string,
 };
 
 QRCode.defaultProps = {
