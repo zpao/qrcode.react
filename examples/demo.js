@@ -3,21 +3,18 @@
 var QRCode = require('..');
 var React = require('react');
 var ReactDOM = require('react-dom');
-var createReactClass = require('create-react-class');
 
 // TODO: live update demo
-var Demo = createReactClass({
-  getInitialState: function() {
-    return {
-      value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
-      size: 128,
-      fgColor: '#000000',
-      bgColor: '#ffffff',
-      level: 'L',
-    }
-  },
+class Demo extends React.Component {
+  state = {
+    value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
+    size: 128,
+    fgColor: '#000000',
+    bgColor: '#ffffff',
+    level: 'L',
+  }
 
-  update: function() {
+  update = () => {
     this.setState({
       value: this.refs.value.value || '',
       size: parseInt(this.refs.size.value) || 0,
@@ -25,9 +22,9 @@ var Demo = createReactClass({
       fgColor: this.refs.fgColor.value,
       level: this.refs.level.value,
     });
-  },
+  }
 
-  render: function() {
+  render() {
     var code = `<QRCode
   value={"${this.state.value}"}
   size={${this.state.size}}
@@ -119,8 +116,8 @@ var Demo = createReactClass({
         />
       </div>
     );
-  },
-});
+  }
+}
 
 ReactDOM.render(
   <Demo />,
