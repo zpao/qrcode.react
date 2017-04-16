@@ -13,6 +13,8 @@
     "lint": "eslint src/ examples/demo.js",
     "pretty": "prettier --write --single-quote --bracket-spacing=false --trailing-comma=es5 {.eslintrc.js,src/*.js,examples/demo.js}",
     "prepublish": "make clean && make all",
+    "prepublish-docs": "make clean && make all",
+    "publish-docs": "gh-pages --dist=examples --src='{index.html,bundle.js}'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Paul O’Shannessy <paul@oshannessy.com>",
@@ -42,6 +44,7 @@
     "eslint": "^3.19.0",
     "eslint-config-prettier": "^1.6.0",
     "eslint-plugin-react": "^3.16.1",
+    "gh-pages": "^0.12.0",
     "prettier": "^1.1.0",
     "react": "^15.5.3",
     "react-dom": "^15.5.3"
