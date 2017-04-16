@@ -12,7 +12,7 @@ class Demo extends React.Component {
     fgColor: '#000000',
     bgColor: '#ffffff',
     level: 'L',
-  }
+  };
 
   update = () => {
     this.setState({
@@ -22,7 +22,7 @@ class Demo extends React.Component {
       fgColor: this.refs.fgColor.value,
       level: this.refs.level.value,
     });
-  }
+  };
 
   render() {
     var code = `<QRCode
@@ -37,7 +37,7 @@ class Demo extends React.Component {
         <div>
           <label>
             Size(px):
-            <br/>
+            <br />
             <input
               ref="size"
               type="number"
@@ -49,7 +49,7 @@ class Demo extends React.Component {
         <div>
           <label>
             Background Color:
-            <br/>
+            <br />
             <input
               ref="bgColor"
               type="color"
@@ -61,7 +61,7 @@ class Demo extends React.Component {
         <div>
           <label>
             Foreground Color:
-            <br/>
+            <br />
             <input
               ref="fgColor"
               type="color"
@@ -73,11 +73,8 @@ class Demo extends React.Component {
         <div>
           <label>
             Error Level:
-            <br/>
-            <select
-              ref="level"
-              onChange={this.update}
-              value={this.state.level}>
+            <br />
+            <select ref="level" onChange={this.update} value={this.state.level}>
               <option value="L">L</option>
               <option value="M">M</option>
               <option value="Q">Q</option>
@@ -88,7 +85,7 @@ class Demo extends React.Component {
         <div>
           <label>
             Value:
-            <br/>
+            <br />
             <textarea
               rows="6"
               cols="80"
@@ -102,7 +99,7 @@ class Demo extends React.Component {
         <div>
           <label>
             Use it:
-            <br/>
+            <br />
             <textarea rows="6" cols="80" disabled={true} value={code} />
           </label>
         </div>
@@ -119,7 +116,4 @@ class Demo extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <Demo />,
-  document.getElementById('demo')
-);
+ReactDOM.render(<Demo />, document.getElementById('demo'));

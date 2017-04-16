@@ -11,6 +11,7 @@
   "main": "lib/index.js",
   "scripts": {
     "lint": "eslint src/ examples/demo.js",
+    "pretty": "prettier --write --single-quote --bracket-spacing=false --trailing-comma=es5 {.eslintrc.js,src/*.js,examples/demo.js}",
     "prepublish": "make clean && make all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -32,14 +33,15 @@
   },
   "devDependencies": {
     "babel-cli": "^6.4.0",
-    "babel-eslint": "^4.1.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
-    "eslint": "^1.6.0",
-    "eslint-plugin-react": "^3.5.1",
+    "eslint": "^3.19.0",
+    "eslint-config-prettier": "^1.6.0",
+    "eslint-plugin-react": "^3.16.1",
+    "prettier": "^1.1.0",
     "react": "^15.5.3",
     "react-dom": "^15.5.3"
   }

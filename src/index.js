@@ -20,7 +20,9 @@ function getBackingStorePixelRatio(ctx) {
 
 class QRCode extends React.Component {
   shouldComponentUpdate(nextProps) {
-    return Object.keys(QRCode.propTypes).some((k) => this.props[k] !== nextProps[k]);
+    return Object.keys(QRCode.propTypes).some(
+      k => this.props[k] !== nextProps[k]
+    );
   }
 
   componentDidMount() {
@@ -52,8 +54,8 @@ class QRCode extends React.Component {
     cells.forEach(function(row, rdx) {
       row.forEach(function(cell, cdx) {
         ctx.fillStyle = cell ? fgColor : bgColor;
-        var w = (Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW));
-        var h = (Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH));
+        var w = Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW);
+        var h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH);
         ctx.fillRect(Math.round(cdx * tileW), Math.round(rdx * tileH), w, h);
       });
     });
