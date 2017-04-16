@@ -10,9 +10,10 @@
   "homepage": "http://zpao.github.io/qrcode.react",
   "main": "lib/index.js",
   "scripts": {
+    "flow": "flow",
     "lint": "eslint src/ examples/demo.js",
     "pretty": "prettier --write --single-quote --bracket-spacing=false --trailing-comma=es5 {.eslintrc.js,src/*.js,examples/demo.js}",
-    "prepublish": "make clean && make all",
+    "prepublish": "flow && make clean && make all",
     "prepublish-docs": "make clean && make all",
     "publish-docs": "gh-pages --dist=examples --src='{index.html,bundle.js}'",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -27,6 +28,7 @@
     "lib"
   ],
   "dependencies": {
+    "flow-bin": "^0.44.0",
     "prop-types": "^15.5.8",
     "qr.js": "0.0.0"
   },

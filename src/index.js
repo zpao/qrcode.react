@@ -1,3 +1,5 @@
+// @flow
+
 'use strict';
 
 var React = require('react');
@@ -7,19 +9,50 @@ var PropTypes = require('prop-types');
 var QRCodeImpl = require('qr.js/lib/QRCode');
 var ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
 
-function getBackingStorePixelRatio(ctx) {
+function getBackingStorePixelRatio(ctx: CanvasRenderingContext2D): number {
   return (
+    // $FlowFixMe
     ctx.webkitBackingStorePixelRatio ||
+    // $FlowFixMe
     ctx.mozBackingStorePixelRatio ||
+    // $FlowFixMe
     ctx.msBackingStorePixelRatio ||
+    // $FlowFixMe
     ctx.oBackingStorePixelRatio ||
+    // $FlowFixMe
     ctx.backingStorePixelRatio ||
     1
   );
 }
 
+type Props = {
+  value: string,
+  size: number,
+  level: 'L' | 'M' | 'Q' | 'H',
+  bgColor: string,
+  fgColor: string,
+};
+
 class QRCode extends React.Component {
-  shouldComponentUpdate(nextProps) {
+  props: Props;
+  _canvas: ?HTMLCanvasElement;
+
+  static defaultProps = {
+    size: 128,
+    level: 'L',
+    bgColor: '#FFFFFF',
+    fgColor: '#000000',
+  };
+
+  static propTypes = {
+    value: PropTypes.string.isRequired,
+    size: PropTypes.number,
+    level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
+    bgColor: PropTypes.string,
+    fgColor: PropTypes.string,
+  };
+
+  shouldComponentUpdate(nextProps: Props) {
     return Object.keys(QRCode.propTypes).some(
       k => this.props[k] !== nextProps[k]
     );
@@ -41,24 +74,36 @@ class QRCode extends React.Component {
     qrcode.addData(value);
     qrcode.make();
 
-    var canvas = this.refs.canvas;
+    if (this._canvas != null) {
+      var canvas = this._canvas;
 
-    var ctx = canvas.getContext('2d');
-    var cells = qrcode.modules;
-    var tileW = size / cells.length;
-    var tileH = size / cells.length;
-    var scale = (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx);
-    canvas.height = canvas.width = size * scale;
-    ctx.scale(scale, scale);
+      var ctx = canvas.getContext('2d');
+      if (!ctx) {
+        return;
+      }
+      var cells = (qrcode.modules: [[number]]);
+      var tileW = (size / cells.length: number);
+      var tileH = (size / cells.length: number);
+      var scale =
+        (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx);
+      canvas.height = canvas.width = size * scale;
+      ctx.scale(scale, scale);
 
-    cells.forEach(function(row, rdx) {
-      row.forEach(function(cell, cdx) {
-        ctx.fillStyle = cell ? fgColor : bgColor;
-        var w = Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW);
-        var h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH);
-        ctx.fillRect(Math.round(cdx * tileW), Math.round(rdx * tileH), w, h);
+      cells.forEach(function(row, rdx) {
+        row.forEach(function(cell, cdx) {
+          ctx && (ctx.fillStyle = cell ? fgColor : bgColor);
+          var w = Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW);
+          var h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH);
+          ctx &&
+            ctx.fillRect(
+              Math.round(cdx * tileW),
+              Math.round(rdx * tileH),
+              w,
+              h
+            );
+        });
       });
-    });
+    }
   }
 
   render() {
@@ -67,25 +112,11 @@ class QRCode extends React.Component {
         style={{height: this.props.size, width: this.props.size}}
         height={this.props.size}
         width={this.props.size}
-        ref="canvas"
+        ref={(ref: ?HTMLCanvasElement): ?HTMLCanvasElement =>
+          this._canvas = ref}
       />
     );
   }
 }
-
-QRCode.propTypes = {
-  value: PropTypes.string.isRequired,
-  size: PropTypes.number,
-  level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-  bgColor: PropTypes.string,
-  fgColor: PropTypes.string,
-};
-
-QRCode.defaultProps = {
-  size: 128,
-  level: 'L',
-  bgColor: '#FFFFFF',
-  fgColor: '#000000',
-};
 
 module.exports = QRCode;
