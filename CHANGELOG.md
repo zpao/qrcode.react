@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [0.7.0] - 2017-04-25
+
+### Removed
+- Removed support for React < 15.5
+
+
 ## [0.6.1] - 2016-04-13
 
 - Extended support to React v15
