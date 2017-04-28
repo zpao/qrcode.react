@@ -31,3 +31,6 @@ prop      | type                 | default value
 `level`   | `string` (`'L' 'M' 'Q' 'H'`)            | `'L'`
 
 <img src="qrcode.png" height="256" width="256">
+
+
+## LICENSE [ISC](LICENSE)
