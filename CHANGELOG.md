@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+
+## [0.7.1] - 2017-04-27
+
+### Fixed
+- Removed `flow-bin` from `dependencies`
+
+
 ## [0.7.0] - 2017-04-25
 
 ### Removed
