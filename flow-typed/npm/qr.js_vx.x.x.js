@@ -13,6 +13,15 @@
  * https://github.com/flowtype/flow-typed
  */
 
+type errorLevels = {
+  L: 1,
+  M: 0,
+  Q: 3,
+  H: 2,
+};
+type errorLevels$keys = $Keys<errorLevels>;
+type errorLevels$values = 0 | 1 | 2 | 3;
+
 declare module 'qr.js' {
   declare module.exports: any;
 }
@@ -35,7 +44,7 @@ declare module 'qr.js/lib/BitBuffer' {
 }
 
 declare module 'qr.js/lib/ErrorCorrectLevel' {
-  declare module.exports: any;
+  declare module.exports: errorLevels;
 }
 
 declare module 'qr.js/lib/math' {
@@ -51,7 +60,17 @@ declare module 'qr.js/lib/Polynomial' {
 }
 
 declare module 'qr.js/lib/QRCode' {
-  declare module.exports: any;
+  declare class QRCode {
+    // I don't know how to get specific values from errorLevels...
+    constructor(
+      typeNumber: number,
+      errorCorrectLevel: errorLevels$values
+    ): void,
+    make(): void,
+    addData(data: any): void,
+    modules: [[boolean]] | null,
+  }
+  declare module.exports: typeof QRCode;
 }
 
 declare module 'qr.js/lib/RSBlock' {

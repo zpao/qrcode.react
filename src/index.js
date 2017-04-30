@@ -28,7 +28,7 @@ function getBackingStorePixelRatio(ctx: CanvasRenderingContext2D): number {
 type Props = {
   value: string,
   size: number,
-  level: 'L' | 'M' | 'Q' | 'H',
+  level: $Keys<typeof ErrorCorrectLevel>,
   bgColor: string,
   fgColor: string,
 };
@@ -81,9 +81,12 @@ class QRCode extends React.Component {
       if (!ctx) {
         return;
       }
-      var cells = (qrcode.modules: [[number]]);
-      var tileW = (size / cells.length: number);
-      var tileH = (size / cells.length: number);
+      var cells = qrcode.modules;
+      if (cells === null) {
+        return;
+      }
+      var tileW = size / cells.length;
+      var tileH = size / cells.length;
       var scale =
         (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx);
       canvas.height = canvas.width = size * scale;
