@@ -3,7 +3,7 @@ all: examples/bundle.js
 lib:
 	mkdir -p lib
 
-lib/index.js: lib src/index.js
+lib/index.js: lib src/index.js yarn.lock
 	./node_modules/.bin/babel src -d lib
 
 examples/bundle.js: lib/index.js examples/demo.js
