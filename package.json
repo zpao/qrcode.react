@@ -32,7 +32,7 @@
     "qr.js": "0.0.0"
   },
   "peerDependencies": {
-    "react": "^15.5.3"
+    "react": "^15.5.3 || ^16.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.4.0",
