@@ -1,6 +1,12 @@
 ## [Unreleased]
 
 
+## [0.7.2] - 2017-10-01
+
+### Added
+- Added support for React v16
+
+
 ## [0.7.1] - 2017-04-27
 
 ### Fixed
