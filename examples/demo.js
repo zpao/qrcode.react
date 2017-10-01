@@ -16,6 +16,7 @@ class Demo extends React.Component {
 
   update = () => {
     this.setState({
+      className: this.refs.className.value || '',
       value: this.refs.value.value || '',
       size: parseInt(this.refs.size.value) || 0,
       bgColor: this.refs.bgColor.value,
@@ -26,6 +27,7 @@ class Demo extends React.Component {
 
   render() {
     var code = `<QRCode
+  className={"${this.state.className}"}
   value={"${this.state.value}"}
   size={${this.state.size}}
   bgColor={"${this.state.bgColor}"}
@@ -34,6 +36,18 @@ class Demo extends React.Component {
 />`;
     return (
       <div>
+        <div>
+          <label>
+            ClassName:
+            <br />
+            <input
+              ref="className"
+              type="type"
+              onChange={this.update}
+              value={this.state.className}
+            />
+          </label>
+        </div>
         <div>
           <label>
             Size(px):
@@ -105,6 +119,7 @@ class Demo extends React.Component {
         </div>
 
         <QRCode
+          className={this.state.className}
           value={this.state.value}
           size={this.state.size}
           fgColor={this.state.fgColor}

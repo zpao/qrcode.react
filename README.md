@@ -22,13 +22,14 @@ React.render(
 
 ## Available Props
 
-prop      | type                 | default value
-----------|----------------------|--------------
-`value`   | `string`             |
-`size`    | `number`             | `128`
-`bgColor` | `string` (CSS color) | `"#FFFFFF"`
-`fgColor` | `string` (CSS color) | `"#000000"`
-`level`   | `string` (`'L' 'M' 'Q' 'H'`)            | `'L'`
+prop        | type                            | default value
+------------|---------------------------------|--------------
+`className` | `string`                        | `""`
+`value`     | `string`                        | N.A
+`size`      | `number`                        | `128`
+`bgColor`   | `string` (CSS color)            | `"#FFFFFF"`
+`fgColor`   | `string` (CSS color)            | `"#000000"`
+`level`     | `string` (`"L", "M", "Q", "H"`) | `"L"`
 
 <img src="qrcode.png" height="256" width="256">
 
