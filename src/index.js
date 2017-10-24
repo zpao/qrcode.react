@@ -31,9 +31,10 @@ type Props = {
   level: $Keys<typeof ErrorCorrectLevel>,
   bgColor: string,
   fgColor: string,
+  didGeneratePNGData: (string) => void
 };
 
-class QRCode extends React.Component {
+class QRCode extends React.Component<Props> {
   props: Props;
   _canvas: ?HTMLCanvasElement;
 
@@ -42,6 +43,8 @@ class QRCode extends React.Component {
     level: 'L',
     bgColor: '#FFFFFF',
     fgColor: '#000000',
+    didGeneratePNGData: null,
+    value: ""
   };
 
   static propTypes = {
@@ -50,11 +53,12 @@ class QRCode extends React.Component {
     level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
     bgColor: PropTypes.string,
     fgColor: PropTypes.string,
+    didGeneratePNGData: PropTypes.func
   };
 
   shouldComponentUpdate(nextProps: Props) {
     return Object.keys(QRCode.propTypes).some(
-      k => this.props[k] !== nextProps[k]
+      k => this.props[k] !== nextProps[k] && k !== "didGeneratePNGData"
     );
   }
 
@@ -106,6 +110,10 @@ class QRCode extends React.Component {
             );
         });
       });
+
+      if (this.props.didGeneratePNGData != null) {
+        this.props.didGeneratePNGData(canvas.toDataURL("image/png"));
+      }
     }
   }
 
