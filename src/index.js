@@ -54,7 +54,7 @@ class QRCode extends React.Component {
 
   shouldComponentUpdate(nextProps: Props) {
     return Object.keys(QRCode.propTypes).some(
-      k => this.props[k] !== nextProps[k]
+      (k) => this.props[k] !== nextProps[k]
     );
   }
 
@@ -116,7 +116,8 @@ class QRCode extends React.Component {
         height={this.props.size}
         width={this.props.size}
         ref={(ref: ?HTMLCanvasElement): ?HTMLCanvasElement =>
-          this._canvas = ref}
+          (this._canvas = ref)
+        }
       />
     );
   }
