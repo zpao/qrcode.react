@@ -33,8 +33,7 @@ type Props = {
   fgColor: string,
 };
 
-class QRCode extends React.Component {
-  props: Props;
+class QRCode extends React.Component<Props> {
   _canvas: ?HTMLCanvasElement;
 
   static defaultProps = {
