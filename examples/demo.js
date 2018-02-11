@@ -12,6 +12,7 @@ class Demo extends React.Component {
     fgColor: '#000000',
     bgColor: '#ffffff',
     level: 'L',
+    renderAs: 'svg',
   };
 
   update = () => {
@@ -21,6 +22,7 @@ class Demo extends React.Component {
       bgColor: this.refs.bgColor.value,
       fgColor: this.refs.fgColor.value,
       level: this.refs.level.value,
+      renderAs: this.refs.renderAs.value,
     });
   };
 
@@ -31,6 +33,7 @@ class Demo extends React.Component {
   bgColor={"${this.state.bgColor}"}
   fgColor={"${this.state.fgColor}"}
   level={"${this.state.level}"}
+  renderAs={"${this.state.renderAs}"}
 />`;
     return (
       <div>
@@ -98,6 +101,20 @@ class Demo extends React.Component {
 
         <div>
           <label>
+            Render As:
+            <br />
+            <select
+              ref="renderAs"
+              onChange={this.update}
+              value={this.state.renderAs}>
+              <option value="svg">SVG</option>
+              <option value="canvas">Canvas</option>
+            </select>
+          </label>
+        </div>
+
+        <div>
+          <label>
             Use it:
             <br />
             <textarea rows="6" cols="80" disabled={true} value={code} />
@@ -110,6 +127,7 @@ class Demo extends React.Component {
           fgColor={this.state.fgColor}
           bgColor={this.state.bgColor}
           level={this.state.level}
+          renderAs={this.state.renderAs}
         />
       </div>
     );
