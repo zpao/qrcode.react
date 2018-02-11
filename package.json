@@ -36,13 +36,13 @@
   },
   "devDependencies": {
     "babel-cli": "^6.4.0",
+    "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.2",
+    "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
-    "babelify": "^7.2.0",
-    "browserify": "^13.0.0",
     "eslint": "^3.19.0",
     "eslint-config-prettier": "^1.6.0",
     "eslint-plugin-react": "^3.16.1",
@@ -50,6 +50,7 @@
     "gh-pages": "^0.12.0",
     "prettier": "^1.1.0",
     "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react-dom": "^16.0.0",
+    "webpack": "^3.11.0"
   }
 }
