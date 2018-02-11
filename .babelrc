@@ -1,12 +1,18 @@
 {
-  "presets": ["es2015", "react"],
-  "plugins": [
+  "presets": [
     [
-      "transform-class-properties",
+      "@babel/preset-env",
       {
-        "spec": true
+        "targets": {
+          "browsers": "last 2 versions"
+        }
       }
     ],
-    "transform-object-rest-spread"
+    "@babel/preset-react",
+    "@babel/preset-flow"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-object-rest-spread"
   ]
 }
