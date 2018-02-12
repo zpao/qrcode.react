@@ -28,7 +28,7 @@
     "lib"
   ],
   "dependencies": {
-    "prop-types": "^15.5.8",
+    "prop-types": "^15.6.0",
     "qr.js": "0.0.0"
   },
   "peerDependencies": {
@@ -50,8 +50,8 @@
     "flow-bin": "^0.64.0",
     "gh-pages": "^0.12.0",
     "prettier": "^1.1.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "webpack": "^3.11.0"
   }
 }
