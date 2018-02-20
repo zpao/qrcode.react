@@ -87,20 +87,6 @@ class Demo extends React.Component {
         </div>
         <div>
           <label>
-            Value:
-            <br />
-            <textarea
-              rows="6"
-              cols="80"
-              ref="value"
-              onChange={this.update}
-              value={this.state.value}
-            />
-          </label>
-        </div>
-
-        <div>
-          <label>
             Render As:
             <br />
             <select
@@ -110,6 +96,19 @@ class Demo extends React.Component {
               <option value="svg">SVG</option>
               <option value="canvas">Canvas</option>
             </select>
+          </label>
+        </div>
+        <div>
+          <label>
+            Value:
+            <br />
+            <textarea
+              rows="6"
+              cols="80"
+              ref="value"
+              onChange={this.update}
+              value={this.state.value}
+            />
           </label>
         </div>
 
