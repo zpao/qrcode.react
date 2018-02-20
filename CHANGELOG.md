@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+### Added
+
+- New `renderAs` prop, with support for rendering to SVG. This is a more versatile target for high quality visuals.
+- Support for `style`, `className`, and any other DOM props that might be passed through (e.g. `data-*`).
+- Support for proper encoding of multibyte strings (Chinese, Japanese, Emoji, etc.).
+
 
 ## [0.7.2] - 2017-10-01
 
