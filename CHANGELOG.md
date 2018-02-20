@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+
+## [0.8.0] - 2018-02-19
+
 ### Added
 
 - New `renderAs` prop, with support for rendering to SVG. This is a more versatile target for high quality visuals.
