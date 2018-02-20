@@ -64,6 +64,7 @@ type QRProps = {
   level: $Keys<typeof ErrorCorrectLevel>,
   bgColor: string,
   fgColor: string,
+  style?: ?Object,
 };
 
 const DEFAULT_PROPS = {
@@ -102,7 +103,7 @@ class QRCodeCanvas extends React.Component<QRProps> {
   }
 
   update() {
-    var {value, size, level, bgColor, fgColor} = this.props;
+    var {value, size, level, bgColor, fgColor, style} = this.props;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     var qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -145,14 +146,25 @@ class QRCodeCanvas extends React.Component<QRProps> {
   }
 
   render() {
+    var {
+      value,
+      size,
+      level,
+      bgColor,
+      fgColor,
+      style,
+      ...otherProps
+    } = this.props;
+    style = {height: size, width: size, ...style};
     return (
       <canvas
-        style={{height: this.props.size, width: this.props.size}}
-        height={this.props.size}
-        width={this.props.size}
+        style={style}
+        height={size}
+        width={size}
         ref={(ref: ?HTMLCanvasElement): ?HTMLCanvasElement =>
           (this._canvas = ref)
         }
+        {...otherProps}
       />
     );
   }
@@ -169,7 +181,7 @@ class QRCodeSVG extends React.Component<QRProps> {
   }
 
   render() {
-    var {value, size, level, bgColor, fgColor} = this.props;
+    var {value, size, level, bgColor, fgColor, ...otherProps} = this.props;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     var qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -228,7 +240,8 @@ class QRCodeSVG extends React.Component<QRProps> {
         shapeRendering="crispEdges"
         height={size}
         width={size}
-        viewBox={`0 0 ${cells.length} ${cells.length}`}>
+        viewBox={`0 0 ${cells.length} ${cells.length}`}
+        {...otherProps}>
         <path fill={bgColor} d={`M0,0 h${cells.length}v${cells.length}H0z`} />
         <path fill={fgColor} d={ops.join('')} />
       </svg>
