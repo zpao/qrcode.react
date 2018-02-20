@@ -2,12 +2,12 @@
 
 'use strict';
 
-var React = require('react');
-var PropTypes = require('prop-types');
+const React = require('react');
+const PropTypes = require('prop-types');
 // qr.js doesn't handle error level of zero (M) so we need to do it right,
 // thus the deep require.
-var QRCodeImpl = require('qr.js/lib/QRCode');
-var ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
+const QRCodeImpl = require('qr.js/lib/QRCode');
+const ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
 
 function getBackingStorePixelRatio(ctx: CanvasRenderingContext2D): number {
   return (
@@ -103,27 +103,27 @@ class QRCodeCanvas extends React.Component<QRProps> {
   }
 
   update() {
-    var {value, size, level, bgColor, fgColor, style} = this.props;
+    const {value, size, level, bgColor, fgColor} = this.props;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
-    var qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
+    const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
     qrcode.addData(convertStr(value));
     qrcode.make();
 
     if (this._canvas != null) {
-      var canvas = this._canvas;
+      const canvas = this._canvas;
 
-      var ctx = canvas.getContext('2d');
+      const ctx = canvas.getContext('2d');
       if (!ctx) {
         return;
       }
-      var cells = qrcode.modules;
+      const cells = qrcode.modules;
       if (cells === null) {
         return;
       }
-      var tileW = size / cells.length;
-      var tileH = size / cells.length;
-      var scale =
+      const tileW = size / cells.length;
+      const tileH = size / cells.length;
+      const scale =
         (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx);
       canvas.height = canvas.width = size * scale;
       ctx.scale(scale, scale);
@@ -131,8 +131,8 @@ class QRCodeCanvas extends React.Component<QRProps> {
       cells.forEach(function(row, rdx) {
         row.forEach(function(cell, cdx) {
           ctx && (ctx.fillStyle = cell ? fgColor : bgColor);
-          var w = Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW);
-          var h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH);
+          const w = Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW);
+          const h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH);
           ctx &&
             ctx.fillRect(
               Math.round(cdx * tileW),
@@ -146,7 +146,7 @@ class QRCodeCanvas extends React.Component<QRProps> {
   }
 
   render() {
-    var {
+    const {
       value,
       size,
       level,
@@ -155,10 +155,10 @@ class QRCodeCanvas extends React.Component<QRProps> {
       style,
       ...otherProps
     } = this.props;
-    style = {height: size, width: size, ...style};
+    const canvasStyle = {height: size, width: size, ...style};
     return (
       <canvas
-        style={style}
+        style={canvasStyle}
         height={size}
         width={size}
         ref={(ref: ?HTMLCanvasElement): ?HTMLCanvasElement =>
@@ -181,14 +181,14 @@ class QRCodeSVG extends React.Component<QRProps> {
   }
 
   render() {
-    var {value, size, level, bgColor, fgColor, ...otherProps} = this.props;
+    const {value, size, level, bgColor, fgColor, ...otherProps} = this.props;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
-    var qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
+    const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
     qrcode.addData(convertStr(value));
     qrcode.make();
 
-    var cells = qrcode.modules;
+    const cells = qrcode.modules;
     if (cells === null) {
       return;
     }
