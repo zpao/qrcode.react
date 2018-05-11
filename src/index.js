@@ -1,13 +1,10 @@
 // @flow
-
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 // qr.js doesn't handle error level of zero (M) so we need to do it right,
 // thus the deep require.
-const QRCodeImpl = require('qr.js/lib/QRCode');
-const ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
+import QRCodeImpl from 'qr.js/lib/QRCode';
+import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel';
 
 function getBackingStorePixelRatio(ctx: CanvasRenderingContext2D): number {
   return (
@@ -201,7 +198,6 @@ class QRCodeSVG extends React.Component<QRProps> {
     // For level 40, 31329 -> 2
     const ops = [];
     cells.forEach(function(row, y) {
-      let lastIsDark = false;
       let start = null;
       row.forEach(function(cell, x) {
         if (!cell && start !== null) {
@@ -258,4 +254,4 @@ const QRCode = (props: RootProps): React.Node => {
 
 QRCode.defaultProps = {renderAs: 'canvas', ...DEFAULT_PROPS};
 
-module.exports = QRCode;
+export default QRCode;

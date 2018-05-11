@@ -9,6 +9,7 @@
   ],
   "homepage": "http://zpao.github.io/qrcode.react",
   "main": "lib/index.js",
+  "module": "es/index.js",
   "scripts": {
     "flow": "flow",
     "lint": "eslint src/ examples/demo.js",
@@ -25,7 +26,8 @@
   },
   "license": "ISC",
   "files": [
-    "lib"
+    "lib",
+    "es"
   ],
   "dependencies": {
     "prop-types": "^15.6.0",
@@ -35,7 +37,6 @@
     "react": "^15.5.3 || ^16.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0-beta.39",
     "@babel/core": "^7.0.0-beta.39",
     "@babel/plugin-proposal-class-properties": "^7.0.0-beta.39",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.39",
@@ -44,6 +45,7 @@
     "@babel/preset-react": "^7.0.0-beta.39",
     "babel-eslint": "^8.2.1",
     "babel-loader": "^8.0.0-beta.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.13",
     "eslint": "^4.17.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-react": "^7.6.1",
@@ -52,6 +54,8 @@
     "prettier": "^1.1.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "rollup": "^0.58.2",
+    "rollup-plugin-babel": "^4.0.0-beta.4",
     "webpack": "^3.11.0"
   }
 }
