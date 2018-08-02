@@ -110,7 +110,7 @@ class QRCodeCanvas extends React.Component<QRProps> {
     qrcode.addData(convertStr(value));
     qrcode.make();
 
-    if (this._canvas != null) {
+    if (this._canvas != null && this._canvas.getContext) {
       const canvas = this._canvas;
 
       const ctx = canvas.getContext('2d');
