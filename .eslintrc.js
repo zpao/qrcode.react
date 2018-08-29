@@ -10,7 +10,23 @@ module.exports = {
   env: {
     es6: true,
     node: true,
+    browser: true,
   },
   plugins: ['react'],
-  extends: ['prettier', 'prettier/react'],
+  extends: [
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:flowtype/recommended',
+    'plugin:prettier/recommended',
+    'prettier/react',
+    'prettier/flowtype',
+  ],
+  settings: {
+    react: {
+      version: '16.2.0',
+    },
+  },
+  rules: {
+    'no-unused-vars': ['error', {ignoreRestSiblings: true}],
+  },
 };

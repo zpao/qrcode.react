@@ -11,7 +11,7 @@
   "main": "lib/index.js",
   "scripts": {
     "flow": "flow",
-    "lint": "eslint src/ examples/demo.js",
+    "lint": "eslint .",
     "pretty": "prettier --write {*,.*}.{js,json} **/*.{js,json}",
     "prepublish": "flow && make clean && make all",
     "prepublish-docs": "make clean && make all",
@@ -46,6 +46,8 @@
     "babel-loader": "^8.0.0",
     "eslint": "^5.4.0",
     "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-react": "^7.6.1",
     "flow-bin": "^0.79.1",
     "gh-pages": "^0.12.0",
