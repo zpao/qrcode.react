@@ -201,7 +201,6 @@ class QRCodeSVG extends React.Component<QRProps> {
     // For level 40, 31329 -> 2
     const ops = [];
     cells.forEach(function(row, y) {
-      let lastIsDark = false;
       let start = null;
       row.forEach(function(cell, x) {
         if (!cell && start !== null) {
