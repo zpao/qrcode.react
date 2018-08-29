@@ -12,7 +12,7 @@ npm install qrcode.react
 
 ```js
 var React = require('react');
-var QRCode = require('qrcode.react');
+var QRCode = require('qrcode.react').QRCodeCanvas; // or QRCodeSVG
 
 React.render(
   <QRCode value="http://facebook.github.io/react/" />,

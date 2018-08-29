@@ -449,13 +449,4 @@ if (process.env.NODE_ENV !== 'production') {
   QRCodeSVG.propTypes = PROP_TYPES;
 }
 
-type RootProps = QRProps & {renderAs: 'svg' | 'canvas'};
-const QRCode = (props: RootProps): React.Node => {
-  const {renderAs, ...otherProps} = props;
-  const Component = renderAs === 'svg' ? QRCodeSVG : QRCodeCanvas;
-  return <Component {...otherProps} />;
-};
-
-QRCode.defaultProps = {renderAs: 'canvas', ...DEFAULT_PROPS};
-
-module.exports = QRCode;
+module.exports = {QRCodeSVG, QRCodeCanvas};
