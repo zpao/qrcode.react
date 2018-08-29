@@ -66,17 +66,11 @@ const PROP_TYPES = {
   fgColor: PropTypes.string,
 };
 
-class QRCodeCanvas extends React.Component<QRProps> {
+class QRCodeCanvas extends React.PureComponent<QRProps> {
   _canvas: ?HTMLCanvasElement;
 
   static defaultProps = DEFAULT_PROPS;
   static propTypes = PROP_TYPES;
-
-  shouldComponentUpdate(nextProps: QRProps) {
-    return Object.keys(QRCodeCanvas.propTypes).some(
-      (k) => this.props[k] !== nextProps[k]
-    );
-  }
 
   componentDidMount() {
     this.update();
@@ -153,15 +147,9 @@ class QRCodeCanvas extends React.Component<QRProps> {
   }
 }
 
-class QRCodeSVG extends React.Component<QRProps> {
+class QRCodeSVG extends React.PureComponent<QRProps> {
   static defaultProps = DEFAULT_PROPS;
   static propTypes = PROP_TYPES;
-
-  shouldComponentUpdate(nextProps: QRProps) {
-    return Object.keys(QRCodeCanvas.propTypes).some(
-      (k) => this.props[k] !== nextProps[k]
-    );
-  }
 
   render() {
     const {value, size, level, bgColor, fgColor, ...otherProps} = this.props;
