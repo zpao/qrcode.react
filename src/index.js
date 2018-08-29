@@ -9,22 +9,6 @@ const PropTypes = require('prop-types');
 const QRCodeImpl = require('qr.js/lib/QRCode');
 const ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
 
-function getBackingStorePixelRatio(ctx: CanvasRenderingContext2D): number {
-  return (
-    // $FlowFixMe
-    ctx.webkitBackingStorePixelRatio ||
-    // $FlowFixMe
-    ctx.mozBackingStorePixelRatio ||
-    // $FlowFixMe
-    ctx.msBackingStorePixelRatio ||
-    // $FlowFixMe
-    ctx.oBackingStorePixelRatio ||
-    // $FlowFixMe
-    ctx.backingStorePixelRatio ||
-    1
-  );
-}
-
 // Convert from UTF-16, forcing the use of byte-mode encoding in our QR Code.
 // This allows us to encode Hanji, Kanji, emoji, etc. Ideally we'd do more
 // detection and not resort to byte-mode if possible, but we're trading off
@@ -123,8 +107,7 @@ class QRCodeCanvas extends React.Component<QRProps> {
       }
       const tileW = size / cells.length;
       const tileH = size / cells.length;
-      const scale =
-        (window.devicePixelRatio || 1) / getBackingStorePixelRatio(ctx);
+      const scale = window.devicePixelRatio || 1;
       canvas.height = canvas.width = size * scale;
       ctx.scale(scale, scale);
 
