@@ -15,17 +15,6 @@ class Demo extends React.Component {
     renderAs: 'svg',
   };
 
-  update = () => {
-    this.setState({
-      value: this.refs.value.value || '',
-      size: parseInt(this.refs.size.value) || 0,
-      bgColor: this.refs.bgColor.value,
-      fgColor: this.refs.fgColor.value,
-      level: this.refs.level.value,
-      renderAs: this.refs.renderAs.value,
-    });
-  };
-
   render() {
     var code = `<QRCode
   value={"${this.state.value}"}
@@ -42,9 +31,10 @@ class Demo extends React.Component {
             Size(px):
             <br />
             <input
-              ref="size"
               type="number"
-              onChange={this.update}
+              onChange={(e) =>
+                this.setState({size: parseInt(e.target.value, 10) || 0})
+              }
               value={this.state.size}
             />
           </label>
@@ -54,9 +44,8 @@ class Demo extends React.Component {
             Background Color:
             <br />
             <input
-              ref="bgColor"
               type="color"
-              onChange={this.update}
+              onChange={(e) => this.setState({bgColor: e.target.value})}
               value={this.state.bgColor}
             />
           </label>
@@ -66,9 +55,8 @@ class Demo extends React.Component {
             Foreground Color:
             <br />
             <input
-              ref="fgColor"
               type="color"
-              onChange={this.update}
+              onChange={(e) => this.setState({fgColor: e.target.value})}
               value={this.state.fgColor}
             />
           </label>
@@ -77,7 +65,9 @@ class Demo extends React.Component {
           <label>
             Error Level:
             <br />
-            <select ref="level" onChange={this.update} value={this.state.level}>
+            <select
+              onChange={(e) => this.setState({level: e.target.value})}
+              value={this.state.level}>
               <option value="L">L</option>
               <option value="M">M</option>
               <option value="Q">Q</option>
@@ -90,8 +80,7 @@ class Demo extends React.Component {
             Render As:
             <br />
             <select
-              ref="renderAs"
-              onChange={this.update}
+              onChange={(e) => this.setState({renderAs: e.target.value})}
               value={this.state.renderAs}>
               <option value="svg">SVG</option>
               <option value="canvas">Canvas</option>
@@ -105,8 +94,7 @@ class Demo extends React.Component {
             <textarea
               rows="6"
               cols="80"
-              ref="value"
-              onChange={this.update}
+              onChange={(e) => this.setState({value: e.target.value})}
               value={this.state.value}
             />
           </label>
