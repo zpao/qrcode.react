@@ -12,7 +12,7 @@
   "scripts": {
     "flow": "flow",
     "lint": "eslint src/ examples/demo.js",
-    "pretty": "prettier --write --single-quote --bracket-spacing=false --trailing-comma=es5 {.eslintrc.js,src/*.js,examples/demo.js}",
+    "pretty": "prettier --write {*,.*}.{js,json} **/*.{js,json}",
     "prepublish": "flow && make clean && make all",
     "prepublish-docs": "make clean && make all",
     "publish-docs": "gh-pages --dist=examples --src='{index.html,bundle.js}'",
