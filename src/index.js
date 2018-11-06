@@ -205,11 +205,15 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
       });
     });
 
+    const sizeProp = size !== -1 ? {
+      width: size,
+      height: size
+    } : {}
+
     return (
       <svg
         shapeRendering="crispEdges"
-        height={size}
-        width={size}
+        {...sizeProp}
         viewBox={`0 0 ${cells.length} ${cells.length}`}
         {...otherProps}>
         <path fill={bgColor} d={`M0,0 h${cells.length}v${cells.length}H0z`} />
