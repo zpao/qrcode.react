@@ -22,14 +22,16 @@ React.render(
 
 ## Available Props
 
-prop      | type                 | default value
-----------|----------------------|--------------
-`value`   | `string`             |
-`renderAs`| `string` (`'canvas' 'svg'`) | `'canvas'`
-`size`    | `number`             | `128`
-`bgColor` | `string` (CSS color) | `"#FFFFFF"`
-`fgColor` | `string` (CSS color) | `"#000000"`
-`level`   | `string` (`'L' 'M' 'Q' 'H'`)            | `'L'`
+prop            | type                 | default value
+----------------|----------------------|--------------
+`value`         | `string`             |
+`renderAs`      | `string` (`'canvas' 'svg'`) | `'canvas'`
+`size`          | `number`             | `128`
+`bgColor`       | `string` (CSS color) | `"#FFFFFF"`
+`fgColor`       | `string` (CSS color) | `"#000000"`
+`includeMargin` | `boolean`            | `false`
+`marginSize`    | `number`             | `4`
+`level`         | `string` (`'L' 'M' 'Q' 'H'`)            | `'L'`
 
 ## Custom Styles
 

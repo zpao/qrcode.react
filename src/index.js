@@ -8,6 +8,7 @@ const PropTypes = require('prop-types');
 // thus the deep require.
 const QRCodeImpl = require('qr.js/lib/QRCode');
 const ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
+const DEFAULT_MARGIN = 4;
 
 // Convert from UTF-16, forcing the use of byte-mode encoding in our QR Code.
 // This allows us to encode Hanji, Kanji, emoji, etc. Ideally we'd do more
@@ -48,6 +49,8 @@ type QRProps = {
   level: $Keys<typeof ErrorCorrectLevel>,
   bgColor: string,
   fgColor: string,
+  includeMargin: boolean,
+  marginSize: number,
   style?: ?Object,
 };
 
@@ -56,6 +59,8 @@ const DEFAULT_PROPS = {
   level: 'L',
   bgColor: '#FFFFFF',
   fgColor: '#000000',
+  includeMargin: false,
+  marginSize: DEFAULT_MARGIN,
 };
 
 const PROP_TYPES = {
@@ -64,6 +69,8 @@ const PROP_TYPES = {
   level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
   bgColor: PropTypes.string,
   fgColor: PropTypes.string,
+  includeMargin: PropTypes.bool,
+  marginSize: PropTypes.number,
 };
 
 class QRCodeCanvas extends React.PureComponent<QRProps> {
@@ -81,7 +88,17 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
   }
 
   update() {
-    const {value, size, level, bgColor, fgColor} = this.props;
+    const {
+      value,
+      size,
+      level,
+      bgColor,
+      fgColor,
+      includeMargin,
+      marginSize,
+    } = this.props;
+    const singleMarginOffset = includeMargin ? marginSize : 0;
+    const halfMargin = Math.round(singleMarginOffset / 2);
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -100,9 +117,22 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
         return;
       }
       const tileW = size / cells.length;
-      const tileH = size / cells.length;
+      const tileH = tileW;
       const scale = window.devicePixelRatio || 1;
-      canvas.height = canvas.width = size * scale;
+      canvas.height = canvas.width = size * scale + singleMarginOffset * 2;
+      const singleMarginDownScaled = singleMarginOffset / 2;
+
+      if (includeMargin) {
+        ctx.strokeStyle = bgColor;
+        ctx.lineWidth = singleMarginOffset;
+        ctx.strokeRect(
+          halfMargin,
+          halfMargin,
+          canvas.width - singleMarginOffset,
+          canvas.height - singleMarginOffset
+        );
+      }
+
       ctx.scale(scale, scale);
 
       cells.forEach(function(row, rdx) {
@@ -112,8 +142,8 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
           const h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH);
           ctx &&
             ctx.fillRect(
-              Math.round(cdx * tileW),
-              Math.round(rdx * tileH),
+              Math.floor(cdx * tileW + singleMarginDownScaled),
+              Math.floor(rdx * tileH + singleMarginDownScaled),
               w,
               h
             );

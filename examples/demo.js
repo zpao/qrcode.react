@@ -12,6 +12,8 @@ class Demo extends React.Component {
     fgColor: '#000000',
     bgColor: '#ffffff',
     level: 'L',
+    includeMargin: false,
+    marginSize: 4,
     renderAs: 'svg',
   };
 
@@ -21,6 +23,8 @@ class Demo extends React.Component {
   size={${this.state.size}}
   bgColor={"${this.state.bgColor}"}
   fgColor={"${this.state.fgColor}"}
+  includeMargin={${this.state.includeMargin}}
+  marginSize={${this.state.marginSize}}
   level={"${this.state.level}"}
   renderAs={"${this.state.renderAs}"}
 />`;
@@ -58,6 +62,30 @@ class Demo extends React.Component {
               type="color"
               onChange={(e) => this.setState({fgColor: e.target.value})}
               value={this.state.fgColor}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Include margin:
+            <br />
+            <input
+              type="checkbox"
+              checked={this.state.includeMargin}
+              onChange={(e) => this.setState({includeMargin: e.target.checked})}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Margin size(px):
+            <br />
+            <input
+              type="number"
+              onChange={(e) =>
+                this.setState({marginSize: parseInt(e.target.value, 10) || 0})
+              }
+              value={this.state.marginSize}
             />
           </label>
         </div>
@@ -113,6 +141,8 @@ class Demo extends React.Component {
           size={this.state.size}
           fgColor={this.state.fgColor}
           bgColor={this.state.bgColor}
+          includeMargin={this.state.includeMargin}
+          marginSize={this.state.marginSize}
           level={this.state.level}
           renderAs={this.state.renderAs}
         />
