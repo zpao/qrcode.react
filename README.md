@@ -30,6 +30,7 @@ prop      | type                 | default value
 `bgColor` | `string` (CSS color) | `"#FFFFFF"`
 `fgColor` | `string` (CSS color) | `"#000000"`
 `level`   | `string` (`'L' 'M' 'Q' 'H'`)            | `'L'`
+`includeMargin` | `boolean`      | `false`
 
 ## Custom Styles
 

@@ -49,6 +49,7 @@ type QRProps = {
   bgColor: string,
   fgColor: string,
   style?: ?Object,
+  includeMargin: boolean,
 };
 
 const DEFAULT_PROPS = {
@@ -56,6 +57,7 @@ const DEFAULT_PROPS = {
   level: 'L',
   bgColor: '#FFFFFF',
   fgColor: '#000000',
+  includeMargin: false,
 };
 
 const PROP_TYPES = {
@@ -64,9 +66,12 @@ const PROP_TYPES = {
   level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
   bgColor: PropTypes.string,
   fgColor: PropTypes.string,
+  includeMargin: PropTypes.bool,
 };
 
-function generatePath(modules: [[boolean]]): string {
+const MARGIN_SIZE = 4;
+
+function generatePath(modules: [[boolean]], margin: number = 0): string {
   const ops = [];
   modules.forEach(function(row, y) {
     let start = null;
@@ -74,7 +79,9 @@ function generatePath(modules: [[boolean]]): string {
       if (!cell && start !== null) {
         // M0 0h7v1H0z injects the space with the move and drops the comma,
         // saving a char per operation
-        ops.push(`M${start} ${y}h${x - start}v1H${start}z`);
+        ops.push(
+          `M${start + margin} ${y + margin}h${x - start}v1H${start + margin}z`
+        );
         start = null;
         return;
       }
@@ -88,10 +95,13 @@ function generatePath(modules: [[boolean]]): string {
         }
         if (start === null) {
           // Just a single dark module.
-          ops.push(`M${x},${y} h1v1H${x}z`);
+          ops.push(`M${x + margin},${y + margin} h1v1H${x + margin}z`);
         } else {
           // Otherwise finish the current line.
-          ops.push(`M${start},${y} h${x + 1 - start}v1H${start}z`);
+          ops.push(
+            `M${start + margin},${y + margin} h${x + 1 - start}v1H${start +
+              margin}z`
+          );
         }
         return;
       }
@@ -124,7 +134,7 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
   }
 
   update() {
-    const {value, size, level, bgColor, fgColor} = this.props;
+    const {value, size, level, bgColor, fgColor, includeMargin} = this.props;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -144,18 +154,22 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
         return;
       }
 
+      const margin = includeMargin ? MARGIN_SIZE : 0;
+
+      const numCells = cells.length + margin * 2;
+
       // We're going to scale this so that the number of drawable units
       // matches the number of cells. This avoids rounding issues, but does
       // result in some potentially unwanted single pixel issues between
       // blocks, only in environments that don't support Path2D.
       const pixelRatio = window.devicePixelRatio || 1;
       canvas.height = canvas.width = size * pixelRatio;
-      const scale = (size / cells.length) * pixelRatio;
+      const scale = (size / numCells) * pixelRatio;
       ctx.scale(scale, scale);
 
       // Draw solid background, only paint dark modules.
       ctx.fillStyle = bgColor;
-      ctx.fillRect(0, 0, cells.length, cells.length);
+      ctx.fillRect(0, 0, numCells, numCells);
 
       ctx.fillStyle = fgColor;
       if (SUPPORTS_PATH2D) {
@@ -165,7 +179,7 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
         cells.forEach(function(row, rdx) {
           row.forEach(function(cell, cdx) {
             if (cell) {
-              ctx.fillRect(cdx, rdx, 1, 1);
+              ctx.fillRect(cdx + margin, rdx + margin, 1, 1);
             }
           });
         });
@@ -203,7 +217,15 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
   static propTypes = PROP_TYPES;
 
   render() {
-    const {value, size, level, bgColor, fgColor, ...otherProps} = this.props;
+    const {
+      value,
+      size,
+      level,
+      bgColor,
+      fgColor,
+      includeMargin,
+      ...otherProps
+    } = this.props;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -215,22 +237,26 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
       return;
     }
 
+    const margin = includeMargin ? MARGIN_SIZE : 0;
+
     // Drawing strategy: instead of a rect per module, we're going to create a
     // single path for the dark modules and layer that on top of a light rect,
     // for a total of 2 DOM nodes. We pay a bit more in string concat but that's
     // way faster than DOM ops.
     // For level 1, 441 nodes -> 2
     // For level 40, 31329 -> 2
-    const fgPath = generatePath(cells);
+    const fgPath = generatePath(cells, margin);
+
+    const numCells = cells.length + margin * 2;
 
     return (
       <svg
         shapeRendering="crispEdges"
         height={size}
         width={size}
-        viewBox={`0 0 ${cells.length} ${cells.length}`}
+        viewBox={`0 0 ${numCells} ${numCells}`}
         {...otherProps}>
-        <path fill={bgColor} d={`M0,0 h${cells.length}v${cells.length}H0z`} />
+        <path fill={bgColor} d={`M0,0 h${numCells}v${numCells}H0z`} />
         <path fill={fgColor} d={fgPath} />
       </svg>
     );
