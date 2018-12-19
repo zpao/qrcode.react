@@ -13,6 +13,7 @@ class Demo extends React.Component {
     bgColor: '#ffffff',
     level: 'L',
     renderAs: 'svg',
+    includeMargin: false,
   };
 
   render() {
@@ -22,6 +23,7 @@ class Demo extends React.Component {
   bgColor={"${this.state.bgColor}"}
   fgColor={"${this.state.fgColor}"}
   level={"${this.state.level}"}
+  includeMargin={${this.state.includeMargin}}
   renderAs={"${this.state.renderAs}"}
 />`;
     return (
@@ -77,6 +79,17 @@ class Demo extends React.Component {
         </div>
         <div>
           <label>
+            Include Margin:
+            <br />
+            <input
+              type="checkbox"
+              checked={this.state.includeMargin}
+              onChange={(e) => this.setState({includeMargin: e.target.checked})}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
             Render As:
             <br />
             <select
@@ -115,6 +128,7 @@ class Demo extends React.Component {
           bgColor={this.state.bgColor}
           level={this.state.level}
           renderAs={this.state.renderAs}
+          includeMargin={this.state.includeMargin}
         />
       </div>
     );
