@@ -66,6 +66,49 @@ const PROP_TYPES = {
   fgColor: PropTypes.string,
 };
 
+function generatePath(modules: [[boolean]]): string {
+  const ops = [];
+  modules.forEach(function(row, y) {
+    let start = null;
+    row.forEach(function(cell, x) {
+      if (!cell && start !== null) {
+        // M0 0h7v1H0z injects the space with the move and drops the comma,
+        // saving a char per operation
+        ops.push(`M${start} ${y}h${x - start}v1H${start}z`);
+        start = null;
+        return;
+      }
+
+      // end of row, clean up or skip
+      if (x === row.length - 1) {
+        if (!cell) {
+          // We would have closed the op above already so this can only mean
+          // 2+ light modules in a row.
+          return;
+        }
+        if (start === null) {
+          // Just a single dark module.
+          ops.push(`M${x},${y} h1v1H${x}z`);
+        } else {
+          // Otherwise finish the current line.
+          ops.push(`M${start},${y} h${x + 1 - start}v1H${start}z`);
+        }
+        return;
+      }
+
+      if (cell && start === null) {
+        start = x;
+      }
+    });
+  });
+  return ops.join('');
+}
+
+// For canvas we're going to switch our drawing mode based on whether or not
+// the environment supports Path2D. We only need the constructor to be
+// supported.
+const SUPPORTS_PATH2D = typeof Path2D === 'function';
+
 class QRCodeCanvas extends React.PureComponent<QRProps> {
   _canvas: ?HTMLCanvasElement;
 
@@ -95,30 +138,38 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
       if (!ctx) {
         return;
       }
+
       const cells = qrcode.modules;
       if (cells === null) {
         return;
       }
-      const tileW = size / cells.length;
-      const tileH = size / cells.length;
-      const scale = window.devicePixelRatio || 1;
-      canvas.height = canvas.width = size * scale;
+
+      // We're going to scale this so that the number of drawable units
+      // matches the number of cells. This avoids rounding issues, but does
+      // result in some potentially unwanted single pixel issues between
+      // blocks, only in environments that don't support Path2D.
+      const pixelRatio = window.devicePixelRatio || 1;
+      canvas.height = canvas.width = size * pixelRatio;
+      const scale = (size / cells.length) * pixelRatio;
       ctx.scale(scale, scale);
 
-      cells.forEach(function(row, rdx) {
-        row.forEach(function(cell, cdx) {
-          ctx && (ctx.fillStyle = cell ? fgColor : bgColor);
-          const w = Math.ceil((cdx + 1) * tileW) - Math.floor(cdx * tileW);
-          const h = Math.ceil((rdx + 1) * tileH) - Math.floor(rdx * tileH);
-          ctx &&
-            ctx.fillRect(
-              Math.round(cdx * tileW),
-              Math.round(rdx * tileH),
-              w,
-              h
-            );
+      // Draw solid background, only paint dark modules.
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(0, 0, cells.length, cells.length);
+
+      ctx.fillStyle = fgColor;
+      if (SUPPORTS_PATH2D) {
+        // $FlowFixMe: Path2D c'tor doesn't support args yet.
+        ctx.fill(new Path2D(generatePath(cells)));
+      } else {
+        cells.forEach(function(row, rdx) {
+          row.forEach(function(cell, cdx) {
+            if (cell) {
+              ctx.fillRect(cdx, rdx, 1, 1);
+            }
+          });
         });
-      });
+      }
     }
   }
 
@@ -170,40 +221,7 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
     // way faster than DOM ops.
     // For level 1, 441 nodes -> 2
     // For level 40, 31329 -> 2
-    const ops = [];
-    cells.forEach(function(row, y) {
-      let start = null;
-      row.forEach(function(cell, x) {
-        if (!cell && start !== null) {
-          // M0 0h7v1H0z injects the space with the move and dropd the comma,
-          // saving a char per operation
-          ops.push(`M${start} ${y}h${x - start}v1H${start}z`);
-          start = null;
-          return;
-        }
-
-        // end of row, clean up or skip
-        if (x === row.length - 1) {
-          if (!cell) {
-            // We would have closed the op above already so this can only mean
-            // 2+ light modules in a row.
-            return;
-          }
-          if (start === null) {
-            // Just a single dark module.
-            ops.push(`M${x},${y} h1v1H${x}z`);
-          } else {
-            // Otherwise finish the current line.
-            ops.push(`M${start},${y} h${x + 1 - start}v1H${start}z`);
-          }
-          return;
-        }
-
-        if (cell && start === null) {
-          start = x;
-        }
-      });
-    });
+    const fgPath = generatePath(cells);
 
     return (
       <svg
@@ -213,7 +231,7 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
         viewBox={`0 0 ${cells.length} ${cells.length}`}
         {...otherProps}>
         <path fill={bgColor} d={`M0,0 h${cells.length}v${cells.length}H0z`} />
-        <path fill={fgColor} d={ops.join('')} />
+        <path fill={fgColor} d={fgPath} />
       </svg>
     );
   }
