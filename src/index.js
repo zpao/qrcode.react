@@ -234,7 +234,7 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
 
     const cells = qrcode.modules;
     if (cells === null) {
-      return;
+      return null;
     }
 
     const margin = includeMargin ? MARGIN_SIZE : 0;
