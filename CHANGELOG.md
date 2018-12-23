@@ -1,4 +1,11 @@
-## [Unreleased]
+## [0.9.0] - 2018-12-22
+
+### Added
+- Support for `includeMargin` prop, to include the "quiet zone" in rendering
+
+### Changed
+- Updated canvas renderer to use Path2D (where available), and simplify the render. This fixes some rendering inconsistencies.
+- Switched to using `React.PureComponent` instead of a custom `shouldComponentUpdate` method.
 
 
 ## [0.8.0] - 2018-02-19
