@@ -1,3 +1,9 @@
+## [0.9.1] - 2018-12-27
+
+### Fixed
+- Consume non-DOM prop in canvas renderer to prevent spurious warnings from React.
+
+
 ## [0.9.0] - 2018-12-22
 
 ### Added
