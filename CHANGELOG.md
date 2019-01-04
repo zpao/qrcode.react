@@ -1,3 +1,9 @@
+## [0.9.2] - 2019-01-03
+
+### Fixed
+- Properly support new `includeMargin` prop in the canvas renderer.
+
+
 ## [0.9.1] - 2018-12-27
 
 ### Fixed
