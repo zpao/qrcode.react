@@ -174,7 +174,7 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
       ctx.fillStyle = fgColor;
       if (SUPPORTS_PATH2D) {
         // $FlowFixMe: Path2D c'tor doesn't support args yet.
-        ctx.fill(new Path2D(generatePath(cells)));
+        ctx.fill(new Path2D(generatePath(cells, margin)));
       } else {
         cells.forEach(function(row, rdx) {
           row.forEach(function(cell, cdx) {
