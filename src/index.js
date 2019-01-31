@@ -9,6 +9,10 @@ const PropTypes = require('prop-types');
 const QRCodeImpl = require('qr.js/lib/QRCode');
 const ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
 
+function isMsEdge(ua: string) {
+  return /Edge\/([0-9._]+)/.test(ua);
+}
+
 // Convert from UTF-16, forcing the use of byte-mode encoding in our QR Code.
 // This allows us to encode Hanji, Kanji, emoji, etc. Ideally we'd do more
 // detection and not resort to byte-mode if possible, but we're trading off
@@ -117,7 +121,11 @@ function generatePath(modules: [[boolean]], margin: number = 0): string {
 // For canvas we're going to switch our drawing mode based on whether or not
 // the environment supports Path2D. We only need the constructor to be
 // supported.
-const SUPPORTS_PATH2D = typeof Path2D === 'function';
+
+// Path2D does not support SVG path data in the constructor at Ms Edge
+// ref to https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/8438884/
+const IS_MS_EDGE = isMsEdge(navigator.userAgent);
+const SUPPORTS_PATH2D = typeof Path2D === 'function' && !IS_MS_EDGE;
 
 class QRCodeCanvas extends React.PureComponent<QRProps> {
   _canvas: ?HTMLCanvasElement;
