@@ -3,6 +3,7 @@
 var QRCode = require('..');
 var React = require('react');
 var ReactDOM = require('react-dom');
+var qrCodeDownloadCode = `this.qrcode.download('QR Code.png');`;
 
 class Demo extends React.Component {
   state = {
@@ -20,20 +21,21 @@ class Demo extends React.Component {
       left: 50,
       width: 10,
       height: 10,
-    }
+    },
   };
 
   downloadQRCode = () => {
     this.qrcode.download('QR Code.png');
-  }
+  };
 
   setImgState(state) {
     this.setState({img: {...this.state.img, ...state}});
   }
 
   render() {
-    var imgCode = this.state.withImg ?
-      `  img={${JSON.stringify(this.state.img)}}\n` : ''
+    var imgCode = this.state.withImg
+      ? `  img={${JSON.stringify(this.state.img)}}\n`
+      : '';
     var code = `<QRCode
   value={"${this.state.value}"}
   size={${this.state.size}}
@@ -43,7 +45,7 @@ class Demo extends React.Component {
   includeMargin={${this.state.includeMargin}}
   renderAs={"${this.state.renderAs}"}
   ref={ref => this.qrcode = ref}
-${imgCode}/>`
+${imgCode}/>`;
     return (
       <div>
         <div>
@@ -141,12 +143,11 @@ ${imgCode}/>`
             </label>
           </div>
           <div>
-            <label>
-              Img Coordinate:
-            </label>
+            <label>Img Coordinate:</label>
             <br />
             <div style={{marginLeft: '20px'}}>
-              <label>top (percent):
+              <label>
+                top (percent):
                 <input
                   type="number"
                   onChange={(e) =>
@@ -155,7 +156,8 @@ ${imgCode}/>`
                   value={this.state.img.top}
                 />
               </label>
-              <label>, left (percent):
+              <label>
+                , left (percent):
                 <input
                   type="number"
                   onChange={(e) =>
@@ -165,20 +167,26 @@ ${imgCode}/>`
                 />
               </label>
               <br />
-              <label>width (percent):
+              <label>
+                width (percent):
                 <input
                   type="number"
                   onChange={(e) =>
-                    this.setImgState({width: parseInt(e.target.value, 10) || 10})
+                    this.setImgState({
+                      width: parseInt(e.target.value, 10) || 10,
+                    })
                   }
                   value={this.state.img.width}
                 />
               </label>
-              <label>height (percent):
+              <label>
+                height (percent):
                 <input
                   type="number"
                   onChange={(e) =>
-                    this.setImgState({height: parseInt(e.target.value, 10) || 10})
+                    this.setImgState({
+                      height: parseInt(e.target.value, 10) || 10,
+                    })
                   }
                   value={this.state.img.height}
                 />
@@ -216,12 +224,12 @@ ${imgCode}/>`
           renderAs={this.state.renderAs}
           includeMargin={this.state.includeMargin}
           {...(this.state.withImg ? {img: this.state.img} : {})}
-          ref={ref => this.qrcode = ref}
+          ref={(ref) => (this.qrcode = ref)}
         />
 
         <br />
         <button onClick={this.downloadQRCode} style={{fontFamily: 'monospace'}}>
-          this.qrcode.download('QR Code.png');
+          {qrCodeDownloadCode}
         </button>
       </div>
     );
