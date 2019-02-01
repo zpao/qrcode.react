@@ -4,7 +4,6 @@ var QRCode = require('..');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-// TODO: live update demo
 class Demo extends React.Component {
   state = {
     value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
@@ -14,9 +13,27 @@ class Demo extends React.Component {
     level: 'L',
     renderAs: 'svg',
     includeMargin: false,
+    withImg: false,
+    img: {
+      src: './logo.png',
+      top: 50,
+      left: 50,
+      width: 10,
+      height: 10,
+    }
   };
 
+  downloadQRCode = () => {
+    this.qrcode.download('QR Code.png');
+  }
+
+  setImgState(state) {
+    this.setState({img: {...this.state.img, ...state}});
+  }
+
   render() {
+    var imgCode = this.state.withImg ?
+      `  img={${JSON.stringify(this.state.img)}}\n` : ''
     var code = `<QRCode
   value={"${this.state.value}"}
   size={${this.state.size}}
@@ -25,7 +42,8 @@ class Demo extends React.Component {
   level={"${this.state.level}"}
   includeMargin={${this.state.includeMargin}}
   renderAs={"${this.state.renderAs}"}
-/>`;
+  ref={ref => this.qrcode = ref}
+${imgCode}/>`
     return (
       <div>
         <div>
@@ -102,6 +120,74 @@ class Demo extends React.Component {
         </div>
         <div>
           <label>
+            With Img:
+            <br />
+            <input
+              type="checkbox"
+              checked={this.state.withImg}
+              onChange={(e) => this.setState({withImg: e.target.checked})}
+            />
+          </label>
+        </div>
+        <div style={this.state.withImg ? {} : {display: 'none'}}>
+          <div>
+            <label>
+              Img src:
+              <br />
+              <input
+                onChange={(e) => this.setImgState({src: e.target.value})}
+                value={this.state.img.src}
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Img Coordinate:
+            </label>
+            <br />
+            <div style={{marginLeft: '20px'}}>
+              <label>top (percent):
+                <input
+                  type="number"
+                  onChange={(e) =>
+                    this.setImgState({top: parseInt(e.target.value, 10) || 50})
+                  }
+                  value={this.state.img.top}
+                />
+              </label>
+              <label>, left (percent):
+                <input
+                  type="number"
+                  onChange={(e) =>
+                    this.setImgState({left: parseInt(e.target.value, 10) || 50})
+                  }
+                  value={this.state.img.left}
+                />
+              </label>
+              <br />
+              <label>width (percent):
+                <input
+                  type="number"
+                  onChange={(e) =>
+                    this.setImgState({width: parseInt(e.target.value, 10) || 10})
+                  }
+                  value={this.state.img.width}
+                />
+              </label>
+              <label>height (percent):
+                <input
+                  type="number"
+                  onChange={(e) =>
+                    this.setImgState({height: parseInt(e.target.value, 10) || 10})
+                  }
+                  value={this.state.img.height}
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label>
             Value:
             <br />
             <textarea
@@ -117,7 +203,7 @@ class Demo extends React.Component {
           <label>
             Use it:
             <br />
-            <textarea rows="6" cols="80" disabled={true} value={code} />
+            <textarea rows="11" cols="80" disabled={true} value={code} />
           </label>
         </div>
 
@@ -129,7 +215,14 @@ class Demo extends React.Component {
           level={this.state.level}
           renderAs={this.state.renderAs}
           includeMargin={this.state.includeMargin}
+          {...(this.state.withImg ? {img: this.state.img} : {})}
+          ref={ref => this.qrcode = ref}
         />
+
+        <br />
+        <button onClick={this.downloadQRCode} style={{fontFamily: 'monospace'}}>
+          this.qrcode.download('QR Code.png');
+        </button>
       </div>
     );
   }
