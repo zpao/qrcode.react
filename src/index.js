@@ -42,6 +42,21 @@ function convertStr(str: string): string {
   return out;
 }
 
+type ImgProps = {
+  src: string,
+  left: number,
+  top: number,
+  width: number,
+  height: number,
+}
+
+const DEFAULT_IMG_PROPS = {
+  left: 50,
+  top: 50,
+  width: 10,
+  height: 10,
+}
+
 type QRProps = {
   value: string,
   size: number,
@@ -50,6 +65,7 @@ type QRProps = {
   fgColor: string,
   style?: ?Object,
   includeMargin: boolean,
+  img: ?ImgProps,
 };
 
 const DEFAULT_PROPS = {
@@ -70,6 +86,80 @@ const PROP_TYPES = {
 };
 
 const MARGIN_SIZE = 4;
+
+function drawQrOnCanvas(
+  qrcode: Object,
+  canvas: HTMLCanvasElement,
+  size: number,
+  margin: number,
+  bgColor: string,
+  fgColor: string,
+  imgProps: ?ImgProps,
+): Promise<HTMLCanvasElement> {
+  return new Promise((resolve, reject) => {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      return reject(new Error('canvas.getContext("2d") failed'));
+    }
+
+    const cells = qrcode.modules;
+    if (cells === null) {
+      return reject(new Error('qrcode.modules is null'));
+    }
+
+    const numCells = cells.length + margin * 2;
+
+    // We're going to scale this so that the number of drawable units
+    // matches the number of cells. This avoids rounding issues, but does
+    // result in some potentially unwanted single pixel issues between
+    // blocks, only in environments that don't support Path2D.
+    const pixelRatio = window.devicePixelRatio || 1;
+    canvas.height = canvas.width = size * pixelRatio;
+    const scale = (size / numCells) * pixelRatio;
+    ctx.scale(scale, scale);
+
+    // Draw solid background, only paint dark modules.
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, numCells, numCells);
+
+    ctx.fillStyle = fgColor;
+    if (SUPPORTS_PATH2D) {
+      // $FlowFixMe: Path2D c'tor doesn't support args yet.
+      ctx.fill(new Path2D(generatePath(cells, margin)));
+    } else {
+      cells.forEach(function(row, rdx) {
+        row.forEach(function(cell, cdx) {
+          if (cell) {
+            ctx.fillRect(cdx + margin, rdx + margin, 1, 1);
+          }
+        });
+      });
+    }
+
+    // reset scale to allow outside manipulation
+    ctx.scale(1 / scale, 1 / scale);
+
+    if (imgProps && imgProps.src) {
+      const {src, left, top, width, height} =
+        {...DEFAULT_IMG_PROPS, ...(imgProps || {})};
+      const img = new Image();
+      img.src = src;
+
+      img.addEventListener('error', reject);
+      img.addEventListener('load', () => {
+        const dWidth = canvas.width * width / 100;
+        const dHeight = canvas.height * height / 100;
+        const dx = canvas.width * left / 100 - dWidth / 2
+        const dy = canvas.height * top / 100 - dHeight / 2
+        ctx.drawImage(img, dx, dy, dWidth, dHeight);
+
+        resolve(canvas);
+      });
+    } else {
+      resolve(canvas);
+    }
+  });
+}
 
 function generatePath(modules: [[boolean]], margin: number = 0): string {
   const ops = [];
@@ -134,7 +224,7 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
   }
 
   update() {
-    const {value, size, level, bgColor, fgColor, includeMargin} = this.props;
+    const {value, size, level, bgColor, fgColor, includeMargin, img} = this.props;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -142,48 +232,15 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
     qrcode.make();
 
     if (this._canvas != null) {
-      const canvas = this._canvas;
-
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        return;
-      }
-
-      const cells = qrcode.modules;
-      if (cells === null) {
-        return;
-      }
-
-      const margin = includeMargin ? MARGIN_SIZE : 0;
-
-      const numCells = cells.length + margin * 2;
-
-      // We're going to scale this so that the number of drawable units
-      // matches the number of cells. This avoids rounding issues, but does
-      // result in some potentially unwanted single pixel issues between
-      // blocks, only in environments that don't support Path2D.
-      const pixelRatio = window.devicePixelRatio || 1;
-      canvas.height = canvas.width = size * pixelRatio;
-      const scale = (size / numCells) * pixelRatio;
-      ctx.scale(scale, scale);
-
-      // Draw solid background, only paint dark modules.
-      ctx.fillStyle = bgColor;
-      ctx.fillRect(0, 0, numCells, numCells);
-
-      ctx.fillStyle = fgColor;
-      if (SUPPORTS_PATH2D) {
-        // $FlowFixMe: Path2D c'tor doesn't support args yet.
-        ctx.fill(new Path2D(generatePath(cells, margin)));
-      } else {
-        cells.forEach(function(row, rdx) {
-          row.forEach(function(cell, cdx) {
-            if (cell) {
-              ctx.fillRect(cdx + margin, rdx + margin, 1, 1);
-            }
-          });
-        });
-      }
+      drawQrOnCanvas(
+        qrcode,
+        this._canvas,
+        size,
+        includeMargin ? MARGIN_SIZE : 0,
+        bgColor,
+        fgColor,
+        img,
+      )
     }
   }
 
@@ -217,6 +274,24 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
   static defaultProps = DEFAULT_PROPS;
   static propTypes = PROP_TYPES;
 
+  renderImg(imgProps: ?ImgProps) {
+    if (imgProps && imgProps.src) {
+      const {src, left, top, width, height} =
+        {...DEFAULT_IMG_PROPS, ...(imgProps || {})};
+      const [x, y, w, h] =
+        [left - width / 2, top - height / 2, width, height].map(v => `${v}%`);
+
+      return (
+        <image
+          xlinkHref={src} x={x} y={y} width={w} height={h}
+          preserveAspectRatio="none"
+        />
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     const {
       value,
@@ -225,6 +300,7 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
       bgColor,
       fgColor,
       includeMargin,
+      img,
       ...otherProps
     } = this.props;
 
@@ -259,18 +335,65 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
         {...otherProps}>
         <path fill={bgColor} d={`M0,0 h${numCells}v${numCells}H0z`} />
         <path fill={fgColor} d={fgPath} />
+        {this.renderImg(img)}
       </svg>
     );
   }
 }
 
-type RootProps = QRProps & {renderAs: 'svg' | 'canvas'};
-const QRCode = (props: RootProps): React.Node => {
-  const {renderAs, ...otherProps} = props;
-  const Component = renderAs === 'svg' ? QRCodeSVG : QRCodeCanvas;
-  return <Component {...otherProps} />;
-};
+const DEFAULT_DATA_URL_TYPE = 'image/png';
+const DEFAULT_DOWNLOAD_FILENAME = 'QRCode.png';
 
-QRCode.defaultProps = {renderAs: 'canvas', ...DEFAULT_PROPS};
+type RootProps = QRProps & { renderAs: 'svg' | 'canvas' };
+class QRCode extends React.Component<RootProps> {
+  static defaultProps = {renderAs: 'canvas', ...DEFAULT_PROPS};
+
+  genCanvas(overwritingProps: QRProps): Promise<HTMLCanvasElement> {
+    const canvas = document.createElement('canvas');
+    const {value, size, level, bgColor, fgColor, includeMargin, img} =
+      {...this.props, ...(overwritingProps || {})};
+
+    // We'll use type===-1 to force QRCode to automatically pick the best type
+    const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
+    qrcode.addData(convertStr(value));
+    qrcode.make();
+
+    return drawQrOnCanvas(
+      qrcode,
+      canvas,
+      size,
+      includeMargin ? MARGIN_SIZE : 0,
+      bgColor,
+      fgColor,
+      img,
+    );
+  }
+
+  genCanvasDataURL(type: string = DEFAULT_DATA_URL_TYPE, overwritingProps: QRProps): Promise<string> {
+    return this.genCanvas(overwritingProps)
+      .then(canvas => canvas.toDataURL(type));
+  }
+
+  download(filename: string = DEFAULT_DOWNLOAD_FILENAME, type: string = DEFAULT_DATA_URL_TYPE, overwritingProps: QRProps) {
+    this.genCanvasDataURL(type, overwritingProps)
+      .then(dataUrl => {
+        const downloadLink = document.createElement('a');
+
+        downloadLink.setAttribute(
+          'href',
+          dataUrl.replace(type, 'image/octet-stream')
+        );
+        downloadLink.setAttribute('download', filename);
+
+        downloadLink.click();
+      });
+  }
+
+  render(): React.Node {
+    const {renderAs, ...otherProps} = this.props;
+    const Component = renderAs === 'svg' ? QRCodeSVG : QRCodeCanvas;
+    return <Component {...otherProps} />;
+  }
+}
 
 module.exports = QRCode;
