@@ -44,7 +44,7 @@ function convertStr(str: string): string {
 
 type QRProps = {
   value: string,
-  size: number,
+  size: number | string,
   level: $Keys<typeof ErrorCorrectLevel>,
   bgColor: string,
   fgColor: string,
@@ -62,7 +62,7 @@ const DEFAULT_PROPS = {
 
 const PROP_TYPES = {
   value: PropTypes.string.isRequired,
-  size: PropTypes.number,
+  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
   bgColor: PropTypes.string,
   fgColor: PropTypes.string,
