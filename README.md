@@ -31,6 +31,18 @@ prop      | type                 | default value
 `fgColor` | `string` (CSS color) | `"#000000"`
 `level`   | `string` (`'L' 'M' 'Q' 'H'`)            | `'L'`
 `includeMargin` | `boolean`      | `false`
+`ref`     | `function` [react's ref](https://reactjs.org/docs/refs-and-the-dom.html) |
+`img`     | see below            | see below
+
+### `img` Props
+
+prop      | type                  | default value
+----------|-----------------------|--------------
+`src`     | `string`              |
+`top`     | `number` (percentage) | `50`
+`left`    | `number` (percentage) | `50`
+`width`   | `number` (percentage) | `10`
+`height`  | `number` (percentage) | `10`
 
 ## Custom Styles
 
@@ -40,5 +52,18 @@ prop      | type                 | default value
 
 <img src="qrcode.png" height="256" width="256">
 
+## Download (or Export) as File
+
+You need to set `ref={ref => this.qrcode = ref}` to get the component reference first, then call:
+
+```javascript
+this.qrcode.download('QR Code.png');
+```
+
+related methods:
+
+* `genCanvas(overwritingProps): Promise<HTMLCanvasElement>`
+* `genCanvasDataURL(type, overwritingProps): Promise<string>`
+* `download(filename, type, overwritingProps)`
 
 ## LICENSE [ISC](LICENSE)
