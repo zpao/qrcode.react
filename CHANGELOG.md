@@ -1,3 +1,9 @@
+## [0.9.3] - 2019-02-17
+
+### Fixed
+- Updated Path2D detection to exclude browsers which don't support string constructor (Edge).
+
+
 ## [0.9.2] - 2019-01-03
 
 ### Fixed
