@@ -14,9 +14,28 @@ class Demo extends React.Component {
     level: 'L',
     renderAs: 'svg',
     includeMargin: false,
+    includeImage: true,
+    imageH: 24,
+    imageW: 24,
+    imageX: 0,
+    imageY: 0,
+    imageSrc: 'https://static.zpao.com/favicon.png',
+    imageExcavate: true,
+    centerImage: true,
   };
 
   render() {
+    var imageSettingsCode = this.state.includeImage
+      ? `
+  imageSettings={{
+    src: "${this.state.imageSrc}",
+    x: ${this.state.centerImage ? 'null' : this.state.imageX},
+    y: ${this.state.centerImage ? 'null' : this.state.imageY},
+    height: ${this.state.imageH},
+    width: ${this.state.imageW},
+    excavate: ${this.state.imageExcavate},
+  }}`
+      : '';
     var code = `<QRCode
   value={"${this.state.value}"}
   size={${this.state.size}}
@@ -24,7 +43,7 @@ class Demo extends React.Component {
   fgColor={"${this.state.fgColor}"}
   level={"${this.state.level}"}
   includeMargin={${this.state.includeMargin}}
-  renderAs={"${this.state.renderAs}"}
+  renderAs={"${this.state.renderAs}"}${imageSettingsCode}
 />`;
     return (
       <div>
@@ -115,9 +134,126 @@ class Demo extends React.Component {
 
         <div>
           <label>
+            Include Image:
+            <br />
+            <input
+              type="checkbox"
+              checked={this.state.includeImage}
+              onChange={(e) => this.setState({includeImage: e.target.checked})}
+            />
+          </label>
+        </div>
+
+        <fieldset disabled={!this.state.includeImage}>
+          <legend>Image Settings</legend>
+
+          <div>
+            <label>
+              Source:
+              <br />
+              <input
+                type="text"
+                onChange={(e) => this.setState({imageSrc: e.target.value})}
+                value={this.state.imageSrc}
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Image Width: {this.state.imageW}
+              <br />
+              <input
+                type="number"
+                value={this.state.imageW}
+                onChange={(e) =>
+                  this.setState({imageW: parseInt(e.target.value, 10)})
+                }
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Image Height: {this.state.imageH}
+              <br />
+              <input
+                type="number"
+                value={this.state.imageH}
+                onChange={(e) =>
+                  this.setState({imageH: parseInt(e.target.value, 10)})
+                }
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Center Image:
+              <br />
+              <input
+                type="checkbox"
+                checked={this.state.centerImage}
+                onChange={(e) => this.setState({centerImage: e.target.checked})}
+              />
+            </label>
+          </div>
+          <fieldset disabled={this.state.centerImage}>
+            <legend>Image Settings</legend>
+            <div>
+              <label>
+                Image X: {this.state.imageX}
+                <br />
+                <input
+                  type="range"
+                  min={0}
+                  max={this.state.size - this.state.imageW}
+                  value={this.state.imageX}
+                  onChange={(e) =>
+                    this.setState({imageX: parseInt(e.target.value, 10)})
+                  }
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Image Y: {this.state.imageY}
+                <br />
+                <input
+                  type="range"
+                  min={0}
+                  max={this.state.size - this.state.imageH}
+                  value={this.state.imageY}
+                  onChange={(e) =>
+                    this.setState({imageY: parseInt(e.target.value, 10)})
+                  }
+                />
+              </label>
+            </div>
+          </fieldset>
+          <div>
+            <label>
+              Excavate ("dig" foreground to nearest whole module):
+              <br />
+              <input
+                type="checkbox"
+                checked={this.state.imageExcavate}
+                onChange={(e) =>
+                  this.setState({imageExcavate: e.target.checked})
+                }
+              />
+            </label>
+          </div>
+        </fieldset>
+
+        <div>
+          <label>
             Use it:
             <br />
-            <textarea rows="6" cols="80" disabled={true} value={code} />
+            <textarea
+              rows={code.split('\n').length}
+              cols="80"
+              readOnly={true}
+              value={code}
+            />
           </label>
         </div>
 
@@ -129,6 +265,18 @@ class Demo extends React.Component {
           level={this.state.level}
           renderAs={this.state.renderAs}
           includeMargin={this.state.includeMargin}
+          imageSettings={
+            this.state.includeImage
+              ? {
+                  src: this.state.imageSrc,
+                  height: this.state.imageH,
+                  width: this.state.imageW,
+                  x: this.state.centerImage ? null : this.state.imageX,
+                  y: this.state.centerImage ? null : this.state.imageY,
+                  excavate: this.state.imageExcavate,
+                }
+              : null
+          }
         />
       </div>
     );

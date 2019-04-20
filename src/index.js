@@ -9,6 +9,10 @@ const PropTypes = require('prop-types');
 const QRCodeImpl = require('qr.js/lib/QRCode');
 const ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
 
+// TODO: pull this off of the QRCode class type so it matches.
+type Modules = Array<Array<boolean>>;
+type Excavation = {|x: number, y: number, w: number, h: number|};
+
 // Convert from UTF-16, forcing the use of byte-mode encoding in our QR Code.
 // This allows us to encode Hanji, Kanji, emoji, etc. Ideally we'd do more
 // detection and not resort to byte-mode if possible, but we're trading off
@@ -50,6 +54,14 @@ type QRProps = {
   fgColor: string,
   style?: ?Object,
   includeMargin: boolean,
+  imageSettings?: {
+    src: string,
+    height: number,
+    width: number,
+    excavate: boolean,
+    x?: number,
+    y?: number,
+  },
 };
 
 const DEFAULT_PROPS = {
@@ -60,18 +72,35 @@ const DEFAULT_PROPS = {
   includeMargin: false,
 };
 
-const PROP_TYPES = process.env.NODE_ENV !== 'production' ? {
-  value: PropTypes.string.isRequired,
-  size: PropTypes.number,
-  level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-  bgColor: PropTypes.string,
-  fgColor: PropTypes.string,
-  includeMargin: PropTypes.bool,
-} : {};
+const PROP_TYPES =
+  process.env.NODE_ENV !== 'production'
+    ? {
+        value: PropTypes.string.isRequired,
+        size: PropTypes.number,
+        level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
+        bgColor: PropTypes.string,
+        fgColor: PropTypes.string,
+        includeMargin: PropTypes.bool,
+        imageSettings: PropTypes.shape({
+          src: PropTypes.string.isRequired,
+          height: PropTypes.number.isRequired,
+          width: PropTypes.number.isRequired,
+          excavate: PropTypes.bool,
+          x: PropTypes.number,
+          y: PropTypes.number,
+        }),
+      }
+    : {};
 
 const MARGIN_SIZE = 4;
 
-function generatePath(modules: [[boolean]], margin: number = 0): string {
+// This is *very* rough estimate of max amount of QRCode allowed to be covered.
+// It is "wrong" in a lot of ways (area is a terrible way to estimate, it
+// really should be number of modules covered), but if for some reason we don't
+// get an explicit height or width, I'd rather default to something than throw.
+const DEFAULT_IMG_SCALE = 0.1;
+
+function generatePath(modules: Modules, margin: number = 0): string {
   const ops = [];
   modules.forEach(function(row, y) {
     let start = null;
@@ -114,6 +143,63 @@ function generatePath(modules: [[boolean]], margin: number = 0): string {
   return ops.join('');
 }
 
+// We could just do this in generatePath, except that we want to support
+// non-Path2D canvas, so we need to keep it an explicit step.
+function excavateModules(modules: Modules, excavation: Excavation): Modules {
+  return modules.slice().map((row, y) => {
+    if (y < excavation.y || y >= excavation.y + excavation.h) {
+      return row;
+    }
+    return row.map((cell, x) => {
+      if (x < excavation.x || x >= excavation.x + excavation.w) {
+        return cell;
+      }
+      return false;
+    });
+  });
+}
+
+function getImageSettings(
+  props: QRProps,
+  cells: Modules
+): null | {
+  x: number,
+  y: number,
+  h: number,
+  w: number,
+  excavation: ?Excavation,
+} {
+  const {imageSettings, size, includeMargin} = props;
+  if (imageSettings == null) {
+    return null;
+  }
+  const margin = includeMargin ? MARGIN_SIZE : 0;
+  const numCells = cells.length + margin * 2;
+  const defaultSize = Math.floor(size * DEFAULT_IMG_SCALE);
+  const scale = numCells / size;
+  const w = (imageSettings.width || defaultSize) * scale;
+  const h = (imageSettings.height || defaultSize) * scale;
+  const x =
+    imageSettings.x == null
+      ? cells.length / 2 - w / 2
+      : imageSettings.x * scale;
+  const y =
+    imageSettings.y == null
+      ? cells.length / 2 - h / 2
+      : imageSettings.y * scale;
+
+  let excavation = null;
+  if (imageSettings.excavate) {
+    let floorX = Math.floor(x);
+    let floorY = Math.floor(y);
+    let ceilW = Math.ceil(w + x - floorX);
+    let ceilH = Math.ceil(h + y - floorY);
+    excavation = {x: floorX, y: floorY, w: ceilW, h: ceilH};
+  }
+
+  return {x, y, h, w, excavation};
+}
+
 // For canvas we're going to switch our drawing mode based on whether or not
 // the environment supports Path2D. We only need the constructor to be
 // supported, but Edge doesn't actually support the path (string) type
@@ -128,8 +214,11 @@ const SUPPORTS_PATH2D = (function() {
   return true;
 })();
 
-class QRCodeCanvas extends React.PureComponent<QRProps> {
+class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
   _canvas: ?HTMLCanvasElement;
+  _image: ?HTMLImageElement;
+
+  state = {imgLoaded: false};
 
   static defaultProps = DEFAULT_PROPS;
 
@@ -142,7 +231,15 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
   }
 
   update() {
-    const {value, size, level, bgColor, fgColor, includeMargin} = this.props;
+    const {
+      value,
+      size,
+      level,
+      bgColor,
+      fgColor,
+      includeMargin,
+      imageSettings,
+    } = this.props;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
@@ -157,14 +254,20 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
         return;
       }
 
-      const cells = qrcode.modules;
+      let cells = qrcode.modules;
       if (cells === null) {
         return;
       }
 
       const margin = includeMargin ? MARGIN_SIZE : 0;
-
       const numCells = cells.length + margin * 2;
+      const calculatedImageSettings = getImageSettings(this.props, cells);
+
+      if (imageSettings != null && calculatedImageSettings != null) {
+        if (calculatedImageSettings.excavation != null) {
+          cells = excavateModules(cells, calculatedImageSettings.excavation);
+        }
+      }
 
       // We're going to scale this so that the number of drawable units
       // matches the number of cells. This avoids rounding issues, but does
@@ -192,8 +295,25 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
           });
         });
       }
+      if (
+        this.state.imgLoaded &&
+        this._image &&
+        calculatedImageSettings != null
+      ) {
+        ctx.drawImage(
+          this._image,
+          calculatedImageSettings.x + margin,
+          calculatedImageSettings.y + margin,
+          calculatedImageSettings.w,
+          calculatedImageSettings.h
+        );
+      }
     }
   }
+
+  handleImageLoad = () => {
+    this.setState({imgLoaded: true});
+  };
 
   render() {
     const {
@@ -204,19 +324,37 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
       fgColor,
       style,
       includeMargin,
+      imageSettings,
       ...otherProps
     } = this.props;
     const canvasStyle = {height: size, width: size, ...style};
+    let img = null;
+    let imgSrc = imageSettings && imageSettings.src;
+    if (imageSettings != null && imgSrc != null) {
+      img = (
+        <img
+          src={imgSrc}
+          style={{display: 'none'}}
+          onLoad={this.handleImageLoad}
+          ref={(ref: ?HTMLImageElement): ?HTMLImageElement =>
+            (this._image = ref)
+          }
+        />
+      );
+    }
     return (
-      <canvas
-        style={canvasStyle}
-        height={size}
-        width={size}
-        ref={(ref: ?HTMLCanvasElement): ?HTMLCanvasElement =>
-          (this._canvas = ref)
-        }
-        {...otherProps}
-      />
+      <>
+        <canvas
+          style={canvasStyle}
+          height={size}
+          width={size}
+          ref={(ref: ?HTMLCanvasElement): ?HTMLCanvasElement =>
+            (this._canvas = ref)
+          }
+          {...otherProps}
+        />
+        {img}
+      </>
     );
   }
 }
@@ -236,6 +374,7 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
       bgColor,
       fgColor,
       includeMargin,
+      imageSettings,
       ...otherProps
     } = this.props;
 
@@ -244,12 +383,32 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
     qrcode.addData(convertStr(value));
     qrcode.make();
 
-    const cells = qrcode.modules;
+    let cells = qrcode.modules;
     if (cells === null) {
       return null;
     }
 
     const margin = includeMargin ? MARGIN_SIZE : 0;
+    const numCells = cells.length + margin * 2;
+    const calculatedImageSettings = getImageSettings(this.props, cells);
+
+    let image = null;
+    if (imageSettings != null && calculatedImageSettings != null) {
+      if (calculatedImageSettings.excavation != null) {
+        cells = excavateModules(cells, calculatedImageSettings.excavation);
+      }
+
+      image = (
+        <image
+          xlinkHref={imageSettings.src}
+          height={calculatedImageSettings.h}
+          width={calculatedImageSettings.w}
+          x={calculatedImageSettings.x + margin}
+          y={calculatedImageSettings.y + margin}
+          preserveAspectRatio="none"
+        />
+      );
+    }
 
     // Drawing strategy: instead of a rect per module, we're going to create a
     // single path for the dark modules and layer that on top of a light rect,
@@ -258,8 +417,6 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
     // For level 1, 441 nodes -> 2
     // For level 40, 31329 -> 2
     const fgPath = generatePath(cells, margin);
-
-    const numCells = cells.length + margin * 2;
 
     return (
       <svg
@@ -270,6 +427,7 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
         {...otherProps}>
         <path fill={bgColor} d={`M0,0 h${numCells}v${numCells}H0z`} />
         <path fill={fgColor} d={fgPath} />
+        {image}
       </svg>
     );
   }
