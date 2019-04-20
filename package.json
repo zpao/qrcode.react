@@ -28,6 +28,7 @@
     "lib"
   ],
   "dependencies": {
+    "loose-envify": "^1.4.0",
     "prop-types": "^15.6.0",
     "qr.js": "0.0.0"
   },
@@ -56,5 +57,10 @@
     "react-dom": "^16.2.0",
     "webpack": "^4.28.1",
     "webpack-cli": "^3.1.2"
+  },
+  "browserify": {
+    "transform": [
+      "loose-envify"
+    ]
   }
 }

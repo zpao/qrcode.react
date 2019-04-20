@@ -60,14 +60,14 @@ const DEFAULT_PROPS = {
   includeMargin: false,
 };
 
-const PROP_TYPES = {
+const PROP_TYPES = process.env.NODE_ENV !== 'production' ? {
   value: PropTypes.string.isRequired,
   size: PropTypes.number,
   level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
   bgColor: PropTypes.string,
   fgColor: PropTypes.string,
   includeMargin: PropTypes.bool,
-};
+} : {};
 
 const MARGIN_SIZE = 4;
 
@@ -132,7 +132,6 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
   _canvas: ?HTMLCanvasElement;
 
   static defaultProps = DEFAULT_PROPS;
-  static propTypes = PROP_TYPES;
 
   componentDidMount() {
     this.update();
@@ -222,9 +221,12 @@ class QRCodeCanvas extends React.PureComponent<QRProps> {
   }
 }
 
+if (process.env.NODE_ENV !== 'production') {
+  QRCodeCanvas.propTypes = PROP_TYPES;
+}
+
 class QRCodeSVG extends React.PureComponent<QRProps> {
   static defaultProps = DEFAULT_PROPS;
-  static propTypes = PROP_TYPES;
 
   render() {
     const {
@@ -271,6 +273,10 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
       </svg>
     );
   }
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  QRCodeSVG.propTypes = PROP_TYPES;
 }
 
 type RootProps = QRProps & {renderAs: 'svg' | 'canvas'};
