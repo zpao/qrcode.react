@@ -29,7 +29,7 @@
   ],
   "dependencies": {
     "loose-envify": "^1.4.0",
-    "prop-types": "^15.6.0",
+    "prop-types": "^15.6.2",
     "qr.js": "0.0.0"
   },
   "peerDependencies": {
