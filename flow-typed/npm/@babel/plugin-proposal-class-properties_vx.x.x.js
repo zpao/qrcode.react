@@ -28,5 +28,7 @@ declare module '@babel/plugin-proposal-class-properties/lib/index' {
 
 // Filename aliases
 declare module '@babel/plugin-proposal-class-properties/lib/index.js' {
-  declare module.exports: $Exports<'@babel/plugin-proposal-class-properties/lib/index'>;
+  declare module.exports: $Exports<
+    '@babel/plugin-proposal-class-properties/lib/index'
+  >;
 }

@@ -60,14 +60,17 @@ const DEFAULT_PROPS = {
   includeMargin: false,
 };
 
-const PROP_TYPES = process.env.NODE_ENV !== 'production' ? {
-  value: PropTypes.string.isRequired,
-  size: PropTypes.number,
-  level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-  bgColor: PropTypes.string,
-  fgColor: PropTypes.string,
-  includeMargin: PropTypes.bool,
-} : {};
+const PROP_TYPES =
+  process.env.NODE_ENV !== 'production'
+    ? {
+        value: PropTypes.string.isRequired,
+        size: PropTypes.number,
+        level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
+        bgColor: PropTypes.string,
+        fgColor: PropTypes.string,
+        includeMargin: PropTypes.bool,
+      }
+    : {};
 
 const MARGIN_SIZE = 4;
 

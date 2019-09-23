@@ -83,13 +83,19 @@ declare module 'babel-eslint/lib/analyze-scope.js' {
   declare module.exports: $Exports<'babel-eslint/lib/analyze-scope'>;
 }
 declare module 'babel-eslint/lib/babylon-to-espree/attachComments.js' {
-  declare module.exports: $Exports<'babel-eslint/lib/babylon-to-espree/attachComments'>;
+  declare module.exports: $Exports<
+    'babel-eslint/lib/babylon-to-espree/attachComments'
+  >;
 }
 declare module 'babel-eslint/lib/babylon-to-espree/convertComments.js' {
-  declare module.exports: $Exports<'babel-eslint/lib/babylon-to-espree/convertComments'>;
+  declare module.exports: $Exports<
+    'babel-eslint/lib/babylon-to-espree/convertComments'
+  >;
 }
 declare module 'babel-eslint/lib/babylon-to-espree/convertTemplateType.js' {
-  declare module.exports: $Exports<'babel-eslint/lib/babylon-to-espree/convertTemplateType'>;
+  declare module.exports: $Exports<
+    'babel-eslint/lib/babylon-to-espree/convertTemplateType'
+  >;
 }
 declare module 'babel-eslint/lib/babylon-to-espree/index.js' {
   declare module.exports: $Exports<'babel-eslint/lib/babylon-to-espree/index'>;
@@ -98,10 +104,14 @@ declare module 'babel-eslint/lib/babylon-to-espree/toAST.js' {
   declare module.exports: $Exports<'babel-eslint/lib/babylon-to-espree/toAST'>;
 }
 declare module 'babel-eslint/lib/babylon-to-espree/toToken.js' {
-  declare module.exports: $Exports<'babel-eslint/lib/babylon-to-espree/toToken'>;
+  declare module.exports: $Exports<
+    'babel-eslint/lib/babylon-to-espree/toToken'
+  >;
 }
 declare module 'babel-eslint/lib/babylon-to-espree/toTokens.js' {
-  declare module.exports: $Exports<'babel-eslint/lib/babylon-to-espree/toTokens'>;
+  declare module.exports: $Exports<
+    'babel-eslint/lib/babylon-to-espree/toTokens'
+  >;
 }
 declare module 'babel-eslint/lib/index.js' {
   declare module.exports: $Exports<'babel-eslint/lib/index'>;
