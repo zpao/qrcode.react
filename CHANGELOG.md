@@ -1,3 +1,12 @@
+## [1.0.0] - 2019-11-08
+
+### Added
+- Support for embedding image into QR Code.
+
+### Changed
+- Remove `PropTypes` in production environments.
+
+
 ## [0.9.3] - 2019-02-17
 
 ### Fixed
