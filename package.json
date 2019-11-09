@@ -50,7 +50,7 @@
     "eslint-plugin-flowtype": "^4.3.0",
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.6.1",
-    "flow-bin": "^0.89.0",
+    "flow-bin": "^0.111.3",
     "gh-pages": "^2.0.1",
     "prettier": "^1.1.0",
     "react": "^16.2.0",
