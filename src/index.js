@@ -11,7 +11,7 @@ const ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
 
 // TODO: pull this off of the QRCode class type so it matches.
 type Modules = Array<Array<boolean>>;
-type Excavation = {|x: number, y: number, w: number, h: number|};
+type Excavation = {| x: number, y: number, w: number, h: number |};
 
 // Convert from UTF-16, forcing the use of byte-mode encoding in our QR Code.
 // This allows us to encode Hanji, Kanji, emoji, etc. Ideally we'd do more
@@ -75,21 +75,21 @@ const DEFAULT_PROPS = {
 const PROP_TYPES =
   process.env.NODE_ENV !== 'production'
     ? {
-        value: PropTypes.string.isRequired,
-        size: PropTypes.number,
-        level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-        bgColor: PropTypes.string,
-        fgColor: PropTypes.string,
-        includeMargin: PropTypes.bool,
-        imageSettings: PropTypes.shape({
-          src: PropTypes.string.isRequired,
-          height: PropTypes.number.isRequired,
-          width: PropTypes.number.isRequired,
-          excavate: PropTypes.bool,
-          x: PropTypes.number,
-          y: PropTypes.number,
-        }),
-      }
+      value: PropTypes.string.isRequired,
+      size: PropTypes.number,
+      level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
+      bgColor: PropTypes.string,
+      fgColor: PropTypes.string,
+      includeMargin: PropTypes.bool,
+      imageSettings: PropTypes.shape({
+        src: PropTypes.string.isRequired,
+        height: PropTypes.number.isRequired,
+        width: PropTypes.number.isRequired,
+        excavate: PropTypes.bool,
+        x: PropTypes.number,
+        y: PropTypes.number,
+      }),
+    }
     : {};
 
 const MARGIN_SIZE = 4;
@@ -102,9 +102,9 @@ const DEFAULT_IMG_SCALE = 0.1;
 
 function generatePath(modules: Modules, margin: number = 0): string {
   const ops = [];
-  modules.forEach(function(row, y) {
+  modules.forEach(function (row, y) {
     let start = null;
-    row.forEach(function(cell, x) {
+    row.forEach(function (cell, x) {
       if (!cell && start !== null) {
         // M0 0h7v1H0z injects the space with the move and drops the comma,
         // saving a char per operation
@@ -129,7 +129,7 @@ function generatePath(modules: Modules, margin: number = 0): string {
           // Otherwise finish the current line.
           ops.push(
             `M${start + margin},${y + margin} h${x + 1 - start}v1H${start +
-              margin}z`
+            margin}z`
           );
         }
         return;
@@ -169,7 +169,7 @@ function getImageSettings(
   w: number,
   excavation: ?Excavation,
 } {
-  const {imageSettings, size, includeMargin} = props;
+  const { imageSettings, size, includeMargin } = props;
   if (imageSettings == null) {
     return null;
   }
@@ -194,10 +194,10 @@ function getImageSettings(
     let floorY = Math.floor(y);
     let ceilW = Math.ceil(w + x - floorX);
     let ceilH = Math.ceil(h + y - floorY);
-    excavation = {x: floorX, y: floorY, w: ceilW, h: ceilH};
+    excavation = { x: floorX, y: floorY, w: ceilW, h: ceilH };
   }
 
-  return {x, y, h, w, excavation};
+  return { x, y, h, w, excavation };
 }
 
 // For canvas we're going to switch our drawing mode based on whether or not
@@ -205,7 +205,7 @@ function getImageSettings(
 // supported, but Edge doesn't actually support the path (string) type
 // argument. Luckily it also doesn't support the addPath() method. We can
 // treat that as the same thing.
-const SUPPORTS_PATH2D = (function() {
+const SUPPORTS_PATH2D = (function () {
   try {
     new Path2D().addPath(new Path2D());
   } catch (e) {
@@ -214,11 +214,11 @@ const SUPPORTS_PATH2D = (function() {
   return true;
 })();
 
-class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
+class QRCodeCanvas extends React.PureComponent<QRProps, { imgLoaded: boolean }> {
   _canvas: ?HTMLCanvasElement;
   _image: ?HTMLImageElement;
 
-  state = {imgLoaded: false};
+  state = { imgLoaded: false };
 
   static defaultProps = DEFAULT_PROPS;
 
@@ -228,6 +228,14 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
 
   componentDidUpdate() {
     this.update();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { imageSettings = { src: '' } } = this.props;
+    const { imageSettings: imageSettingsNew = { src: '' } } = nextProps;
+    if (imageSettings.src !== imageSettingsNew.src) {
+      this.setState({ imgLoaded: false });
+    }
   }
 
   update() {
@@ -287,8 +295,8 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
         // $FlowFixMe: Path2D c'tor doesn't support args yet.
         ctx.fill(new Path2D(generatePath(cells, margin)));
       } else {
-        cells.forEach(function(row, rdx) {
-          row.forEach(function(cell, cdx) {
+        cells.forEach(function (row, rdx) {
+          row.forEach(function (cell, cdx) {
             if (cell) {
               ctx.fillRect(cdx + margin, rdx + margin, 1, 1);
             }
@@ -312,7 +320,7 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
   }
 
   handleImageLoad = () => {
-    this.setState({imgLoaded: true});
+    this.setState({ imgLoaded: true });
   };
 
   render() {
@@ -327,14 +335,14 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
       imageSettings,
       ...otherProps
     } = this.props;
-    const canvasStyle = {height: size, width: size, ...style};
+    const canvasStyle = { height: size, width: size, ...style };
     let img = null;
     let imgSrc = imageSettings && imageSettings.src;
     if (imageSettings != null && imgSrc != null) {
       img = (
         <img
           src={imgSrc}
-          style={{display: 'none'}}
+          style={{ display: 'none' }}
           onLoad={this.handleImageLoad}
           ref={(ref: ?HTMLImageElement): ?HTMLImageElement =>
             (this._image = ref)
@@ -437,13 +445,13 @@ if (process.env.NODE_ENV !== 'production') {
   QRCodeSVG.propTypes = PROP_TYPES;
 }
 
-type RootProps = QRProps & {renderAs: 'svg' | 'canvas'};
+type RootProps = QRProps & { renderAs: 'svg' | 'canvas' };
 const QRCode = (props: RootProps): React.Node => {
-  const {renderAs, ...otherProps} = props;
+  const { renderAs, ...otherProps } = props;
   const Component = renderAs === 'svg' ? QRCodeSVG : QRCodeCanvas;
   return <Component {...otherProps} />;
 };
 
-QRCode.defaultProps = {renderAs: 'canvas', ...DEFAULT_PROPS};
+QRCode.defaultProps = { renderAs: 'canvas', ...DEFAULT_PROPS };
 
 module.exports = QRCode;
