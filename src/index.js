@@ -223,6 +223,10 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
   static defaultProps = DEFAULT_PROPS;
 
   componentDidMount() {
+    if (this._image && this._image.complete) {
+      this.handleImageLoad();
+    }
+
     this.update();
   }
 
