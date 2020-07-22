@@ -420,7 +420,7 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
 
     return (
       <svg
-        shapeRendering="crispEdges"
+        shape-rendering="crispEdges"
         height={size}
         width={size}
         viewBox={`0 0 ${numCells} ${numCells}`}
