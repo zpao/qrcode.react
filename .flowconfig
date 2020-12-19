@@ -5,6 +5,7 @@
 [libs]
 
 [options]
+esproposal.optional_chaining=enable
 
 [version]
 ^0.111.0
