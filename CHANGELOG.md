@@ -1,3 +1,13 @@
+## [1.0.1] - 2020-12-30
+
+### Added
+- Added React v17 to allowed peer dependencies.
+
+### Fixed
+- Handle mounting server rendered content properly.
+- Handle updates to embedded image properly.
+
+
 ## [1.0.0] - 2019-11-08
 
 ### Added
