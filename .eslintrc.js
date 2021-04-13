@@ -18,8 +18,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:flowtype/recommended',
     'plugin:prettier/recommended',
-    'prettier/react',
-    'prettier/flowtype',
+    'prettier',
   ],
   settings: {
     react: {
