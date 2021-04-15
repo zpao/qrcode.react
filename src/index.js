@@ -53,7 +53,7 @@ type QRProps = {
   bgColor: string,
   fgColor: string,
   style?: ?Object,
-  includeMargin: boolean,
+  includeMargin: boolean | number,
   imageSettings?: {
     src: string,
     height: number,
@@ -80,7 +80,7 @@ const PROP_TYPES =
         level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
         bgColor: PropTypes.string,
         fgColor: PropTypes.string,
-        includeMargin: PropTypes.bool,
+        includeMargin: PropTypes.oneOf([PropTypes.bool, PropTypes.number]),
         imageSettings: PropTypes.shape({
           src: PropTypes.string.isRequired,
           height: PropTypes.number.isRequired,
@@ -173,7 +173,10 @@ function getImageSettings(
   if (imageSettings == null) {
     return null;
   }
-  const margin = includeMargin ? MARGIN_SIZE : 0;
+  let margin = 0;
+  if (includeMargin) {
+    margin = typeof includeMargin === 'number' ? includeMargin : MARGIN_SIZE;
+  }
   const numCells = cells.length + margin * 2;
   const defaultSize = Math.floor(size * DEFAULT_IMG_SCALE);
   const scale = numCells / size;
@@ -271,7 +274,11 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
         return;
       }
 
-      const margin = includeMargin ? MARGIN_SIZE : 0;
+      let margin = 0;
+      if (includeMargin) {
+        margin =
+          typeof includeMargin === 'number' ? includeMargin : MARGIN_SIZE;
+      }
       const numCells = cells.length + margin * 2;
       const calculatedImageSettings = getImageSettings(this.props, cells);
 
@@ -400,7 +407,10 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
       return null;
     }
 
-    const margin = includeMargin ? MARGIN_SIZE : 0;
+    let margin = 0;
+    if (includeMargin) {
+      margin = typeof includeMargin === 'number' ? includeMargin : MARGIN_SIZE;
+    }
     const numCells = cells.length + margin * 2;
     const calculatedImageSettings = getImageSettings(this.props, cells);
 
