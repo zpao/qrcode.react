@@ -20,6 +20,22 @@ React.render(
 );
 ```
 
+## Import
+Common js
+```js
+var QRCode = require('qrcode.react');
+```
+ES6
+```js
+import QRCode from "qrcode.react";
+```
+
+## Types
+To ensure proper behaviour under Typescript install the types:
+```
+npm i @types/qrcode.react
+```
+
 ## Available Props
 
 prop      | type                 | default value
