@@ -1,6 +1,6 @@
 'use strict';
 
-var QRCode = require('..');
+var {QRCodeCanvas, QRCodeSVG} = require('..');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
@@ -36,15 +36,16 @@ class Demo extends React.Component {
     excavate: ${this.state.imageExcavate},
   }}`
       : '';
-    var code = `<QRCode
+    var code = `<${this.state.renderAs === 'svg' ? 'QRCodeSVG' :  'QRCodeCanvas'}
   value={"${this.state.value}"}
   size={${this.state.size}}
   bgColor={"${this.state.bgColor}"}
   fgColor={"${this.state.fgColor}"}
   level={"${this.state.level}"}
-  includeMargin={${this.state.includeMargin}}
-  renderAs={"${this.state.renderAs}"}${imageSettingsCode}
+  includeMargin={${this.state.includeMargin}}${imageSettingsCode}
 />`;
+
+    const Component = this.state.renderAs === 'svg' ? QRCodeSVG :  QRCodeCanvas;
     return (
       <div>
         <div>
@@ -257,7 +258,7 @@ class Demo extends React.Component {
           </label>
         </div>
 
-        <QRCode
+        <Component
           value={this.state.value}
           size={this.state.size}
           fgColor={this.state.fgColor}
