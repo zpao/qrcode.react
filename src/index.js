@@ -102,9 +102,9 @@ const DEFAULT_IMG_SCALE = 0.1;
 
 function generatePath(modules: Modules, margin: number = 0): string {
   const ops = [];
-  modules.forEach(function(row, y) {
+  modules.forEach(function (row, y) {
     let start = null;
-    row.forEach(function(cell, x) {
+    row.forEach(function (cell, x) {
       if (!cell && start !== null) {
         // M0 0h7v1H0z injects the space with the move and drops the comma,
         // saving a char per operation
@@ -128,8 +128,9 @@ function generatePath(modules: Modules, margin: number = 0): string {
         } else {
           // Otherwise finish the current line.
           ops.push(
-            `M${start + margin},${y + margin} h${x + 1 - start}v1H${start +
-              margin}z`
+            `M${start + margin},${y + margin} h${x + 1 - start}v1H${
+              start + margin
+            }z`
           );
         }
         return;
@@ -205,7 +206,7 @@ function getImageSettings(
 // supported, but Edge doesn't actually support the path (string) type
 // argument. Luckily it also doesn't support the addPath() method. We can
 // treat that as the same thing.
-const SUPPORTS_PATH2D = (function() {
+const SUPPORTS_PATH2D = (function () {
   try {
     new Path2D().addPath(new Path2D());
   } catch (e) {
@@ -299,8 +300,8 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
         // $FlowFixMe: Path2D c'tor doesn't support args yet.
         ctx.fill(new Path2D(generatePath(cells, margin)));
       } else {
-        cells.forEach(function(row, rdx) {
-          row.forEach(function(cell, cdx) {
+        cells.forEach(function (row, rdx) {
+          row.forEach(function (cell, cdx) {
             if (cell) {
               ctx.fillRect(cdx + margin, rdx + margin, 1, 1);
             }
