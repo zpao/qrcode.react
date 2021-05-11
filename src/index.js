@@ -231,7 +231,7 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
     this.update();
   }
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(props, state) {
     const currentSrc = this.props.imageSettings?.src;
     const nextSrc = nextProps.imageSettings?.src;
     if (currentSrc !== nextSrc) {
