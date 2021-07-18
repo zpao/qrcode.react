@@ -17,8 +17,6 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:flowtype/recommended',
-    'plugin:prettier/recommended',
-    'prettier',
   ],
   settings: {
     react: {
@@ -26,6 +24,6 @@ module.exports = {
     },
   },
   rules: {
-    'no-unused-vars': ['error', {ignoreRestSiblings: true}],
+    'no-unused-vars': ['error', { ignoreRestSiblings: true }],
   },
 };

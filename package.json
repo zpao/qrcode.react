@@ -1,6 +1,6 @@
 {
-  "name": "@raynorlin/qrcode.react",
-  "version": "1.0.0",
+  "name": "@raynorlin/qrcode-react",
+  "version": "0.0.1",
   "description": "React component to generate QR codes",
   "keywords": [
     "react",
@@ -11,8 +11,7 @@
   "scripts": {
     "flow": "flow",
     "lint": "eslint .",
-    "pretty": "prettier --write '{*,.*}.{js,json}' '**/*.{js,json}'",
-    "prepublish": "flow && make clean && make all",
+    "prepublish": "make clean && make all",
     "prepublish-docs": "make clean && make all",
     "publish-docs": "gh-pages --dist=examples --src='{index.html,bundle.js}'",
     "test": "echo \"Error: no test specified\" && exit 1"

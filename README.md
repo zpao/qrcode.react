@@ -1,23 +1,98 @@
-# qrcode.react
+# @raynorlin/qrcode-react
+> This project is fork from [qrcode.react](https://github.com/zpao/qrcode.react)
 
 A React component to generate [QR codes](http://en.wikipedia.org/wiki/QR_code).
+
+## Features
+
+* Support forwardRef
+* Support download SVG and PNG file
+* Remove componentWillReceiveProps
+* Refactor componentWillReceiveProps with componentDidUpdate
 
 ## Installation
 
 ```sh
-npm install qrcode.react
+npm install @raynorlin/qrcode-react
 ```
 
 ## Usage
 
 ```js
-var React = require('react');
-var QRCode = require('qrcode.react');
+import React from 'react';
+import QRCode = from '@raynorlin/qrcode-react';
 
 React.render(
   <QRCode value="http://facebook.github.io/react/" />,
   mountNode
 );
+```
+
+## API
+### downloadSvg
+
+```js
+downloadSvg(filename)
+```
+
+If you using `renderAs='svg'`, you can pass ref and use `downloadSvg`
+
+```jsx
+const Test = () => {
+  const ref = useRef(null);
+
+  const clickDownload = () => {
+    const filename = 'QRCode.svg';
+    ref.current.downloadSvg(filename);
+
+    // then will download a SVG file
+  }
+
+  return (
+    <div>
+      <QRCode
+        ref={ref}
+        value="https://www.google.com"
+        renderAs="svg"
+      />
+      <button onClick={clickDownload}>Download SVG</button>
+    </div>
+  );
+}
+```
+
+### downloadPng
+
+```js
+downloadPng(filename)
+```
+
+If you using `renderAs='canvas'`, you can pass ref and use `downloadPng`
+
+> Note: This function cannot use with passing imageSettings, will have some error with convert canvas to dataUrl.
+
+```jsx
+const Test = () => {
+  const ref = useRef(null);
+
+  const clickDownload = () => {
+    const filename = 'QRCode.png';
+    ref.current.downloadPng(filename);
+
+    // then will download a PNG file
+  }
+
+  return (
+    <div>
+      <QRCode
+        ref={ref}
+        value="https://www.google.com"
+        renderAs="canvas"
+      />
+      <button onClick={clickDownload}>Download PNG</button>
+    </div>
+  );
+}
 ```
 
 ## Available Props

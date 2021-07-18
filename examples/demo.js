@@ -14,7 +14,7 @@ class Demo extends React.Component {
     level: 'L',
     renderAs: 'svg',
     includeMargin: false,
-    includeImage: true,
+    includeImage: false,
     imageH: 24,
     imageW: 24,
     imageX: 0,
@@ -23,6 +23,20 @@ class Demo extends React.Component {
     imageExcavate: true,
     centerImage: true,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.componentRef = React.createRef();
+  }
+
+  clickDownloadSvg = () => {
+    this.componentRef.current.downloadSvg();
+  }
+
+  clickDownloadPng = () => {
+    this.componentRef.current.downloadPng();
+  }
 
   render() {
     var imageSettingsCode = this.state.includeImage
@@ -54,7 +68,7 @@ class Demo extends React.Component {
             <input
               type="number"
               onChange={(e) =>
-                this.setState({size: parseInt(e.target.value, 10) || 0})
+                this.setState({ size: parseInt(e.target.value, 10) || 0 })
               }
               value={this.state.size}
             />
@@ -66,7 +80,7 @@ class Demo extends React.Component {
             <br />
             <input
               type="color"
-              onChange={(e) => this.setState({bgColor: e.target.value})}
+              onChange={(e) => this.setState({ bgColor: e.target.value })}
               value={this.state.bgColor}
             />
           </label>
@@ -77,7 +91,7 @@ class Demo extends React.Component {
             <br />
             <input
               type="color"
-              onChange={(e) => this.setState({fgColor: e.target.value})}
+              onChange={(e) => this.setState({ fgColor: e.target.value })}
               value={this.state.fgColor}
             />
           </label>
@@ -87,7 +101,7 @@ class Demo extends React.Component {
             Error Level:
             <br />
             <select
-              onChange={(e) => this.setState({level: e.target.value})}
+              onChange={(e) => this.setState({ level: e.target.value })}
               value={this.state.level}>
               <option value="L">L</option>
               <option value="M">M</option>
@@ -103,7 +117,7 @@ class Demo extends React.Component {
             <input
               type="checkbox"
               checked={this.state.includeMargin}
-              onChange={(e) => this.setState({includeMargin: e.target.checked})}
+              onChange={(e) => this.setState({ includeMargin: e.target.checked })}
             />
           </label>
         </div>
@@ -112,7 +126,7 @@ class Demo extends React.Component {
             Render As:
             <br />
             <select
-              onChange={(e) => this.setState({renderAs: e.target.value})}
+              onChange={(e) => this.setState({ renderAs: e.target.value })}
               value={this.state.renderAs}>
               <option value="svg">SVG</option>
               <option value="canvas">Canvas</option>
@@ -126,7 +140,7 @@ class Demo extends React.Component {
             <textarea
               rows="6"
               cols="80"
-              onChange={(e) => this.setState({value: e.target.value})}
+              onChange={(e) => this.setState({ value: e.target.value })}
               value={this.state.value}
             />
           </label>
@@ -139,7 +153,7 @@ class Demo extends React.Component {
             <input
               type="checkbox"
               checked={this.state.includeImage}
-              onChange={(e) => this.setState({includeImage: e.target.checked})}
+              onChange={(e) => this.setState({ includeImage: e.target.checked })}
             />
           </label>
         </div>
@@ -153,7 +167,7 @@ class Demo extends React.Component {
               <br />
               <input
                 type="text"
-                onChange={(e) => this.setState({imageSrc: e.target.value})}
+                onChange={(e) => this.setState({ imageSrc: e.target.value })}
                 value={this.state.imageSrc}
               />
             </label>
@@ -166,7 +180,7 @@ class Demo extends React.Component {
                 type="number"
                 value={this.state.imageW}
                 onChange={(e) =>
-                  this.setState({imageW: parseInt(e.target.value, 10)})
+                  this.setState({ imageW: parseInt(e.target.value, 10) })
                 }
               />
             </label>
@@ -179,7 +193,7 @@ class Demo extends React.Component {
                 type="number"
                 value={this.state.imageH}
                 onChange={(e) =>
-                  this.setState({imageH: parseInt(e.target.value, 10)})
+                  this.setState({ imageH: parseInt(e.target.value, 10) })
                 }
               />
             </label>
@@ -192,7 +206,7 @@ class Demo extends React.Component {
               <input
                 type="checkbox"
                 checked={this.state.centerImage}
-                onChange={(e) => this.setState({centerImage: e.target.checked})}
+                onChange={(e) => this.setState({ centerImage: e.target.checked })}
               />
             </label>
           </div>
@@ -208,7 +222,7 @@ class Demo extends React.Component {
                   max={this.state.size - this.state.imageW}
                   value={this.state.imageX}
                   onChange={(e) =>
-                    this.setState({imageX: parseInt(e.target.value, 10)})
+                    this.setState({ imageX: parseInt(e.target.value, 10) })
                   }
                 />
               </label>
@@ -223,7 +237,7 @@ class Demo extends React.Component {
                   max={this.state.size - this.state.imageH}
                   value={this.state.imageY}
                   onChange={(e) =>
-                    this.setState({imageY: parseInt(e.target.value, 10)})
+                    this.setState({ imageY: parseInt(e.target.value, 10) })
                   }
                 />
               </label>
@@ -237,7 +251,7 @@ class Demo extends React.Component {
                 type="checkbox"
                 checked={this.state.imageExcavate}
                 onChange={(e) =>
-                  this.setState({imageExcavate: e.target.checked})
+                  this.setState({ imageExcavate: e.target.checked })
                 }
               />
             </label>
@@ -258,6 +272,7 @@ class Demo extends React.Component {
         </div>
 
         <QRCode
+          ref={this.componentRef}
           value={this.state.value}
           size={this.state.size}
           fgColor={this.state.fgColor}
@@ -268,16 +283,26 @@ class Demo extends React.Component {
           imageSettings={
             this.state.includeImage
               ? {
-                  src: this.state.imageSrc,
-                  height: this.state.imageH,
-                  width: this.state.imageW,
-                  x: this.state.centerImage ? null : this.state.imageX,
-                  y: this.state.centerImage ? null : this.state.imageY,
-                  excavate: this.state.imageExcavate,
-                }
+                src: this.state.imageSrc,
+                height: this.state.imageH,
+                width: this.state.imageW,
+                x: this.state.centerImage ? null : this.state.imageX,
+                y: this.state.centerImage ? null : this.state.imageY,
+                excavate: this.state.imageExcavate,
+              }
               : null
           }
         />
+
+        <div>
+          {this.state.renderAs === 'svg'
+            ? (
+              <button onClick={this.clickDownloadSvg}>Download SVG</button>
+            )
+            : (
+              <button onClick={this.clickDownloadPng}>Download PNG</button>
+          )}
+        </div>
       </div>
     );
   }
