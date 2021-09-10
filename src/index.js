@@ -19,7 +19,8 @@ type Excavation = {|x: number, y: number, w: number, h: number|};
 // a smaller library for a smaller amount of data we can potentially encode.
 // Based on http://jonisalonen.com/2012/from-utf-16-to-utf-8-in-javascript/
 function convertStr(str: string): string {
-  let out = '';
+   let out = '';
+  if (str){
   for (let i = 0; i < str.length; i++) {
     let charcode = str.charCodeAt(i);
     if (charcode < 0x0080) {
@@ -42,6 +43,7 @@ function convertStr(str: string): string {
       out += String.fromCharCode(0x80 | ((charcode >> 6) & 0x3f));
       out += String.fromCharCode(0x80 | (charcode & 0x3f));
     }
+  }
   }
   return out;
 }
