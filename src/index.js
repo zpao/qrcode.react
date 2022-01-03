@@ -244,15 +244,8 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
   }
 
   update() {
-    const {
-      value,
-      size,
-      level,
-      bgColor,
-      fgColor,
-      includeMargin,
-      imageSettings,
-    } = this.props;
+    const {value, size, level, bgColor, fgColor, includeMargin, imageSettings} =
+      this.props;
 
     // We'll use type===-1 to force QRCode to automatically pick the best type
     const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);

@@ -1,5 +1,5 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaVersion: 2016,
     sourceType: 'module',
@@ -27,5 +27,6 @@ module.exports = {
   },
   rules: {
     'no-unused-vars': ['error', {ignoreRestSiblings: true}],
+    'react/no-unescaped-entities': 'off',
   },
 };
