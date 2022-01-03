@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-const QRCode = require('../index');
+import QRCode from '..';
 
 const BASIC_PROPS = {
   value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
