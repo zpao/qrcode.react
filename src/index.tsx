@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 
 // qr.js doesn't handle error level of zero (M) so we need to do it right,
 // thus the deep require.
@@ -71,26 +70,6 @@ const DEFAULT_PROPS = {
   fgColor: '#000000',
   includeMargin: false,
 };
-
-const PROP_TYPES =
-  process.env.NODE_ENV !== 'production'
-    ? {
-        value: PropTypes.string.isRequired,
-        size: PropTypes.number,
-        level: PropTypes.oneOf(['L', 'M', 'Q', 'H']),
-        bgColor: PropTypes.string,
-        fgColor: PropTypes.string,
-        includeMargin: PropTypes.bool,
-        imageSettings: PropTypes.shape({
-          src: PropTypes.string.isRequired,
-          height: PropTypes.number.isRequired,
-          width: PropTypes.number.isRequired,
-          excavate: PropTypes.bool,
-          x: PropTypes.number,
-          y: PropTypes.number,
-        }),
-      }
-    : {};
 
 const MARGIN_SIZE = 4;
 
@@ -361,11 +340,6 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
   }
 }
 
-// Typescript's React.PureComponent doesn't have the propTypes field, so turn it off for now
-// if (process.env.NODE_ENV !== 'production') {
-//   QRCodeCanvas.propTypes = PROP_TYPES;
-// }
-
 class QRCodeSVG extends React.PureComponent<QRProps> {
   static defaultProps = DEFAULT_PROPS;
 
@@ -435,11 +409,6 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
     );
   }
 }
-
-// Typescript's React.PureComponent doesn't have the propTypes field, so turn it off for now
-// if (process.env.NODE_ENV !== 'production') {
-//   QRCodeSVG.propTypes = PROP_TYPES;
-// }
 
 type RenderAs = 'svg' | 'canvas';
 type RootProps = QRProps & {renderAs: string};
