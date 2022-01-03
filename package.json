@@ -13,10 +13,11 @@
     "flow": "flow",
     "lint": "eslint .",
     "pretty": "prettier --write '{*,.*}.{js,json}' '**/*.{js,json}'",
-    "prepublish": "flow && make clean && make all",
+    "prepublishOnly": "flow && make clean && make all",
     "prepublish-docs": "make clean && make all",
     "publish-docs": "gh-pages --dist=examples --src='{index.html,bundle.js}'",
-    "test": "jest"
+    "test": "jest",
+    "typecheck": "flow"
   },
   "author": "Paul O’Shannessy <paul@oshannessy.com>",
   "repository": {
