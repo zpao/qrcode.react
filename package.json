@@ -8,8 +8,13 @@
     "qrcode"
   ],
   "homepage": "http://zpao.github.io/qrcode.react",
-  "main": "lib/index.js",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/esm/index.d.ts",
   "scripts": {
+    "build": "yarn run build:esm && yarn run build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
     "lint": "eslint .",
     "pretty": "prettier --write '{*,.*}.{js,json}' '**/*.{js,json}'",
     "prepublishOnly": "tsc && make clean && make all",
