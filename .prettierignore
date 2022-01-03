@@ -2,4 +2,3 @@ package.json
 node_modules
 lib
 examples/bundle.js
-flow-typed

@@ -1,17 +1,16 @@
-// @flow
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 
-'use strict';
-
-const React = require('react');
-const PropTypes = require('prop-types');
 // qr.js doesn't handle error level of zero (M) so we need to do it right,
 // thus the deep require.
-const QRCodeImpl = require('qr.js/lib/QRCode');
-const ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
+import QRCodeImpl from 'qr.js/lib/QRCode';
+import ErrorCorrectLevel from 'qr.js/lib/ErrorCorrectLevel';
+// const QRCodeImpl = require('qr.js/lib/QRCode');
+// const ErrorCorrectLevel = require('qr.js/lib/ErrorCorrectLevel');
 
 // TODO: pull this off of the QRCode class type so it matches.
 type Modules = Array<Array<boolean>>;
-type Excavation = {|x: number, y: number, w: number, h: number|};
+type Excavation = {x: number; y: number; w: number; h: number};
 
 // Convert from UTF-16, forcing the use of byte-mode encoding in our QR Code.
 // This allows us to encode Hanji, Kanji, emoji, etc. Ideally we'd do more
@@ -47,21 +46,22 @@ function convertStr(str: string): string {
 }
 
 type QRProps = {
-  value: string,
-  size: number,
-  level: $Keys<typeof ErrorCorrectLevel>,
-  bgColor: string,
-  fgColor: string,
-  style?: ?Object,
-  includeMargin: boolean,
+  value: string;
+  size: number;
+  // Should be a real enum, but doesn't seem to be compatible with real code.
+  level: string;
+  bgColor: string;
+  fgColor: string;
+  style?: React.CSSProperties;
+  includeMargin: boolean;
   imageSettings?: {
-    src: string,
-    height: number,
-    width: number,
-    excavate: boolean,
-    x?: number,
-    y?: number,
-  },
+    src: string;
+    height: number;
+    width: number;
+    excavate: boolean;
+    x?: number;
+    y?: number;
+  };
 };
 
 const DEFAULT_PROPS = {
@@ -101,9 +101,9 @@ const MARGIN_SIZE = 4;
 const DEFAULT_IMG_SCALE = 0.1;
 
 function generatePath(modules: Modules, margin: number = 0): string {
-  const ops = [];
+  const ops: Array<string> = [];
   modules.forEach(function (row, y) {
-    let start = null;
+    let start: number | null = null;
     row.forEach(function (cell, x) {
       if (!cell && start !== null) {
         // M0 0h7v1H0z injects the space with the move and drops the comma,
@@ -164,11 +164,11 @@ function getImageSettings(
   props: QRProps,
   cells: Modules
 ): null | {
-  x: number,
-  y: number,
-  h: number,
-  w: number,
-  excavation: ?Excavation,
+  x: number;
+  y: number;
+  h: number;
+  w: number;
+  excavation: Excavation | null;
 } {
   const {imageSettings, size, includeMargin} = props;
   if (imageSettings == null) {
@@ -216,8 +216,8 @@ const SUPPORTS_PATH2D = (function () {
 })();
 
 class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
-  _canvas: ?HTMLCanvasElement;
-  _image: ?HTMLImageElement;
+  _canvas: HTMLCanvasElement | null | undefined;
+  _image: HTMLImageElement | null | undefined;
 
   state = {imgLoaded: false};
 
@@ -342,9 +342,7 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
           src={imgSrc}
           style={{display: 'none'}}
           onLoad={this.handleImageLoad}
-          ref={(ref: ?HTMLImageElement): ?HTMLImageElement =>
-            (this._image = ref)
-          }
+          ref={(ref) => (this._image = ref)}
         />
       );
     }
@@ -354,9 +352,7 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
           style={canvasStyle}
           height={size}
           width={size}
-          ref={(ref: ?HTMLCanvasElement): ?HTMLCanvasElement =>
-            (this._canvas = ref)
-          }
+          ref={(ref) => (this._canvas = ref)}
           {...otherProps}
         />
         {img}
@@ -365,9 +361,10 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
   }
 }
 
-if (process.env.NODE_ENV !== 'production') {
-  QRCodeCanvas.propTypes = PROP_TYPES;
-}
+// Typescript's React.PureComponent doesn't have the propTypes field, so turn it off for now
+// if (process.env.NODE_ENV !== 'production') {
+//   QRCodeCanvas.propTypes = PROP_TYPES;
+// }
 
 class QRCodeSVG extends React.PureComponent<QRProps> {
   static defaultProps = DEFAULT_PROPS;
@@ -439,17 +436,19 @@ class QRCodeSVG extends React.PureComponent<QRProps> {
   }
 }
 
-if (process.env.NODE_ENV !== 'production') {
-  QRCodeSVG.propTypes = PROP_TYPES;
-}
+// Typescript's React.PureComponent doesn't have the propTypes field, so turn it off for now
+// if (process.env.NODE_ENV !== 'production') {
+//   QRCodeSVG.propTypes = PROP_TYPES;
+// }
 
-type RootProps = QRProps & {renderAs: 'svg' | 'canvas'};
-const QRCode = (props: RootProps): React.Node => {
+type RenderAs = 'svg' | 'canvas';
+type RootProps = QRProps & {renderAs: string};
+const QRCode = (props: RootProps) => {
   const {renderAs, ...otherProps} = props;
-  const Component = renderAs === 'svg' ? QRCodeSVG : QRCodeCanvas;
+  const Component = (renderAs as RenderAs) === 'svg' ? QRCodeSVG : QRCodeCanvas;
   return <Component {...otherProps} />;
 };
 
 QRCode.defaultProps = {renderAs: 'canvas', ...DEFAULT_PROPS};
 
-module.exports = QRCode;
+export default QRCode;

@@ -1,8 +1,8 @@
 'use strict';
 
-var QRCode = require('..');
-var React = require('react');
-var ReactDOM = require('react-dom');
+import QRCode from '..';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 // TODO: live update demo
 class Demo extends React.Component {
@@ -25,7 +25,7 @@ class Demo extends React.Component {
   };
 
   render() {
-    var imageSettingsCode = this.state.includeImage
+    const imageSettingsCode = this.state.includeImage
       ? `
   imageSettings={{
     src: "${this.state.imageSrc}",
@@ -36,7 +36,7 @@ class Demo extends React.Component {
     excavate: ${this.state.imageExcavate},
   }}`
       : '';
-    var code = `<QRCode
+    const code = `<QRCode
   value={"${this.state.value}"}
   size={${this.state.size}}
   bgColor={"${this.state.bgColor}"}
@@ -124,8 +124,8 @@ class Demo extends React.Component {
             Value:
             <br />
             <textarea
-              rows="6"
-              cols="80"
+              rows={6}
+              cols={80}
               onChange={(e) => this.setState({value: e.target.value})}
               value={this.state.value}
             />
@@ -250,7 +250,7 @@ class Demo extends React.Component {
             <br />
             <textarea
               rows={code.split('\n').length}
-              cols="80"
+              cols={80}
               readOnly={true}
               value={code}
             />
