@@ -17,6 +17,13 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        react_version:
+          - '15'
+          - '16'
+          - '17'
+          - '18.0.0-rc.0'
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -24,6 +31,8 @@ jobs:
           node-version: '16'
           cache: 'yarn'
       - run: yarn install
+      - name: Install React deps (@v${{ matrix.react_version }})
+        run: npm install --no-save --no-package-lock react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }} react-test-renderer@${{ matrix.react_version }}
       - run: yarn test
   lint:
     needs: build
