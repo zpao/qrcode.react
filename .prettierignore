@@ -2,3 +2,4 @@ package.json
 node_modules
 lib
 examples/bundle.js
+third-party

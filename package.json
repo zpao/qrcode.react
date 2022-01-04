@@ -34,8 +34,7 @@
     "lib"
   ],
   "dependencies": {
-    "loose-envify": "^1.4.0",
-    "qr.js": "0.0.0"
+    "loose-envify": "^1.4.0"
   },
   "peerDependencies": {
     "react": "^16.3.0 || ^17.0.0"

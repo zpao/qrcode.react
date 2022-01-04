@@ -10,7 +10,7 @@ module.exports = {
     path: path.resolve(__dirname, 'examples'),
   },
   module: {
-    rules: [{test: /\.tsx$/, exclude: /node_modules/, loader: 'babel-loader'}],
+    rules: [{test: /\.tsx?$/, exclude: /node_modules/, loader: 'babel-loader'}],
   },
   target: 'web',
   mode: 'production',
