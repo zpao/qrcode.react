@@ -377,4 +377,4 @@ const QRCode = (props: RootProps) => {
 
 QRCode.defaultProps = {renderAs: 'canvas', ...DEFAULT_PROPS};
 
-export default QRCode;
+export {QRCode as default, QRCodeCanvas, QRCodeSVG};
