@@ -1,4 +1,5 @@
-import * as React from 'react';
+import React, {PureComponent, createRef} from 'react';
+import type {CSSProperties} from 'react';
 import qrcodegen from './third-party/qrcodegen';
 
 type Modules = ReturnType<qrcodegen.QrCode['getModules']>;
@@ -18,7 +19,7 @@ type QRProps = {
   level: string;
   bgColor: string;
   fgColor: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   includeMargin: boolean;
   imageSettings?: {
     src: string;
@@ -161,16 +162,16 @@ const SUPPORTS_PATH2D = (function () {
   return true;
 })();
 
-class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
-  _canvas: HTMLCanvasElement | null | undefined;
-  _image: HTMLImageElement | null | undefined;
+class QRCodeCanvas extends PureComponent<QRProps, {imgLoaded: boolean}> {
+  private _canvas = createRef<HTMLCanvasElement>();
+  private _image = createRef<HTMLImageElement>();
 
   state = {imgLoaded: false};
 
   static defaultProps = DEFAULT_PROPS;
 
   componentDidMount() {
-    if (this._image && this._image.complete) {
+    if (this._image.current?.complete) {
       this.handleImageLoad();
     }
 
@@ -193,8 +194,8 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
     const {value, size, level, bgColor, fgColor, includeMargin, imageSettings} =
       this.props;
 
-    if (this._canvas != null) {
-      const canvas = this._canvas;
+    if (this._canvas.current != null) {
+      const canvas = this._canvas.current;
 
       const ctx = canvas.getContext('2d');
       if (!ctx) {
@@ -244,11 +245,11 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
       }
       if (
         this.state.imgLoaded &&
-        this._image &&
+        this._image.current != null &&
         calculatedImageSettings != null
       ) {
         ctx.drawImage(
-          this._image,
+          this._image.current,
           calculatedImageSettings.x + margin,
           calculatedImageSettings.y + margin,
           calculatedImageSettings.w,
@@ -283,7 +284,7 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
           src={imgSrc}
           style={{display: 'none'}}
           onLoad={this.handleImageLoad}
-          ref={(ref) => (this._image = ref)}
+          ref={this._image}
         />
       );
     }
@@ -293,7 +294,7 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
           style={canvasStyle}
           height={size}
           width={size}
-          ref={(ref) => (this._canvas = ref)}
+          ref={this._canvas}
           {...otherProps}
         />
         {img}
@@ -302,70 +303,67 @@ class QRCodeCanvas extends React.PureComponent<QRProps, {imgLoaded: boolean}> {
   }
 }
 
-class QRCodeSVG extends React.PureComponent<QRProps> {
-  static defaultProps = DEFAULT_PROPS;
+function QRCodeSVG(props: QRProps) {
+  const {
+    value,
+    size,
+    level,
+    bgColor,
+    fgColor,
+    includeMargin,
+    imageSettings,
+    ...otherProps
+  } = props;
 
-  render() {
-    const {
-      value,
-      size,
-      level,
-      bgColor,
-      fgColor,
-      includeMargin,
-      imageSettings,
-      ...otherProps
-    } = this.props;
+  let cells = qrcodegen.QrCode.encodeText(
+    value,
+    ERROR_LEVEL_MAP[level]
+  ).getModules();
 
-    let cells = qrcodegen.QrCode.encodeText(
-      value,
-      ERROR_LEVEL_MAP[level]
-    ).getModules();
+  const margin = includeMargin ? MARGIN_SIZE : 0;
+  const numCells = cells.length + margin * 2;
+  const calculatedImageSettings = getImageSettings(props, cells);
 
-    const margin = includeMargin ? MARGIN_SIZE : 0;
-    const numCells = cells.length + margin * 2;
-    const calculatedImageSettings = getImageSettings(this.props, cells);
-
-    let image = null;
-    if (imageSettings != null && calculatedImageSettings != null) {
-      if (calculatedImageSettings.excavation != null) {
-        cells = excavateModules(cells, calculatedImageSettings.excavation);
-      }
-
-      image = (
-        <image
-          xlinkHref={imageSettings.src}
-          height={calculatedImageSettings.h}
-          width={calculatedImageSettings.w}
-          x={calculatedImageSettings.x + margin}
-          y={calculatedImageSettings.y + margin}
-          preserveAspectRatio="none"
-        />
-      );
+  let image = null;
+  if (imageSettings != null && calculatedImageSettings != null) {
+    if (calculatedImageSettings.excavation != null) {
+      cells = excavateModules(cells, calculatedImageSettings.excavation);
     }
 
-    // Drawing strategy: instead of a rect per module, we're going to create a
-    // single path for the dark modules and layer that on top of a light rect,
-    // for a total of 2 DOM nodes. We pay a bit more in string concat but that's
-    // way faster than DOM ops.
-    // For level 1, 441 nodes -> 2
-    // For level 40, 31329 -> 2
-    const fgPath = generatePath(cells, margin);
-
-    return (
-      <svg
-        shapeRendering="crispEdges"
-        height={size}
-        width={size}
-        viewBox={`0 0 ${numCells} ${numCells}`}
-        {...otherProps}>
-        <path fill={bgColor} d={`M0,0 h${numCells}v${numCells}H0z`} />
-        <path fill={fgColor} d={fgPath} />
-        {image}
-      </svg>
+    image = (
+      <image
+        xlinkHref={imageSettings.src}
+        height={calculatedImageSettings.h}
+        width={calculatedImageSettings.w}
+        x={calculatedImageSettings.x + margin}
+        y={calculatedImageSettings.y + margin}
+        preserveAspectRatio="none"
+      />
     );
   }
+
+  // Drawing strategy: instead of a rect per module, we're going to create a
+  // single path for the dark modules and layer that on top of a light rect,
+  // for a total of 2 DOM nodes. We pay a bit more in string concat but that's
+  // way faster than DOM ops.
+  // For level 1, 441 nodes -> 2
+  // For level 40, 31329 -> 2
+  const fgPath = generatePath(cells, margin);
+
+  return (
+    <svg
+      shapeRendering="crispEdges"
+      height={size}
+      width={size}
+      viewBox={`0 0 ${numCells} ${numCells}`}
+      {...otherProps}>
+      <path fill={bgColor} d={`M0,0 h${numCells}v${numCells}H0z`} />
+      <path fill={fgColor} d={fgPath} />
+      {image}
+    </svg>
+  );
 }
+QRCodeSVG.defaultProps = DEFAULT_PROPS;
 
 type RenderAs = 'svg' | 'canvas';
 type RootProps = QRProps & {renderAs: string};
