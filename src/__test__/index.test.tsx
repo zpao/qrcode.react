@@ -39,6 +39,12 @@ const TEST_CONFIGS = [
       excavate: false,
     },
   },
+  {value: 1234567890},
+  {value: '1234567890'},
+  {value: 'single byte emoji ✅'},
+  {value: 'double byte emoji 👌'},
+  {value: 'four byte emoji 👌🏽'},
+  {value: '火と氷'},
 ];
 
 describe('SVG rendering', () => {
