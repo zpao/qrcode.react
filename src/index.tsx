@@ -1,4 +1,4 @@
-import React, {PureComponent, createRef} from 'react';
+import React, {useRef, useEffect} from 'react';
 import type {CSSProperties} from 'react';
 import qrcodegen from './third-party/qrcodegen';
 
@@ -162,40 +162,15 @@ const SUPPORTS_PATH2D = (function () {
   return true;
 })();
 
-class QRCodeCanvas extends PureComponent<QRProps, {imgLoaded: boolean}> {
-  private _canvas = createRef<HTMLCanvasElement>();
-  private _image = createRef<HTMLImageElement>();
+function QRCodeCanvas(props: QRProps) {
+  const _canvas = useRef<HTMLCanvasElement>(null);
+  const _image = useRef<HTMLImageElement>(null);
 
-  state = {imgLoaded: false};
+  function update() {
+    const {value, size, level, bgColor, fgColor, includeMargin} = props;
 
-  static defaultProps = DEFAULT_PROPS;
-
-  componentDidMount() {
-    if (this._image.current?.complete) {
-      this.handleImageLoad();
-    }
-
-    this.update();
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const currentSrc = this.props.imageSettings?.src;
-    const nextSrc = nextProps.imageSettings?.src;
-    if (currentSrc !== nextSrc) {
-      this.setState({imgLoaded: false});
-    }
-  }
-
-  componentDidUpdate() {
-    this.update();
-  }
-
-  update() {
-    const {value, size, level, bgColor, fgColor, includeMargin, imageSettings} =
-      this.props;
-
-    if (this._canvas.current != null) {
-      const canvas = this._canvas.current;
+    if (_canvas.current != null) {
+      const canvas = _canvas.current;
 
       const ctx = canvas.getContext('2d');
       if (!ctx) {
@@ -209,9 +184,17 @@ class QRCodeCanvas extends PureComponent<QRProps, {imgLoaded: boolean}> {
 
       const margin = includeMargin ? MARGIN_SIZE : 0;
       const numCells = cells.length + margin * 2;
-      const calculatedImageSettings = getImageSettings(this.props, cells);
+      const calculatedImageSettings = getImageSettings(props, cells);
 
-      if (imageSettings != null && calculatedImageSettings != null) {
+      const image = _image.current;
+      const haveImageToRender =
+        calculatedImageSettings != null &&
+        image !== null &&
+        image.complete &&
+        image.naturalHeight !== 0 &&
+        image.naturalWidth !== 0;
+
+      if (haveImageToRender) {
         if (calculatedImageSettings.excavation != null) {
           cells = excavateModules(cells, calculatedImageSettings.excavation);
         }
@@ -243,13 +226,10 @@ class QRCodeCanvas extends PureComponent<QRProps, {imgLoaded: boolean}> {
           });
         });
       }
-      if (
-        this.state.imgLoaded &&
-        this._image.current != null &&
-        calculatedImageSettings != null
-      ) {
+
+      if (haveImageToRender) {
         ctx.drawImage(
-          this._image.current,
+          image,
           calculatedImageSettings.x + margin,
           calculatedImageSettings.y + margin,
           calculatedImageSettings.w,
@@ -259,49 +239,53 @@ class QRCodeCanvas extends PureComponent<QRProps, {imgLoaded: boolean}> {
     }
   }
 
-  handleImageLoad = () => {
-    this.setState({imgLoaded: true});
-  };
+  useEffect(() => {
+    // Always update the canvas. It's cheap enough and we want to be correct
+    // with the current state.
+    update();
+  });
 
-  render() {
-    const {
-      value,
-      size,
-      level,
-      bgColor,
-      fgColor,
-      style,
-      includeMargin,
-      imageSettings,
-      ...otherProps
-    } = this.props;
-    const canvasStyle = {height: size, width: size, ...style};
-    let img = null;
-    let imgSrc = imageSettings && imageSettings.src;
-    if (imageSettings != null && imgSrc != null) {
-      img = (
-        <img
-          src={imgSrc}
-          style={{display: 'none'}}
-          onLoad={this.handleImageLoad}
-          ref={this._image}
-        />
-      );
-    }
-    return (
-      <>
-        <canvas
-          style={canvasStyle}
-          height={size}
-          width={size}
-          ref={this._canvas}
-          {...otherProps}
-        />
-        {img}
-      </>
+  const {
+    value,
+    size,
+    level,
+    bgColor,
+    fgColor,
+    style,
+    includeMargin,
+    imageSettings,
+    ...otherProps
+  } = props;
+  const canvasStyle = {height: size, width: size, ...style};
+  let img = null;
+  let imgSrc = imageSettings?.src;
+  if (imgSrc != null) {
+    img = (
+      <img
+        src={imgSrc}
+        key={imgSrc}
+        style={{display: 'none'}}
+        onLoad={() => {
+          update();
+        }}
+        ref={_image}
+      />
     );
   }
+  return (
+    <>
+      <canvas
+        style={canvasStyle}
+        height={size}
+        width={size}
+        ref={_canvas}
+        {...otherProps}
+      />
+      {img}
+    </>
+  );
 }
+QRCodeCanvas.defaultProps = DEFAULT_PROPS;
 
 function QRCodeSVG(props: QRProps) {
   const {
