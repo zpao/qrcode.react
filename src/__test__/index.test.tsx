@@ -1,10 +1,9 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import QRCode from '..';
+import {QRCodeSVG, QRCodeCanvas} from '..';
 
 const BASIC_PROPS = {
   value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
-  renderAs: 'svg',
   size: 128,
   bgColor: '#ffffff',
   fgColor: '#000000',
@@ -39,7 +38,6 @@ const TEST_CONFIGS = [
       excavate: false,
     },
   },
-  {value: 1234567890},
   {value: '1234567890'},
   {value: 'single byte emoji ✅'},
   {value: 'double byte emoji 👌'},
@@ -49,14 +47,31 @@ const TEST_CONFIGS = [
 
 describe('SVG rendering', () => {
   test('renders basic SVG correctly', () => {
-    const tree = renderer.create(<QRCode {...BASIC_PROPS} />).toJSON();
+    const tree = renderer.create(<QRCodeSVG {...BASIC_PROPS} />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   test.each(TEST_CONFIGS)('renders SVG variation (%o) correctly', (config) => {
     const tree = renderer
-      .create(<QRCode {...BASIC_PROPS} {...config} />)
+      .create(<QRCodeSVG {...BASIC_PROPS} {...config} />)
       .toJSON();
     expect(tree).toMatchSnapshot();
   });
+});
+
+describe('Canvas rendering', () => {
+  test('renders basic Canvas correctly', () => {
+    const tree = renderer.create(<QRCodeCanvas {...BASIC_PROPS} />).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  test.each(TEST_CONFIGS)(
+    'renders Canvas variation (%o) correctly',
+    (config) => {
+      const tree = renderer
+        .create(<QRCodeCanvas {...BASIC_PROPS} {...config} />)
+        .toJSON();
+      expect(tree).toMatchSnapshot();
+    }
+  );
 });
