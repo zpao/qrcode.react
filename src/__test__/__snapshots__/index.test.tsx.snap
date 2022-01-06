@@ -1,5 +1,227 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Canvas rendering renders Canvas variation ({
+  imageSettings: {
+    src: 'https://static.zpao.com/favicon.png',
+    x: null,
+    y: null,
+    height: 24,
+    width: 24,
+    excavate: false
+  }
+}) correctly 1`] = `
+Array [
+  <canvas
+    height={128}
+    style={
+      Object {
+        "height": 128,
+        "width": 128,
+      }
+    }
+    width={128}
+  />,
+  <img
+    onLoad={[Function]}
+    src="https://static.zpao.com/favicon.png"
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+  />,
+]
+`;
+
+exports[`Canvas rendering renders Canvas variation ({
+  imageSettings: {
+    src: 'https://static.zpao.com/favicon.png',
+    x: null,
+    y: null,
+    height: 24,
+    width: 24,
+    excavate: true
+  }
+}) correctly 1`] = `
+Array [
+  <canvas
+    height={128}
+    style={
+      Object {
+        "height": 128,
+        "width": 128,
+      }
+    }
+    width={128}
+  />,
+  <img
+    onLoad={[Function]}
+    src="https://static.zpao.com/favicon.png"
+    style={
+      Object {
+        "display": "none",
+      }
+    }
+  />,
+]
+`;
+
+exports[`Canvas rendering renders Canvas variation ({ includeMargin: false }) correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
+exports[`Canvas rendering renders Canvas variation ({ includeMargin: true }) correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
+exports[`Canvas rendering renders Canvas variation ({ level: 'H' }) correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
+exports[`Canvas rendering renders Canvas variation ({ level: 'L' }) correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
+exports[`Canvas rendering renders Canvas variation ({ level: 'M' }) correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
+exports[`Canvas rendering renders Canvas variation ({ level: 'Q' }) correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
+exports[`Canvas rendering renders Canvas variation ({ value: '1234567890' }) correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
+exports[`Canvas rendering renders Canvas variation ({ value: 'double byte emoji 👌' }) correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
+exports[`Canvas rendering renders Canvas variation ({ value: 'four byte emoji 👌🏽' }) correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
+exports[`Canvas rendering renders Canvas variation ({ value: 'single byte emoji ✅' }) correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
+exports[`Canvas rendering renders Canvas variation ({ value: '火と氷' }) correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
+exports[`Canvas rendering renders basic Canvas correctly 1`] = `
+<canvas
+  height={128}
+  style={
+    Object {
+      "height": 128,
+      "width": 128,
+    }
+  }
+  width={128}
+/>
+`;
+
 exports[`SVG rendering renders SVG variation ({
   imageSettings: {
     src: 'https://static.zpao.com/favicon.png',
@@ -263,24 +485,6 @@ exports[`SVG rendering renders SVG variation ({ value: '火と氷' }) correctly 
   />
   <path
     d="M0 0h7v1H0zM8 0h3v1H8zM14,0 h7v1H14zM0 1h1v1H0zM6 1h1v1H6zM8 1h5v1H8zM14 1h1v1H14zM20,1 h1v1H20zM0 2h1v1H0zM2 2h3v1H2zM6 2h1v1H6zM8 2h1v1H8zM11 2h1v1H11zM14 2h1v1H14zM16 2h3v1H16zM20,2 h1v1H20zM0 3h1v1H0zM2 3h3v1H2zM6 3h1v1H6zM8 3h2v1H8zM11 3h2v1H11zM14 3h1v1H14zM16 3h3v1H16zM20,3 h1v1H20zM0 4h1v1H0zM2 4h3v1H2zM6 4h1v1H6zM8 4h2v1H8zM11 4h1v1H11zM14 4h1v1H14zM16 4h3v1H16zM20,4 h1v1H20zM0 5h1v1H0zM6 5h1v1H6zM10 5h2v1H10zM14 5h1v1H14zM20,5 h1v1H20zM0 6h7v1H0zM8 6h1v1H8zM10 6h1v1H10zM12 6h1v1H12zM14,6 h7v1H14zM8 7h4v1H8zM1 8h2v1H1zM4 8h1v1H4zM6 8h2v1H6zM9 8h1v1H9zM12 8h1v1H12zM14 8h1v1H14zM16,8 h5v1H16zM3 9h2v1H3zM7 9h3v1H7zM12 9h2v1H12zM16 9h2v1H16zM19 9h1v1H19zM0 10h2v1H0zM6 10h1v1H6zM9 10h4v1H9zM14 10h1v1H14zM17 10h2v1H17zM0 11h1v1H0zM2 11h2v1H2zM5 11h1v1H5zM7 11h3v1H7zM11 11h8v1H11zM20,11 h1v1H20zM3 12h1v1H3zM5 12h2v1H5zM10 12h2v1H10zM13 12h1v1H13zM15 12h2v1H15zM19,12 h2v1H19zM8 13h1v1H8zM11 13h2v1H11zM15,13 h6v1H15zM0 14h7v1H0zM8 14h1v1H8zM10 14h4v1H10zM15 14h1v1H15zM17 14h1v1H17zM19 14h1v1H19zM0 15h1v1H0zM6 15h1v1H6zM9 15h1v1H9zM11 15h3v1H11zM15 15h1v1H15zM18 15h1v1H18zM0 16h1v1H0zM2 16h3v1H2zM6 16h1v1H6zM8 16h1v1H8zM10 16h1v1H10zM12 16h1v1H12zM14 16h1v1H14zM0 17h1v1H0zM2 17h3v1H2zM6 17h1v1H6zM10 17h1v1H10zM14 17h4v1H14zM19 17h1v1H19zM0 18h1v1H0zM2 18h3v1H2zM6 18h1v1H6zM8 18h2v1H8zM12 18h1v1H12zM17 18h1v1H17zM20,18 h1v1H20zM0 19h1v1H0zM6 19h1v1H6zM8 19h3v1H8zM14 19h1v1H14zM17 19h3v1H17zM0 20h7v1H0zM10 20h1v1H10zM12 20h1v1H12zM14 20h1v1H14zM16 20h1v1H16zM18,20 h3v1H18z"
-    fill="#000000"
-  />
-</svg>
-`;
-
-exports[`SVG rendering renders SVG variation ({ value: 1234567890 }) correctly 1`] = `
-<svg
-  height={128}
-  shapeRendering="crispEdges"
-  viewBox="0 0 21 21"
-  width={128}
->
-  <path
-    d="M0,0 h21v21H0z"
-    fill="#ffffff"
-  />
-  <path
-    d="M0 0h7v1H0zM9 0h4v1H9zM14,0 h7v1H14zM0 1h1v1H0zM6 1h1v1H6zM8 1h1v1H8zM12 1h1v1H12zM14 1h1v1H14zM20,1 h1v1H20zM0 2h1v1H0zM2 2h3v1H2zM6 2h1v1H6zM8 2h1v1H8zM10 2h1v1H10zM12 2h1v1H12zM14 2h1v1H14zM16 2h3v1H16zM20,2 h1v1H20zM0 3h1v1H0zM2 3h3v1H2zM6 3h1v1H6zM8 3h2v1H8zM11 3h1v1H11zM14 3h1v1H14zM16 3h3v1H16zM20,3 h1v1H20zM0 4h1v1H0zM2 4h3v1H2zM6 4h1v1H6zM8 4h2v1H8zM11 4h1v1H11zM14 4h1v1H14zM16 4h3v1H16zM20,4 h1v1H20zM0 5h1v1H0zM6 5h1v1H6zM8 5h1v1H8zM10 5h2v1H10zM14 5h1v1H14zM20,5 h1v1H20zM0 6h7v1H0zM8 6h1v1H8zM10 6h1v1H10zM12 6h1v1H12zM14,6 h7v1H14zM9 7h1v1H9zM11 7h1v1H11zM2 8h1v1H2zM5 8h4v1H5zM12 8h2v1H12zM15 8h5v1H15zM0 9h1v1H0zM3 9h1v1H3zM5 9h1v1H5zM7 9h3v1H7zM14 9h2v1H14zM17 9h2v1H17zM0 10h2v1H0zM5 10h2v1H5zM10 10h3v1H10zM14 10h4v1H14zM19,10 h2v1H19zM0 11h2v1H0zM3 11h1v1H3zM5 11h1v1H5zM7 11h1v1H7zM13 11h3v1H13zM17 11h2v1H17zM0 12h1v1H0zM2 12h8v1H2zM11 12h1v1H11zM13 12h1v1H13zM15,12 h6v1H15zM8 13h1v1H8zM12 13h1v1H12zM14 13h1v1H14zM0 14h7v1H0zM8 14h1v1H8zM10 14h2v1H10zM13 14h1v1H13zM18,14 h3v1H18zM0 15h1v1H0zM6 15h1v1H6zM8 15h2v1H8zM12 15h1v1H12zM16 15h1v1H16zM0 16h1v1H0zM2 16h3v1H2zM6 16h1v1H6zM9 16h1v1H9zM12 16h3v1H12zM18,16 h3v1H18zM0 17h1v1H0zM2 17h3v1H2zM6 17h1v1H6zM9 17h4v1H9zM14 17h2v1H14zM17 17h2v1H17zM0 18h1v1H0zM2 18h3v1H2zM6 18h1v1H6zM8 18h2v1H8zM15 18h3v1H15zM19,18 h2v1H19zM0 19h1v1H0zM6 19h1v1H6zM10 19h1v1H10zM12 19h1v1H12zM15 19h1v1H15zM17 19h3v1H17zM0 20h7v1H0zM9 20h2v1H9zM12 20h1v1H12zM14,20 h7v1H14z"
     fill="#000000"
   />
 </svg>
