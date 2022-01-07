@@ -20,7 +20,6 @@ jobs:
     strategy:
       matrix:
         react_version:
-          - '15'
           - '16'
           - '17'
           - '18.0.0-rc.0'
