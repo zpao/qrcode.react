@@ -33,9 +33,7 @@
   "files": [
     "lib"
   ],
-  "dependencies": {
-    "loose-envify": "^1.4.0"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0"
   },
@@ -70,11 +68,6 @@
     "typescript": "^4.5.4",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.12"
-  },
-  "browserify": {
-    "transform": [
-      "loose-envify"
-    ]
   },
   "jest": {
     "testPathIgnorePatterns": [
