@@ -8,20 +8,19 @@
     "qrcode"
   ],
   "homepage": "http://zpao.github.io/qrcode.react",
-  "main": "./lib/cjs/index.js",
+  "main": "./lib/index.js",
   "module": "./lib/esm/index.js",
-  "types": "./lib/esm/index.d.ts",
+  "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "yarn run build:esm && yarn run build:cjs",
-    "build:esm": "tsc",
-    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build": "yarn run build:code && yarn run build:examples",
+    "build:code": "tsup src/index.tsx -d lib --format esm,cjs --dts --legacy-output --target=es2017 --platform=browser",
+    "build:examples": "tsup examples/demo.tsx -d examples --format iife --env.NODE_ENV production --minify --target=es2017 --legacy-output",
     "lint": "eslint .",
-    "pretty": "prettier --write '{*,.*}.{js,json}' '**/*.{js,json}'",
+    "pretty": "prettier --write '{*,.*}.{mjs,js,json}' '**/*.{js,json}'",
     "prepublishOnly": "tsc && make clean && make all",
     "prepublish-docs": "make clean && make all",
-    "publish-docs": "gh-pages --dist=examples --src='{index.html,bundle.js}'",
+    "publish-docs": "gh-pages --dist=examples --src='{index.html,iife/demo.js}'",
     "test": "jest",
-    "tsc": "tsc",
     "typecheck": "tsc --noEmit"
   },
   "author": "Paul O’Shannessy <paul@oshannessy.com>",
@@ -38,7 +37,6 @@
     "react": "^16.8.0 || ^17.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.13.14",
     "@babel/core": "^7.13.15",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.13.8",
@@ -53,7 +51,6 @@
     "@types/react-test-renderer": "^17.0.1",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
-    "babel-loader": "^8.2.2",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-jest": "^25.3.2",
@@ -65,9 +62,8 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-test-renderer": "^17.0.1",
-    "typescript": "^4.5.4",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12"
+    "tsup": "^5.11.13",
+    "typescript": "^4.5.4"
   },
   "jest": {
     "testPathIgnorePatterns": [

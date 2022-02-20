@@ -1,16 +1,22 @@
-all: lib/esm/index.js lib/cjs/index.js examples/bundle.js
+SRC_DEPS = src/index.tsx src/third-party/qrcodegen/index.ts
+CFG_DEPS = yarn.lock package.json
+
+all: lib/index.js lib/index.d.ts lib/index.js examples/iife/demo.js
 
 lib:
 	mkdir -p lib
 
-lib/esm/index.js: lib src/index.tsx yarn.lock .babelrc tsconfig.json
-	yarn run build:esm
+lib/index.d.ts: lib $(SRC_DEPS) $(CFG_DEPS)
+	yarn run build:code
 
-lib/cjs/index.js: lib src/index.tsx yarn.lock .babelrc tsconfig.cjs.json
-	yarn run build:cjs
+lib/esm/index.js: lib $(SRC_DEPS) $(CFG_DEPS)
+	yarn run build:code
 
-examples/bundle.js: lib/esm/index.js examples/demo.tsx webpack.config.js
-	./node_modules/.bin/webpack
+lib/index.js: lib $(SRC_DEPS) $(CFG_DEPS)
+	yarn run build:code
+
+examples/iife/demo.js: lib/esm/index.js examples/demo.tsx
+	yarn run build:examples
 
 clean:
 	rm -rf lib examples/bundle.js
