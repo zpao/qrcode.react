@@ -1,3 +1,9 @@
+/**
+ * @license qrcode.react
+ * Copyright (c) Paul O'Shannessy
+ * SPDX-License-Identifier: ISC
+ */
+
 import React, {useRef, useEffect} from 'react';
 import type {CSSProperties} from 'react';
 import qrcodegen from './third-party/qrcodegen';
