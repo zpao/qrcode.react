@@ -1,3 +1,12 @@
+## [2.0.0] - 2022-03-05
+
+### Fixed
+- Switched to using `unsafe_*` lifecycle methods, eliminating a warning from non-production environments.
+
+### Removed
+- Removed support for React < 16.3.
+
+
 ## [1.0.1] - 2020-12-30
 
 ### Added
