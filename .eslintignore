@@ -1,4 +1,4 @@
 lib/
 node_modules/
-examples/bundle.js
+examples/iife/demo.js
 third-party/
