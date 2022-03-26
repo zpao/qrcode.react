@@ -3,6 +3,7 @@
 import {QRCodeSVG, QRCodeCanvas} from '..';
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
+import {version} from '../package.json';
 
 function Demo() {
   const [value, setValue] = useState(
@@ -69,214 +70,222 @@ function Demo() {
   };
 
   return (
-    <div className="container">
-      <div className="form">
-        <div>
-          <label>
-            Size(px):
-            <br />
-            <input
-              type="number"
-              onChange={(e) => setSize(parseInt(e.target.value, 10) || 0)}
-              value={size}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Background Color:
-            <br />
-            <input
-              type="color"
-              onChange={(e) => setBgColor(e.target.value)}
-              value={bgColor}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Foreground Color:
-            <br />
-            <input
-              type="color"
-              onChange={(e) => setFgColor(e.target.value)}
-              value={fgColor}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Error Level:
-            <br />
-            <select onChange={(e) => setLevel(e.target.value)} value={level}>
-              <option value="L">L</option>
-              <option value="M">M</option>
-              <option value="Q">Q</option>
-              <option value="H">H</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            Include Margin:
-            <br />
-            <input
-              type="checkbox"
-              checked={includeMargin}
-              onChange={(e) => setIncludeMargin(e.target.checked)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Value:
-            <br />
-            <textarea
-              rows={6}
-              cols={80}
-              onChange={(e) => setValue(e.target.value)}
-              value={value}
-            />
-          </label>
-        </div>
-
-        <div>
-          <label>
-            Include Image:
-            <br />
-            <input
-              type="checkbox"
-              checked={includeImage}
-              onChange={(e) => setIncludeImage(e.target.checked)}
-            />
-          </label>
-        </div>
-
-        <fieldset disabled={!includeImage}>
-          <legend>Image Settings</legend>
-
+    <>
+      <h1>
+        QRCode.react Demo -{' '}
+        <a href={`https://www.npmjs.com/package/qrcode.react/v/${version}`}>
+          v{version}
+        </a>
+      </h1>
+      <div className="container">
+        <div className="form">
           <div>
             <label>
-              Source:
-              <br />
-              <input
-                type="text"
-                onChange={(e) => setImageSrc(e.target.value)}
-                value={imageSrc}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Image Width: {imageW}
+              Size(px):
               <br />
               <input
                 type="number"
-                value={imageW}
-                onChange={(e) => setImageW(parseInt(e.target.value, 10))}
+                onChange={(e) => setSize(parseInt(e.target.value, 10) || 0)}
+                value={size}
               />
             </label>
           </div>
           <div>
             <label>
-              Image Height: {imageH}
+              Background Color:
               <br />
               <input
-                type="number"
-                value={imageH}
-                onChange={(e) => setImageH(parseInt(e.target.value, 10))}
+                type="color"
+                onChange={(e) => setBgColor(e.target.value)}
+                value={bgColor}
               />
             </label>
           </div>
-
           <div>
             <label>
-              Center Image:
+              Foreground Color:
+              <br />
+              <input
+                type="color"
+                onChange={(e) => setFgColor(e.target.value)}
+                value={fgColor}
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Error Level:
+              <br />
+              <select onChange={(e) => setLevel(e.target.value)} value={level}>
+                <option value="L">L</option>
+                <option value="M">M</option>
+                <option value="Q">Q</option>
+                <option value="H">H</option>
+              </select>
+            </label>
+          </div>
+          <div>
+            <label>
+              Include Margin:
               <br />
               <input
                 type="checkbox"
-                checked={centerImage}
-                onChange={(e) => setCenterImage(e.target.checked)}
+                checked={includeMargin}
+                onChange={(e) => setIncludeMargin(e.target.checked)}
               />
             </label>
           </div>
-          <fieldset disabled={centerImage}>
+          <div>
+            <label>
+              Value:
+              <br />
+              <textarea
+                rows={6}
+                cols={80}
+                onChange={(e) => setValue(e.target.value)}
+                value={value}
+              />
+            </label>
+          </div>
+
+          <div>
+            <label>
+              Include Image:
+              <br />
+              <input
+                type="checkbox"
+                checked={includeImage}
+                onChange={(e) => setIncludeImage(e.target.checked)}
+              />
+            </label>
+          </div>
+
+          <fieldset disabled={!includeImage}>
             <legend>Image Settings</legend>
+
             <div>
               <label>
-                Image X: {imageX}
+                Source:
                 <br />
                 <input
-                  type="range"
-                  min={0}
-                  max={size - imageW}
-                  value={imageX}
-                  onChange={(e) => setImageX(parseInt(e.target.value, 10))}
+                  type="text"
+                  onChange={(e) => setImageSrc(e.target.value)}
+                  value={imageSrc}
                 />
               </label>
             </div>
             <div>
               <label>
-                Image Y: {imageY}
+                Image Width: {imageW}
                 <br />
                 <input
-                  type="range"
-                  min={0}
-                  max={size - imageH}
-                  value={imageY}
-                  onChange={(e) => setImageY(parseInt(e.target.value, 10))}
+                  type="number"
+                  value={imageW}
+                  onChange={(e) => setImageW(parseInt(e.target.value, 10))}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Image Height: {imageH}
+                <br />
+                <input
+                  type="number"
+                  value={imageH}
+                  onChange={(e) => setImageH(parseInt(e.target.value, 10))}
+                />
+              </label>
+            </div>
+
+            <div>
+              <label>
+                Center Image:
+                <br />
+                <input
+                  type="checkbox"
+                  checked={centerImage}
+                  onChange={(e) => setCenterImage(e.target.checked)}
+                />
+              </label>
+            </div>
+            <fieldset disabled={centerImage}>
+              <legend>Image Settings</legend>
+              <div>
+                <label>
+                  Image X: {imageX}
+                  <br />
+                  <input
+                    type="range"
+                    min={0}
+                    max={size - imageW}
+                    value={imageX}
+                    onChange={(e) => setImageX(parseInt(e.target.value, 10))}
+                  />
+                </label>
+              </div>
+              <div>
+                <label>
+                  Image Y: {imageY}
+                  <br />
+                  <input
+                    type="range"
+                    min={0}
+                    max={size - imageH}
+                    value={imageY}
+                    onChange={(e) => setImageY(parseInt(e.target.value, 10))}
+                  />
+                </label>
+              </div>
+            </fieldset>
+            <div>
+              <label>
+                Excavate ("dig" foreground to nearest whole module):
+                <br />
+                <input
+                  type="checkbox"
+                  checked={imageExcavate}
+                  onChange={(e) => setImageExcavate(e.target.checked)}
                 />
               </label>
             </div>
           </fieldset>
+        </div>
+
+        <div className="output">
           <div>
-            <label>
-              Excavate ("dig" foreground to nearest whole module):
-              <br />
-              <input
-                type="checkbox"
-                checked={imageExcavate}
-                onChange={(e) => setImageExcavate(e.target.checked)}
+            <h2>
+              <pre>QRCodeSVG</pre>
+            </h2>
+            <div>
+              <textarea
+                rows={svgCode.split('\n').length}
+                cols={80}
+                readOnly={true}
+                value={svgCode}
               />
-            </label>
-          </div>
-        </fieldset>
-      </div>
+            </div>
 
-      <div className="output">
-        <div>
-          <h2>
-            <pre>QRCodeSVG</pre>
-          </h2>
+            <QRCodeSVG {...renderProps} />
+          </div>
+
           <div>
-            <textarea
-              rows={svgCode.split('\n').length}
-              cols={80}
-              readOnly={true}
-              value={svgCode}
-            />
+            <h2>
+              <pre>QRCodeCanvas</pre>
+            </h2>
+            <div>
+              <textarea
+                rows={canvasCode.split('\n').length}
+                cols={80}
+                readOnly={true}
+                value={canvasCode}
+              />
+            </div>
+
+            <QRCodeCanvas {...renderProps} />
           </div>
-
-          <QRCodeSVG {...renderProps} />
-        </div>
-
-        <div>
-          <h2>
-            <pre>QRCodeCanvas</pre>
-          </h2>
-          <div>
-            <textarea
-              rows={canvasCode.split('\n').length}
-              cols={80}
-              readOnly={true}
-              value={canvasCode}
-            />
-          </div>
-
-          <QRCodeCanvas {...renderProps} />
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
