@@ -1,3 +1,21 @@
+## [3.0.0] - 2022-03-26
+
+### Added
+- Added support for named exports for `QRCodeSVG` and `QRCodeCanvas`.
+- Added support for ES Modules.
+- Added embedded type definitions.
+
+### Changed
+- Swapped out `qr.js` dependency for vendored version of <https://www.nayuki.io/page/qr-code-generator-library>.
+- Rewrote using hooks.
+
+### Deprecated
+- Deprecated support for default export. This will be removed in v4.
+
+### Removed
+- Removed support for React < 16.8.
+
+
 ## [2.0.0] - 2022-03-05
 
 ### Fixed

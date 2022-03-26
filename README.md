@@ -1,6 +1,6 @@
 # qrcode.react
 
-A React component to generate [QR codes](http://en.wikipedia.org/wiki/QR_code) for rendering to to the DOM.
+A React component to generate [QR codes](http://en.wikipedia.org/wiki/QR_code) for rendering to the DOM.
 
 ## Installation
 
@@ -92,4 +92,4 @@ ReactDOM.render(
 
 `qrcode.react` is licensed under the [ISC license](LICENSE).
 
-`qrcode.react bundles [QR Code Generator](https://www.nayuki.io/page/qr-code-generator-library), which is available under the [MIT license](src/third-party/qrcodegen/LICENSE).
+`qrcode.react` bundles [QR Code Generator](https://www.nayuki.io/page/qr-code-generator-library), which is available under the [MIT license](src/third-party/qrcodegen/LICENSE).
