@@ -22,7 +22,7 @@ jobs:
         react_version:
           - '16'
           - '17'
-          - '18.0.0-rc.0'
+          - 'next' # swap for 18 on release
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
