@@ -1,3 +1,9 @@
+## [3.0.1] - 2022-03-30
+
+### Added
+- Added React v18 to allowed peer dependencies.
+
+
 ## [3.0.0] - 2022-03-26
 
 ### Added
