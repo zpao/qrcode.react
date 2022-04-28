@@ -357,12 +357,15 @@ function QRCodeSVG(props: QRPropsSVG) {
 }
 QRCodeSVG.defaultProps = DEFAULT_PROPS;
 
-type RenderAs = 'svg' | 'canvas';
-type RootProps = QRProps & {renderAs: string};
+type RootProps =
+  | (QRPropsSVG & {renderAs: 'svg'})
+  | (QRPropsCanvas & {renderAs: 'canvas'});
 const QRCode = (props: RootProps) => {
   const {renderAs, ...otherProps} = props;
-  const Component = (renderAs as RenderAs) === 'svg' ? QRCodeSVG : QRCodeCanvas;
-  return <Component {...otherProps} />;
+  if (renderAs === 'svg') {
+    return <QRCodeSVG {...(otherProps as QRPropsSVG)} />;
+  }
+  return <QRCodeCanvas {...(otherProps as QRPropsCanvas)} />;
 };
 
 QRCode.defaultProps = {renderAs: 'canvas', ...DEFAULT_PROPS};
