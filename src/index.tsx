@@ -36,6 +36,8 @@ type QRProps = {
     y?: number;
   };
 };
+type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
+type QRPropsSVG = QRProps & React.SVGProps<SVGSVGElement>;
 
 const DEFAULT_PROPS = {
   size: 128,
@@ -168,7 +170,7 @@ const SUPPORTS_PATH2D = (function () {
   return true;
 })();
 
-function QRCodeCanvas(props: QRProps) {
+function QRCodeCanvas(props: QRPropsCanvas) {
   const _canvas = useRef<HTMLCanvasElement>(null);
   const _image = useRef<HTMLImageElement>(null);
 
@@ -293,7 +295,7 @@ function QRCodeCanvas(props: QRProps) {
 }
 QRCodeCanvas.defaultProps = DEFAULT_PROPS;
 
-function QRCodeSVG(props: QRProps) {
+function QRCodeSVG(props: QRPropsSVG) {
   const {
     value,
     size,
@@ -355,12 +357,15 @@ function QRCodeSVG(props: QRProps) {
 }
 QRCodeSVG.defaultProps = DEFAULT_PROPS;
 
-type RenderAs = 'svg' | 'canvas';
-type RootProps = QRProps & {renderAs: string};
+type RootProps =
+  | (QRPropsSVG & {renderAs: 'svg'})
+  | (QRPropsCanvas & {renderAs: 'canvas'});
 const QRCode = (props: RootProps) => {
   const {renderAs, ...otherProps} = props;
-  const Component = (renderAs as RenderAs) === 'svg' ? QRCodeSVG : QRCodeCanvas;
-  return <Component {...otherProps} />;
+  if (renderAs === 'svg') {
+    return <QRCodeSVG {...(otherProps as QRPropsSVG)} />;
+  }
+  return <QRCodeCanvas {...(otherProps as QRPropsCanvas)} />;
 };
 
 QRCode.defaultProps = {renderAs: 'canvas', ...DEFAULT_PROPS};

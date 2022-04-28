@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import {QRCodeSVG, QRCodeCanvas} from '..';
+import QRCode, {QRCodeSVG, QRCodeCanvas} from '..';
 
 const BASIC_PROPS = {
   value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
@@ -74,4 +74,28 @@ describe('Canvas rendering', () => {
       expect(tree).toMatchSnapshot();
     }
   );
+});
+
+describe('TypeScript Support', () => {
+  test('QRCodeSVG', () => {
+    <QRCodeSVG {...BASIC_PROPS} className="foo" clipRule="bar" />;
+    expect(0).toBe(0);
+  });
+
+  test('QRCodeCanvas', () => {
+    <QRCodeCanvas {...BASIC_PROPS} className="foo" />;
+    expect(0).toBe(0);
+  });
+
+  test('QRCode', () => {
+    <QRCode {...BASIC_PROPS} renderAs="svg" className="foo" clipRule="bar" />;
+    // To ensure this is properly discriminated, add clipRule as a prop and see
+    // it fail to typecheck.
+    <QRCode {...BASIC_PROPS} renderAs="canvas" className="foo" />;
+    // Unfortunately this won't have the same typechecking because we have
+    // defaultProps.
+    <QRCode {...BASIC_PROPS} className="foo" />;
+
+    expect(0).toBe(0);
+  });
 });
