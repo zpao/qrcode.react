@@ -1,3 +1,12 @@
+## [3.0.2] - 2022-05-15
+
+### Fixed
+- Fixed TypeScript types to reflect pass through of DOM props.
+
+### Changed
+- Updated qr-code-generator to <https://github.com/nayuki/QR-Code-generator/commit/d524de615364fe630040b208b4caa14b6cd8e526>
+
+
 ## [3.0.1] - 2022-03-30
 
 ### Added
