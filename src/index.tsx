@@ -170,7 +170,7 @@ const SUPPORTS_PATH2D = (function () {
   return true;
 })();
 
-const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>((props: QRPropsCanvas, ref: HTMLCanvasElement) => {
+const QRCodeCanvas = React.forwardRef<React.Ref, QRPropsCanvas>((props: QRPropsCanvas, ref: React.Ref) => {
   const _canvas = useRef<HTMLCanvasElement>(null);
   const _image = useRef<HTMLImageElement>(null);
 
