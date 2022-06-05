@@ -48,7 +48,7 @@ function Demo() {
 />`;
   }
   const svgCode = makeExampleCode('QRCodeSVG');
-  const canvasCode = makeExampleCode('QRCodeSVG');
+  const canvasCode = makeExampleCode('QRCodeCanvas');
 
   const renderProps = {
     value,
