@@ -344,13 +344,16 @@ function QRCodeSVG(props: QRPropsSVG) {
 
   return (
     <svg
-      shapeRendering="crispEdges"
       height={size}
       width={size}
       viewBox={`0 0 ${numCells} ${numCells}`}
       {...otherProps}>
-      <path fill={bgColor} d={`M0,0 h${numCells}v${numCells}H0z`} />
-      <path fill={fgColor} d={fgPath} />
+      <path
+        fill={bgColor}
+        d={`M0,0 h${numCells}v${numCells}H0z`}
+        shapeRendering="crispEdges"
+      />
+      <path fill={fgColor} d={fgPath} shapeRendering="crispEdges" />
       {image}
     </svg>
   );
