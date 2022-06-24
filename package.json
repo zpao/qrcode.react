@@ -61,7 +61,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-test-renderer": "^18.0.0",
-    "tsup": "5.12.6",
+    "tsup": "6.1.2",
     "typescript": "^4.5.4"
   },
   "jest": {
