@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: ISC
  */
 
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import type {CSSProperties} from 'react';
 import qrcodegen from './third-party/qrcodegen';
 
@@ -18,34 +18,34 @@ const ERROR_LEVEL_MAP: {[index: string]: qrcodegen.QrCode.Ecc} = {
   H: qrcodegen.QrCode.Ecc.HIGH,
 };
 
+type ImageSettings = {
+  src: string;
+  height: number;
+  width: number;
+  excavate: boolean;
+  x?: number;
+  y?: number;
+};
+
 type QRProps = {
   value: string;
-  size: number;
+  size?: number;
   // Should be a real enum, but doesn't seem to be compatible with real code.
-  level: string;
-  bgColor: string;
-  fgColor: string;
+  level?: string;
+  bgColor?: string;
+  fgColor?: string;
   style?: CSSProperties;
-  includeMargin: boolean;
-  imageSettings?: {
-    src: string;
-    height: number;
-    width: number;
-    excavate: boolean;
-    x?: number;
-    y?: number;
-  };
+  includeMargin?: boolean;
+  imageSettings?: ImageSettings;
 };
 type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
 type QRPropsSVG = QRProps & React.SVGProps<SVGSVGElement>;
 
-const DEFAULT_PROPS = {
-  size: 128,
-  level: 'L',
-  bgColor: '#FFFFFF',
-  fgColor: '#000000',
-  includeMargin: false,
-};
+const DEFAULT_SIZE = 128;
+const DEFAULT_LEVEL = 'L';
+const DEFAULT_BGCOLOR = '#FFFFFF';
+const DEFAULT_FGCOLOR = '#000000';
+const DEFAULT_INCLUDEMARGIN = false;
 
 const MARGIN_SIZE = 4;
 
@@ -116,8 +116,10 @@ function excavateModules(modules: Modules, excavation: Excavation): Modules {
 }
 
 function getImageSettings(
-  props: QRProps,
-  cells: Modules
+  cells: Modules,
+  size: number,
+  includeMargin: boolean,
+  imageSettings?: ImageSettings
 ): null | {
   x: number;
   y: number;
@@ -125,7 +127,6 @@ function getImageSettings(
   w: number;
   excavation: Excavation | null;
 } {
-  const {imageSettings, size, includeMargin} = props;
   if (imageSettings == null) {
     return null;
   }
@@ -171,12 +172,30 @@ const SUPPORTS_PATH2D = (function () {
 })();
 
 function QRCodeCanvas(props: QRPropsCanvas) {
+  const {
+    value,
+    size = DEFAULT_SIZE,
+    level = DEFAULT_LEVEL,
+    bgColor = DEFAULT_BGCOLOR,
+    fgColor = DEFAULT_FGCOLOR,
+    includeMargin = DEFAULT_INCLUDEMARGIN,
+    style,
+    imageSettings,
+    ...otherProps
+  } = props;
+  const imgSrc = imageSettings?.src;
   const _canvas = useRef<HTMLCanvasElement>(null);
   const _image = useRef<HTMLImageElement>(null);
 
-  function update() {
-    const {value, size, level, bgColor, fgColor, includeMargin} = props;
+  // We're just using this state to trigger rerenders when images load. We
+  // Don't actually read the value anywhere. A smarter use of useEffect would
+  // depend on this value.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isImgLoaded, setIsImageLoaded] = useState(false);
 
+  useEffect(() => {
+    // Always update the canvas. It's cheap enough and we want to be correct
+    // with the current state.
     if (_canvas.current != null) {
       const canvas = _canvas.current;
 
@@ -192,7 +211,12 @@ function QRCodeCanvas(props: QRPropsCanvas) {
 
       const margin = includeMargin ? MARGIN_SIZE : 0;
       const numCells = cells.length + margin * 2;
-      const calculatedImageSettings = getImageSettings(props, cells);
+      const calculatedImageSettings = getImageSettings(
+        cells,
+        size,
+        includeMargin,
+        imageSettings
+      );
 
       const image = _image.current;
       const haveImageToRender =
@@ -245,28 +269,16 @@ function QRCodeCanvas(props: QRPropsCanvas) {
         );
       }
     }
-  }
-
-  useEffect(() => {
-    // Always update the canvas. It's cheap enough and we want to be correct
-    // with the current state.
-    update();
   });
 
-  const {
-    value,
-    size,
-    level,
-    bgColor,
-    fgColor,
-    style,
-    includeMargin,
-    imageSettings,
-    ...otherProps
-  } = props;
+  // Ensure we mark image loaded as false here so we trigger updating the
+  // canvas in our other effect.
+  useEffect(() => {
+    setIsImageLoaded(false);
+  }, [imgSrc]);
+
   const canvasStyle = {height: size, width: size, ...style};
   let img = null;
-  let imgSrc = imageSettings?.src;
   if (imgSrc != null) {
     img = (
       <img
@@ -274,7 +286,7 @@ function QRCodeCanvas(props: QRPropsCanvas) {
         key={imgSrc}
         style={{display: 'none'}}
         onLoad={() => {
-          update();
+          setIsImageLoaded(true);
         }}
         ref={_image}
       />
@@ -293,16 +305,15 @@ function QRCodeCanvas(props: QRPropsCanvas) {
     </>
   );
 }
-QRCodeCanvas.defaultProps = DEFAULT_PROPS;
 
 function QRCodeSVG(props: QRPropsSVG) {
   const {
     value,
-    size,
-    level,
-    bgColor,
-    fgColor,
-    includeMargin,
+    size = DEFAULT_SIZE,
+    level = DEFAULT_LEVEL,
+    bgColor = DEFAULT_BGCOLOR,
+    fgColor = DEFAULT_FGCOLOR,
+    includeMargin = DEFAULT_INCLUDEMARGIN,
     imageSettings,
     ...otherProps
   } = props;
@@ -314,7 +325,12 @@ function QRCodeSVG(props: QRPropsSVG) {
 
   const margin = includeMargin ? MARGIN_SIZE : 0;
   const numCells = cells.length + margin * 2;
-  const calculatedImageSettings = getImageSettings(props, cells);
+  const calculatedImageSettings = getImageSettings(
+    cells,
+    size,
+    includeMargin,
+    imageSettings
+  );
 
   let image = null;
   if (imageSettings != null && calculatedImageSettings != null) {
@@ -358,11 +374,10 @@ function QRCodeSVG(props: QRPropsSVG) {
     </svg>
   );
 }
-QRCodeSVG.defaultProps = DEFAULT_PROPS;
 
 type RootProps =
   | (QRPropsSVG & {renderAs: 'svg'})
-  | (QRPropsCanvas & {renderAs: 'canvas'});
+  | (QRPropsCanvas & {renderAs?: 'canvas'});
 const QRCode = (props: RootProps) => {
   const {renderAs, ...otherProps} = props;
   if (renderAs === 'svg') {
@@ -370,7 +385,5 @@ const QRCode = (props: RootProps) => {
   }
   return <QRCodeCanvas {...(otherProps as QRPropsCanvas)} />;
 };
-
-QRCode.defaultProps = {renderAs: 'canvas', ...DEFAULT_PROPS};
 
 export {QRCode as default, QRCodeCanvas, QRCodeSVG};
