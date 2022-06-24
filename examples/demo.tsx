@@ -30,8 +30,8 @@ function Demo() {
       ? `
   imageSettings={{
     src: "${imageSrc}",
-    x: ${centerImage ? 'null' : imageX},
-    y: ${centerImage ? 'null' : imageY},
+    x: ${centerImage ? 'undefined' : imageX},
+    y: ${centerImage ? 'undefined' : imageY},
     height: ${imageH},
     width: ${imageW},
     excavate: ${imageExcavate},
@@ -62,11 +62,11 @@ function Demo() {
           src: imageSrc,
           height: imageH,
           width: imageW,
-          x: centerImage ? null : imageX,
-          y: centerImage ? null : imageY,
+          x: centerImage ? undefined : imageX,
+          y: centerImage ? undefined : imageY,
           excavate: imageExcavate,
         }
-      : null,
+      : undefined,
   };
 
   return (

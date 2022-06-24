@@ -17,7 +17,7 @@
     "build:examples": "tsup examples/demo.tsx -d examples --format iife --env.NODE_ENV production --minify --target=es2017 --legacy-output",
     "lint": "eslint .",
     "pretty": "prettier --write '{*,.*}.{mjs,js,json}' '**/*.{js,json}'",
-    "prepare": "tsc && make clean && make all",
+    "prepack": "make clean && make all && yarn run typecheck",
     "prepublish-docs": "make clean && make all",
     "publish-docs": "gh-pages --dist=examples --src='{index.html,iife/demo.js}'",
     "test": "jest",
