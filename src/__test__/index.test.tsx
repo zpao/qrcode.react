@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import QRCode, {QRCodeSVG, QRCodeCanvas} from '..';
+import {QRCodeSVG, QRCodeCanvas} from '..';
 import {describe, expect, test} from '@jest/globals';
 
 const BASIC_PROPS = {
@@ -91,18 +91,6 @@ describe('TypeScript Support', () => {
 
   test('QRCodeCanvas', () => {
     <QRCodeCanvas {...BASIC_PROPS} className="foo" />;
-    expect(0).toBe(0);
-  });
-
-  test('QRCode', () => {
-    <QRCode {...BASIC_PROPS} renderAs="svg" className="foo" clipRule="bar" />;
-    // To ensure this is properly discriminated, add clipRule as a prop and see
-    // it fail to typecheck.
-    <QRCode {...BASIC_PROPS} renderAs="canvas" className="foo" />;
-    // Unfortunately this won't have the same typechecking because we have
-    // defaultProps.
-    <QRCode {...BASIC_PROPS} className="foo" />;
-
     expect(0).toBe(0);
   });
 });
