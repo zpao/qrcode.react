@@ -4,12 +4,13 @@
     "jsx": "react",
     "module": "ESNext",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "noEmit": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src/"],
+  "include": ["src/", "examples/**/*.tsx"],
   "exclude": ["src/__test__/"]
 }
