@@ -1,3 +1,10 @@
+## [3.1.0] - 2022-06-25
+
+### Fixed
+- Made optional props optional, removing use of `defaultProps`. This may be a slight behavior change with TypeScript if previously passing `null`.
+- Fixed used of `shapeRendering="crispEdges"` in SVG component.
+
+
 ## [3.0.2] - 2022-05-15
 
 ### Fixed
