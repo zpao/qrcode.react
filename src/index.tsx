@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: ISC
  */
 
-import React, {useRef, useEffect, useState} from 'react';
+import React, {useRef, useEffect, useState, useCallback} from 'react';
 import type {CSSProperties} from 'react';
 import qrcodegen from './third-party/qrcodegen';
 
@@ -39,7 +39,7 @@ type QRProps = {
   imageSettings?: ImageSettings;
 };
 type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
-type QRPropsSVG = QRProps & React.SVGProps<SVGSVGElement>;
+type QRPropsSVG = QRProps & React.SVGAttributes<SVGSVGElement>;
 
 const DEFAULT_SIZE = 128;
 const DEFAULT_LEVEL = 'L';
@@ -171,7 +171,10 @@ const SUPPORTS_PATH2D = (function () {
   return true;
 })();
 
-function QRCodeCanvas(props: QRPropsCanvas) {
+const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
+  props: QRPropsCanvas,
+  forwardedRef: React.ForwardedRef<HTMLCanvasElement>
+) {
   const {
     value,
     size = DEFAULT_SIZE,
@@ -184,8 +187,21 @@ function QRCodeCanvas(props: QRPropsCanvas) {
     ...otherProps
   } = props;
   const imgSrc = imageSettings?.src;
-  const _canvas = useRef<HTMLCanvasElement>(null);
+  const _canvas = useRef<HTMLCanvasElement | null>(null);
   const _image = useRef<HTMLImageElement>(null);
+
+  // Set the local ref (_canvas) and also the forwarded ref from outside
+  const setCanvasRef = useCallback(
+    (node: HTMLCanvasElement | null) => {
+      _canvas.current = node;
+      if (typeof forwardedRef === 'function') {
+        forwardedRef(node);
+      } else if (forwardedRef) {
+        forwardedRef.current = node;
+      }
+    },
+    [forwardedRef]
+  );
 
   // We're just using this state to trigger rerenders when images load. We
   // Don't actually read the value anywhere. A smarter use of useEffect would
@@ -298,15 +314,18 @@ function QRCodeCanvas(props: QRPropsCanvas) {
         style={canvasStyle}
         height={size}
         width={size}
-        ref={_canvas}
+        ref={setCanvasRef}
         {...otherProps}
       />
       {img}
     </>
   );
-}
+});
 
-function QRCodeSVG(props: QRPropsSVG) {
+const QRCodeSVG = React.forwardRef(function QRCodeSVG(
+  props: QRPropsSVG,
+  forwardedRef: React.ForwardedRef<SVGSVGElement>
+) {
   const {
     value,
     size = DEFAULT_SIZE,
@@ -363,6 +382,7 @@ function QRCodeSVG(props: QRPropsSVG) {
       height={size}
       width={size}
       viewBox={`0 0 ${numCells} ${numCells}`}
+      ref={forwardedRef}
       {...otherProps}>
       <path
         fill={bgColor}
@@ -373,17 +393,30 @@ function QRCodeSVG(props: QRPropsSVG) {
       {image}
     </svg>
   );
-}
+});
 
 type RootProps =
   | (QRPropsSVG & {renderAs: 'svg'})
   | (QRPropsCanvas & {renderAs?: 'canvas'});
-const QRCode = (props: RootProps) => {
+const QRCode = React.forwardRef(function QRCode(
+  props: RootProps,
+  forwardedRef: React.ForwardedRef<HTMLCanvasElement | SVGSVGElement>
+) {
   const {renderAs, ...otherProps} = props;
   if (renderAs === 'svg') {
-    return <QRCodeSVG {...(otherProps as QRPropsSVG)} />;
+    return (
+      <QRCodeSVG
+        ref={forwardedRef as React.ForwardedRef<SVGSVGElement>}
+        {...(otherProps as QRPropsSVG)}
+      />
+    );
   }
-  return <QRCodeCanvas {...(otherProps as QRPropsCanvas)} />;
-};
+  return (
+    <QRCodeCanvas
+      ref={forwardedRef as React.ForwardedRef<HTMLCanvasElement>}
+      {...(otherProps as QRPropsCanvas)}
+    />
+  );
+});
 
 export {QRCode as default, QRCodeCanvas, QRCodeSVG};
