@@ -35,7 +35,7 @@ type QRProps = {
   bgColor?: string;
   fgColor?: string;
   style?: CSSProperties;
-  includeMargin?: boolean;
+  includeMargin?: boolean | number;
   imageSettings?: ImageSettings;
 };
 type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
@@ -118,7 +118,7 @@ function excavateModules(modules: Modules, excavation: Excavation): Modules {
 function getImageSettings(
   cells: Modules,
   size: number,
-  includeMargin: boolean,
+  includeMargin: boolean | number,
   imageSettings?: ImageSettings
 ): null | {
   x: number;
@@ -130,7 +130,7 @@ function getImageSettings(
   if (imageSettings == null) {
     return null;
   }
-  const margin = includeMargin ? MARGIN_SIZE : 0;
+  const margin = typeof includeMargin === 'number' ? includeMargin : (includeMargin ? MARGIN_SIZE : 0);
   const numCells = cells.length + margin * 2;
   const defaultSize = Math.floor(size * DEFAULT_IMG_SCALE);
   const scale = numCells / size;
