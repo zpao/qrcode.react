@@ -1,3 +1,52 @@
+## [3.1.0] - 2022-06-25
+
+### Fixed
+- Made optional props optional, removing use of `defaultProps`. This may be a slight behavior change with TypeScript if previously passing `null`.
+- Fixed used of `shapeRendering="crispEdges"` in SVG component.
+
+
+## [3.0.2] - 2022-05-15
+
+### Fixed
+- Fixed TypeScript types to reflect pass through of DOM props.
+
+### Changed
+- Updated qr-code-generator to <https://github.com/nayuki/QR-Code-generator/commit/d524de615364fe630040b208b4caa14b6cd8e526>
+
+
+## [3.0.1] - 2022-03-30
+
+### Added
+- Added React v18 to allowed peer dependencies.
+
+
+## [3.0.0] - 2022-03-26
+
+### Added
+- Added support for named exports for `QRCodeSVG` and `QRCodeCanvas`.
+- Added support for ES Modules.
+- Added embedded type definitions.
+
+### Changed
+- Swapped out `qr.js` dependency for vendored version of <https://www.nayuki.io/page/qr-code-generator-library>.
+- Rewrote using hooks.
+
+### Deprecated
+- Deprecated support for default export. This will be removed in v4.
+
+### Removed
+- Removed support for React < 16.8.
+
+
+## [2.0.0] - 2022-03-05
+
+### Fixed
+- Switched to using `unsafe_*` lifecycle methods, eliminating a warning from non-production environments.
+
+### Removed
+- Removed support for React < 16.3.
+
+
 ## [1.0.1] - 2020-12-30
 
 ### Added

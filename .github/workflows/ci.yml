@@ -1,0 +1,66 @@
+name: CI
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      - run: yarn install
+      - run: make
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build-output
+          path: |
+            lib
+            examples/**/*.js
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        react_version:
+          - '16'
+          - '17'
+          - '18'
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      - run: yarn install
+      - name: Install React deps (@v${{ matrix.react_version }})
+        run: npm install --no-save --no-package-lock react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }} react-test-renderer@${{ matrix.react_version }}
+      - run: yarn test
+  lint:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      - run: yarn install
+      - run: yarn lint
+  typecheck:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'yarn'
+      - run: yarn install
+      - uses: actions/download-artifact@v3
+        with:
+          name: build-output
+      - run: yarn typecheck
