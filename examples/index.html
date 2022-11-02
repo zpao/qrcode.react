@@ -6,9 +6,16 @@
     <style>
       .container {
         display: flex;
+        justify-content: center;
+        gap: 1rem;
       }
       .output {
         margin-left: 1rem;
+      }
+      @media only screen and (max-width: 600px) {
+        .container {
+          flex-direction: column;
+        }
       }
     </style>
   </head>
