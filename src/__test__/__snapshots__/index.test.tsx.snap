@@ -10,11 +10,11 @@ exports[`Canvas rendering renders Canvas variation ({
     excavate: false
   }
 }) correctly 1`] = `
-Array [
+[
   <canvas
     height={128}
     style={
-      Object {
+      {
         "height": 128,
         "width": 128,
       }
@@ -25,7 +25,7 @@ Array [
     onLoad={[Function]}
     src="https://static.zpao.com/favicon.png"
     style={
-      Object {
+      {
         "display": "none",
       }
     }
@@ -43,11 +43,11 @@ exports[`Canvas rendering renders Canvas variation ({
     excavate: true
   }
 }) correctly 1`] = `
-Array [
+[
   <canvas
     height={128}
     style={
-      Object {
+      {
         "height": 128,
         "width": 128,
       }
@@ -58,7 +58,7 @@ Array [
     onLoad={[Function]}
     src="https://static.zpao.com/favicon.png"
     style={
-      Object {
+      {
         "display": "none",
       }
     }
@@ -70,7 +70,7 @@ exports[`Canvas rendering renders Canvas variation ({ includeMargin: false }) co
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
@@ -83,7 +83,7 @@ exports[`Canvas rendering renders Canvas variation ({ includeMargin: true }) cor
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
@@ -96,7 +96,7 @@ exports[`Canvas rendering renders Canvas variation ({ level: 'H' }) correctly 1`
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
@@ -109,7 +109,7 @@ exports[`Canvas rendering renders Canvas variation ({ level: 'L' }) correctly 1`
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
@@ -122,7 +122,7 @@ exports[`Canvas rendering renders Canvas variation ({ level: 'M' }) correctly 1`
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
@@ -135,7 +135,7 @@ exports[`Canvas rendering renders Canvas variation ({ level: 'Q' }) correctly 1`
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
@@ -148,7 +148,7 @@ exports[`Canvas rendering renders Canvas variation ({ value: '1234567890' }) cor
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
@@ -161,7 +161,7 @@ exports[`Canvas rendering renders Canvas variation ({ value: 'double byte emoji 
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
@@ -174,7 +174,7 @@ exports[`Canvas rendering renders Canvas variation ({ value: 'four byte emoji �
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
@@ -187,7 +187,7 @@ exports[`Canvas rendering renders Canvas variation ({ value: 'single byte emoji 
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
@@ -200,7 +200,7 @@ exports[`Canvas rendering renders Canvas variation ({ value: '火と氷' }) corr
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
@@ -213,7 +213,7 @@ exports[`Canvas rendering renders basic Canvas correctly 1`] = `
 <canvas
   height={128}
   style={
-    Object {
+    {
       "height": 128,
       "width": 128,
     }
