@@ -54,24 +54,25 @@ ReactDOM.render(
 
 ## Available Props
 
-| prop            | type                         | default value |
-| --------------- | ---------------------------- | ------------- |
+| prop            | type                         | default value | note |
+| --------------- | ---------------------------- | ------------- | ---- |
 | `value`         | `string`                     |
 | `renderAs`      | `string` (`'canvas' 'svg'`)  | `'canvas'`    |
 | `size`          | `number`                     | `128`         |
-| `bgColor`       | `string` (CSS color)         | `"#FFFFFF"`   |
-| `fgColor`       | `string` (CSS color)         | `"#000000"`   |
+| `bgColor`       | `string`                     | `"#FFFFFF"`   | CSS color |
+| `fgColor`       | `string`                     | `"#000000"`   | CSS color |
 | `level`         | `string` (`'L' 'M' 'Q' 'H'`) | `'L'`         |
-| `includeMargin` | `boolean`                    | `false`       |
-| `imageSettings` | `object` (see below)         |               |
+| `includeMargin` | `boolean`                    | `false`       | **DEPRECATED**. This is being remvoed in favor of `marginSize` |
+| `marginSize`    | `number`                     | `0`           | Specifies the number of _modules_ to use for margin around the symbol. The QR Code specification requires `4`, however you may use other values. Values will be turned to integers with `Math.floor`. Overrides `includeMargin` default value when specified |
+| `imageSettings` | `object`                     |               | See below |
 
 ### `imageSettings`
 
-| field      | type      | default value     |
-| ---------- | --------- | ----------------- |
+| field      | type      | default value     | note |
+| ---------- | --------- | ----------------- | ---- |
 | `src`      | `string`  |
-| `x`        | `number`  | none, will center |
-| `y`        | `number`  | none, will center |
+| `x`        | `number`  | none              | Will attempt to center if not specified |
+| `y`        | `number`  | none              | Will attempt to center if not specified |
 | `height`   | `number`  | 10% of `size`     |
 | `width`    | `number`  | 10% of `size`     |
 | `excavate` | `boolean` | `false`           |

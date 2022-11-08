@@ -43,6 +43,11 @@ const TEST_CONFIGS = [
   {value: 'double byte emoji 👌'},
   {value: 'four byte emoji 👌🏽'},
   {value: '火と氷'},
+  // The snapshots for these are only useful for SVG & looking at widths.
+  {includeMargin: true, marginSize: 10},
+  {includeMargin: true, marginSize: 0},
+  {includeMargin: false, marginSize: 8},
+  {includeMargin: false, marginSize: 6.5},
 ];
 
 describe('SVG rendering', () => {
