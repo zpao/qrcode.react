@@ -9,7 +9,7 @@ function FullDemo() {
   const [fgColor, setFgColor] = useState('#000000');
   const [bgColor, setBgColor] = useState('#ffffff');
   const [level, setLevel] = useState('L');
-  const [includeMargin, setIncludeMargin] = useState(false);
+  const [marginSize, setMarginSize] = useState(0);
   const [includeImage, setIncludeImage] = useState(true);
   const [imageH, setImageH] = useState(24);
   const [imageW, setImageW] = useState(24);
@@ -40,7 +40,7 @@ function FullDemo() {
   bgColor={"${bgColor}"}
   fgColor={"${fgColor}"}
   level={"${level}"}
-  includeMargin={${includeMargin}}${imageSettingsCode}
+  marginSize={${marginSize}}${imageSettingsCode}
 />`;
   }
   const svgCode = makeExampleCode('QRCodeSVG');
@@ -52,7 +52,7 @@ function FullDemo() {
     fgColor,
     bgColor,
     level,
-    includeMargin,
+    marginSize,
     imageSettings: includeImage
       ? {
           src: imageSrc,
@@ -115,12 +115,15 @@ function FullDemo() {
         </div>
         <div>
           <label>
-            Include Margin:
+            Margin Size:
             <br />
             <input
-              type="checkbox"
-              checked={includeMargin}
-              onChange={(e) => setIncludeMargin(e.target.checked)}
+              type="number"
+              step={1}
+              value={marginSize}
+              onChange={(e) =>
+                setMarginSize(Math.floor(e.target.valueAsNumber))
+              }
             />
           </label>
         </div>

@@ -36,6 +36,7 @@ type QRProps = {
   fgColor?: string;
   style?: CSSProperties;
   includeMargin?: boolean;
+  marginSize?: number;
   imageSettings?: ImageSettings;
 };
 type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
@@ -47,7 +48,8 @@ const DEFAULT_BGCOLOR = '#FFFFFF';
 const DEFAULT_FGCOLOR = '#000000';
 const DEFAULT_INCLUDEMARGIN = false;
 
-const MARGIN_SIZE = 4;
+const SPEC_MARGIN_SIZE = 4;
+const DEFAULT_MARGIN_SIZE = 0;
 
 // This is *very* rough estimate of max amount of QRCode allowed to be covered.
 // It is "wrong" in a lot of ways (area is a terrible way to estimate, it
@@ -118,7 +120,7 @@ function excavateModules(modules: Modules, excavation: Excavation): Modules {
 function getImageSettings(
   cells: Modules,
   size: number,
-  includeMargin: boolean,
+  margin: number,
   imageSettings?: ImageSettings
 ): null | {
   x: number;
@@ -130,7 +132,6 @@ function getImageSettings(
   if (imageSettings == null) {
     return null;
   }
-  const margin = includeMargin ? MARGIN_SIZE : 0;
   const numCells = cells.length + margin * 2;
   const defaultSize = Math.floor(size * DEFAULT_IMG_SCALE);
   const scale = numCells / size;
@@ -155,6 +156,13 @@ function getImageSettings(
   }
 
   return {x, y, h, w, excavation};
+}
+
+function getMarginSize(includeMargin: boolean, marginSize?: number): number {
+  if (marginSize != null) {
+    return Math.floor(marginSize);
+  }
+  return includeMargin ? SPEC_MARGIN_SIZE : DEFAULT_MARGIN_SIZE;
 }
 
 // For canvas we're going to switch our drawing mode based on whether or not
@@ -182,6 +190,7 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
     bgColor = DEFAULT_BGCOLOR,
     fgColor = DEFAULT_FGCOLOR,
     includeMargin = DEFAULT_INCLUDEMARGIN,
+    marginSize,
     style,
     imageSettings,
     ...otherProps
@@ -225,12 +234,12 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
         ERROR_LEVEL_MAP[level]
       ).getModules();
 
-      const margin = includeMargin ? MARGIN_SIZE : 0;
+      const margin = getMarginSize(includeMargin, marginSize);
       const numCells = cells.length + margin * 2;
       const calculatedImageSettings = getImageSettings(
         cells,
         size,
-        includeMargin,
+        margin,
         imageSettings
       );
 
@@ -333,6 +342,7 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
     bgColor = DEFAULT_BGCOLOR,
     fgColor = DEFAULT_FGCOLOR,
     includeMargin = DEFAULT_INCLUDEMARGIN,
+    marginSize,
     imageSettings,
     ...otherProps
   } = props;
@@ -342,12 +352,12 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
     ERROR_LEVEL_MAP[level]
   ).getModules();
 
-  const margin = includeMargin ? MARGIN_SIZE : 0;
+  const margin = getMarginSize(includeMargin, marginSize);
   const numCells = cells.length + margin * 2;
   const calculatedImageSettings = getImageSettings(
     cells,
     size,
-    includeMargin,
+    margin,
     imageSettings
   );
 
