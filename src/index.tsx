@@ -421,7 +421,7 @@ const QRCode = React.forwardRef(function QRCode(
     return (
       <QRCodeSVG
         ref={forwardedRef as React.ForwardedRef<SVGSVGElement>}
-        {...(otherProps as otherProps)}
+        {...(otherProps as QRPropsSVG)}
       />
     );
   }
