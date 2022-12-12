@@ -388,8 +388,6 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
   // For level 40, 31329 -> 2
   const fgPath = generatePath(cells, margin);
 
-  const titleBlock = (<title>{title}</title>);
-
   return (
     <svg
       height={size}
@@ -397,7 +395,7 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
       viewBox={`0 0 ${numCells} ${numCells}`}
       ref={forwardedRef}
       {...otherProps}>
-      {!!title && titleBlock}
+      {!!title && (<title>{title}</title>)}
       <path
         fill={bgColor}
         d={`M0,0 h${numCells}v${numCells}H0z`}
