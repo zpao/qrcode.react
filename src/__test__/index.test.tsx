@@ -48,6 +48,7 @@ const TEST_CONFIGS = [
   {includeMargin: true, marginSize: 0},
   {includeMargin: false, marginSize: 8},
   {includeMargin: false, marginSize: 6.5},
+  {title: 'some descriptive title'},
 ];
 
 describe('SVG rendering', () => {

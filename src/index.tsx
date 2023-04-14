@@ -38,6 +38,7 @@ type QRProps = {
   includeMargin?: boolean;
   marginSize?: number;
   imageSettings?: ImageSettings;
+  title?: string;
 };
 type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
 type QRPropsSVG = QRProps & React.SVGAttributes<SVGSVGElement>;
@@ -342,6 +343,7 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
     bgColor = DEFAULT_BGCOLOR,
     fgColor = DEFAULT_FGCOLOR,
     includeMargin = DEFAULT_INCLUDEMARGIN,
+    title,
     marginSize,
     imageSettings,
     ...otherProps
@@ -394,6 +396,7 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
       viewBox={`0 0 ${numCells} ${numCells}`}
       ref={forwardedRef}
       {...otherProps}>
+      {!!title && <title>{title}</title>}
       <path
         fill={bgColor}
         d={`M0,0 h${numCells}v${numCells}H0z`}
