@@ -2,6 +2,8 @@ SRC_DEPS = src/index.tsx src/third-party/qrcodegen/index.ts
 CFG_DEPS = yarn.lock package.json tsup.config.ts tsconfig.json
 EXAMPLE_DEPS = examples/*.tsx
 
+.PHONY: all clean
+
 all: lib/index.js lib/index.d.ts lib/index.js examples/iife/demo.js
 
 lib:
