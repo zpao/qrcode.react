@@ -1,6 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import QRCode, {QRCodeSVG, QRCodeCanvas} from '..';
+import {describe, expect, test} from '@jest/globals';
 
 const BASIC_PROPS = {
   value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
@@ -21,8 +22,8 @@ const TEST_CONFIGS = [
   {
     imageSettings: {
       src: 'https://static.zpao.com/favicon.png',
-      x: null,
-      y: null,
+      x: undefined,
+      y: undefined,
       height: 24,
       width: 24,
       excavate: true,
@@ -31,8 +32,8 @@ const TEST_CONFIGS = [
   {
     imageSettings: {
       src: 'https://static.zpao.com/favicon.png',
-      x: null,
-      y: null,
+      x: undefined,
+      y: undefined,
       height: 24,
       width: 24,
       excavate: false,

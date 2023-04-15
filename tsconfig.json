@@ -11,6 +11,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src/", "examples/**/*.tsx"],
-  "exclude": ["src/__test__/"]
+  "include": ["src/", "examples/**/*.tsx"]
 }
