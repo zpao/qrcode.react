@@ -3,8 +3,8 @@
 exports[`Canvas rendering renders Canvas variation ({
   imageSettings: {
     src: 'https://static.zpao.com/favicon.png',
-    x: null,
-    y: null,
+    x: undefined,
+    y: undefined,
     height: 24,
     width: 24,
     excavate: false
@@ -36,8 +36,8 @@ exports[`Canvas rendering renders Canvas variation ({
 exports[`Canvas rendering renders Canvas variation ({
   imageSettings: {
     src: 'https://static.zpao.com/favicon.png',
-    x: null,
-    y: null,
+    x: undefined,
+    y: undefined,
     height: 24,
     width: 24,
     excavate: true
@@ -291,8 +291,8 @@ exports[`Canvas rendering renders basic Canvas correctly 1`] = `
 exports[`SVG rendering renders SVG variation ({
   imageSettings: {
     src: 'https://static.zpao.com/favicon.png',
-    x: null,
-    y: null,
+    x: undefined,
+    y: undefined,
     height: 24,
     width: 24,
     excavate: false
@@ -327,8 +327,8 @@ exports[`SVG rendering renders SVG variation ({
 exports[`SVG rendering renders SVG variation ({
   imageSettings: {
     src: 'https://static.zpao.com/favicon.png',
-    x: null,
-    y: null,
+    x: undefined,
+    y: undefined,
     height: 24,
     width: 24,
     excavate: true

@@ -34,4 +34,15 @@ module.exports = {
       {ignoreParameters: true},
     ],
   },
+  overrides: [
+    // Avoid scattering eslintrc files everywhere
+    {
+      files: ['src/**/*.test.tsx'],
+      plugins: ['jest'],
+      env: {
+        'jest/globals': true,
+      },
+      extends: ['plugin:jest/recommended'],
+    },
+  ],
 };
