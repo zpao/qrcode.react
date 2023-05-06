@@ -3,7 +3,27 @@ import renderer from 'react-test-renderer';
 import {QRCodeSVG, QRCodeCanvas} from '..';
 import {describe, expect, test} from '@jest/globals';
 
-const BASIC_PROPS = {
+import type {ComponentPropsWithoutRef} from 'react';
+
+// We're only using the explicit (non-DOM, non-ref) props for testing, but TS
+// doesn't love us passing our test data as props without actually typing the
+// object. So we'll make sure we give types that work. It's a little messy but
+// gets the job done without being too fancy.
+// Specifically, get the DOM-specific keys and omit them from the also-de-ref'ed
+// component props. Then union together the two types since they may not always
+// be the same.
+type QRCodeCanvasProps = Omit<
+  ComponentPropsWithoutRef<typeof QRCodeCanvas>,
+  keyof React.CanvasHTMLAttributes<HTMLCanvasElement>
+>;
+type QRCodeSVGProps = Omit<
+  ComponentPropsWithoutRef<typeof QRCodeSVG>,
+  keyof React.SVGProps<SVGSVGElement>
+>;
+type QRProps = QRCodeCanvasProps | QRCodeSVGProps;
+type PartialQRProps = Partial<QRCodeCanvasProps> | Partial<QRCodeSVGProps>;
+
+const BASIC_PROPS: QRProps = {
   value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
   size: 128,
   bgColor: '#ffffff',
@@ -12,7 +32,7 @@ const BASIC_PROPS = {
   includeMargin: false,
 };
 
-const TEST_CONFIGS = [
+const TEST_CONFIGS: PartialQRProps[] = [
   {includeMargin: true},
   {includeMargin: false},
   {level: 'L'},
