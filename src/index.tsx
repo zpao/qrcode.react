@@ -10,6 +10,7 @@ import qrcodegen from './third-party/qrcodegen';
 
 type Modules = ReturnType<qrcodegen.QrCode['getModules']>;
 type Excavation = {x: number; y: number; w: number; h: number};
+type ErrorCorrectionLevel = 'L' | 'M' | 'Q' | 'H';
 
 const ERROR_LEVEL_MAP: {[index: string]: qrcodegen.QrCode.Ecc} = {
   L: qrcodegen.QrCode.Ecc.LOW,
@@ -30,8 +31,7 @@ type ImageSettings = {
 type QRProps = {
   value: string;
   size?: number;
-  // Should be a real enum, but doesn't seem to be compatible with real code.
-  level?: string;
+  level?: ErrorCorrectionLevel;
   bgColor?: string;
   fgColor?: string;
   style?: CSSProperties;
@@ -44,7 +44,7 @@ type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
 type QRPropsSVG = QRProps & React.SVGAttributes<SVGSVGElement>;
 
 const DEFAULT_SIZE = 128;
-const DEFAULT_LEVEL = 'L';
+const DEFAULT_LEVEL: ErrorCorrectionLevel = 'L';
 const DEFAULT_BGCOLOR = '#FFFFFF';
 const DEFAULT_FGCOLOR = '#000000';
 const DEFAULT_INCLUDEMARGIN = false;
@@ -432,4 +432,10 @@ const QRCode = React.forwardRef(function QRCode(
   );
 });
 
-export {QRCode as default, QRCodeCanvas, QRCodeSVG};
+export {
+  QRCode as default,
+  QRCodeCanvas,
+  QRCodeSVG,
+  QRProps,
+  ErrorCorrectionLevel,
+};

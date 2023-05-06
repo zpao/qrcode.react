@@ -1,9 +1,9 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import QRCode, {QRCodeSVG, QRCodeCanvas} from '..';
+import QRCode, {QRCodeSVG, QRCodeCanvas, QRProps} from '..';
 import {describe, expect, test} from '@jest/globals';
 
-const BASIC_PROPS = {
+const BASIC_PROPS: QRProps = {
   value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
   size: 128,
   bgColor: '#ffffff',
@@ -12,7 +12,7 @@ const BASIC_PROPS = {
   includeMargin: false,
 };
 
-const TEST_CONFIGS = [
+const TEST_CONFIGS: Partial<QRProps>[] = [
   {includeMargin: true},
   {includeMargin: false},
   {level: 'L'},
