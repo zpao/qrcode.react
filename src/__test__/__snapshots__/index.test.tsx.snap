@@ -315,6 +315,7 @@ exports[`SVG rendering renders SVG variation ({
   />
   <image
     height={5.4375}
+    opacity={1}
     preserveAspectRatio="none"
     width={5.4375}
     x={11.78125}
@@ -351,6 +352,7 @@ exports[`SVG rendering renders SVG variation ({
   />
   <image
     height={5.4375}
+    opacity={1}
     preserveAspectRatio="none"
     width={5.4375}
     x={11.78125}

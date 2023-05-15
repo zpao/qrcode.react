@@ -25,6 +25,7 @@ type ImageSettings = {
   excavate: boolean;
   x?: number;
   y?: number;
+  opacity?: number;
 };
 
 type QRProps = {
@@ -285,6 +286,12 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
         });
       }
 
+      if (imageSettings?.opacity === undefined) {
+        ctx.globalAlpha = 1;
+      } else {
+        ctx.globalAlpha = imageSettings.opacity;
+      }
+
       if (haveImageToRender) {
         ctx.drawImage(
           image,
@@ -365,8 +372,16 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
 
   let image = null;
   if (imageSettings != null && calculatedImageSettings != null) {
+    let imageOpacity;
+
     if (calculatedImageSettings.excavation != null) {
       cells = excavateModules(cells, calculatedImageSettings.excavation);
+    }
+
+    if (imageSettings?.opacity === undefined) {
+      imageOpacity = 1;
+    } else {
+      imageOpacity = imageSettings.opacity;
     }
 
     image = (
@@ -377,6 +392,7 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
         x={calculatedImageSettings.x + margin}
         y={calculatedImageSettings.y + margin}
         preserveAspectRatio="none"
+        opacity={imageOpacity}
       />
     );
   }
