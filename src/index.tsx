@@ -148,6 +148,7 @@ function getImageSettings(
     imageSettings.y == null
       ? cells.length / 2 - h / 2
       : imageSettings.y * scale;
+  const opacity = imageSettings.opacity == null ? 1 : imageSettings.opacity;
 
   let excavation = null;
   if (imageSettings.excavate) {
@@ -156,13 +157,6 @@ function getImageSettings(
     let ceilW = Math.ceil(w + x - floorX);
     let ceilH = Math.ceil(h + y - floorY);
     excavation = {x: floorX, y: floorY, w: ceilW, h: ceilH};
-  }
-
-  let opacity = null;
-  if (imageSettings.opacity === undefined || imageSettings.opacity === null) {
-    opacity = 1;
-  } else {
-    opacity = imageSettings.opacity;
   }
 
   return {x, y, h, w, excavation, opacity};
