@@ -434,4 +434,4 @@ const QRCode = React.forwardRef(function QRCode(
 
 export {QRCode as default, QRCodeCanvas, QRCodeSVG};
 
-export type { QRPropsCanvas, QRPropsSVG };
+export type { QRPropsCanvas, QRPropsSVG, RootProps };
