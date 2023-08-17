@@ -22,4 +22,4 @@ examples/iife/demo.js: lib/esm/index.js ${EXAMPLE_DEPS}
 	yarn run build:examples
 
 clean:
-	rm -rf lib examples/iife/demo.js
+	git clean -fX lib examples
