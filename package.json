@@ -11,6 +11,12 @@
   "main": "./lib/index.js",
   "module": "./lib/esm/index.js",
   "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/esm/index.js",
+      "require": "./lib/index.js"
+    }
+  },
   "scripts": {
     "build": "yarn run build:code && yarn run build:examples",
     "build:code": "tsup src/index.tsx -d lib --format esm,cjs --dts --legacy-output --target=es2017 --platform=browser",
