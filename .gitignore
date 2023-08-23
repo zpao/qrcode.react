@@ -4,3 +4,4 @@ lib/
 examples/bundle.js
 package-lock.json
 examples/iife
+dist

@@ -29,6 +29,7 @@
     "test": "jest",
     "typecheck": "tsc --noEmit"
   },
+  "sideEffects": false,
   "author": "Paul O’Shannessy <paul@oshannessy.com>",
   "repository": {
     "type": "git",
