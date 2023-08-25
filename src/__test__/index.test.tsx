@@ -94,3 +94,13 @@ describe('TypeScript Support', () => {
     expect(0).toBe(0);
   });
 });
+
+describe('Display Names set', () => {
+  test('QRCodeSVG', () => {
+    expect(QRCodeSVG.displayName).toBe('QRCodeSVG');
+  });
+
+  test('QRCodeCanvas', () => {
+    expect(QRCodeCanvas.displayName).toBe('QRCodeCanvas');
+  });
+});

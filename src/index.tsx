@@ -331,6 +331,7 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
     </>
   );
 });
+QRCodeCanvas.displayName = 'QRCodeCanvas';
 
 const QRCodeSVG = React.forwardRef(function QRCodeSVG(
   props: QRPropsSVG,
@@ -407,5 +408,6 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
     </svg>
   );
 });
+QRCodeSVG.displayName = 'QRCodeSVG';
 
 export {QRCodeCanvas, QRCodeSVG};
