@@ -21,6 +21,7 @@
     "build": "yarn run build:code && yarn run build:examples",
     "build:code": "tsup src/index.tsx -d lib --format esm,cjs --dts --legacy-output --target=es2017 --platform=browser",
     "build:examples": "tsup examples/demo.tsx -d examples --format iife --env.NODE_ENV production --minify --target=es2017 --legacy-output",
+    "build:examples:dev": "tsup examples/demo.tsx -d examples --format iife --env.NODE_ENV development --target=es2017 --legacy-output",
     "lint": "eslint .",
     "pretty": "prettier --write '{*,.*}.{mjs,js,json}' '**/*.{js,json}'",
     "prepack": "make clean && make all && yarn run typecheck",
