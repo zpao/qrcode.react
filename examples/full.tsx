@@ -15,6 +15,7 @@ function FullDemo() {
   const [imageW, setImageW] = useState(24);
   const [imageX, setImageX] = useState(0);
   const [imageY, setImageY] = useState(0);
+  const [imageOpacity, setImageOpacity] = useState(1);
   const [imageSrc, setImageSrc] = useState(
     'https://static.zpao.com/favicon.png'
   );
@@ -30,6 +31,7 @@ function FullDemo() {
     y: ${centerImage ? 'undefined' : imageY},
     height: ${imageH},
     width: ${imageW},
+    opacity: ${imageOpacity},
     excavate: ${imageExcavate},
   }}`
       : '';
@@ -61,6 +63,7 @@ function FullDemo() {
           x: centerImage ? undefined : imageX,
           y: centerImage ? undefined : imageY,
           excavate: imageExcavate,
+          opacity: imageOpacity,
         }
       : undefined,
   };
@@ -185,6 +188,18 @@ function FullDemo() {
                 type="number"
                 value={imageH}
                 onChange={(e) => setImageH(parseInt(e.target.value, 10))}
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Image Opacity: {imageOpacity}
+              <br />
+              <input
+                type="number"
+                value={imageOpacity}
+                step="0.1"
+                onChange={(e) => setImageOpacity(Number(e.target.value))}
               />
             </label>
           </div>

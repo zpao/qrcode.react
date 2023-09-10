@@ -25,6 +25,7 @@ type ImageSettings = {
   excavate: boolean;
   x?: number;
   y?: number;
+  opacity?: number;
 };
 
 type QRProps = {
@@ -129,6 +130,7 @@ function getImageSettings(
   h: number;
   w: number;
   excavation: Excavation | null;
+  opacity: number;
 } {
   if (imageSettings == null) {
     return null;
@@ -146,6 +148,7 @@ function getImageSettings(
     imageSettings.y == null
       ? cells.length / 2 - h / 2
       : imageSettings.y * scale;
+  const opacity = imageSettings.opacity == null ? 1 : imageSettings.opacity;
 
   let excavation = null;
   if (imageSettings.excavate) {
@@ -156,7 +159,7 @@ function getImageSettings(
     excavation = {x: floorX, y: floorY, w: ceilW, h: ceilH};
   }
 
-  return {x, y, h, w, excavation};
+  return {x, y, h, w, excavation, opacity};
 }
 
 function getMarginSize(includeMargin: boolean, marginSize?: number): number {
@@ -285,6 +288,10 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
         });
       }
 
+      if (calculatedImageSettings) {
+        ctx.globalAlpha = calculatedImageSettings.opacity;
+      }
+
       if (haveImageToRender) {
         ctx.drawImage(
           image,
@@ -378,6 +385,7 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
         x={calculatedImageSettings.x + margin}
         y={calculatedImageSettings.y + margin}
         preserveAspectRatio="none"
+        opacity={calculatedImageSettings.opacity}
       />
     );
   }

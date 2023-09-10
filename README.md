@@ -61,6 +61,7 @@ ReactDOM.render(
 | `height`   | `number`  | 10% of `size`     |
 | `width`    | `number`  | 10% of `size`     |
 | `excavate` | `boolean` | `false`           |
+| `opacity`  | `number`  | 1                 | 
 
 ## Custom Styles
 
