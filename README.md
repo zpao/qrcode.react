@@ -38,26 +38,11 @@ ReactDOM.render(
 );
 ```
 
-### `QRCode` - **DEPRECATED**
-
-**Note:** Usage of this is deprecated as of v3. It is available as the `default` export for compatiblity with previous versions. The `renderAs` prop is only supported with this component.
-
-```js
-import ReactDOM from 'react-dom';
-import QRCode from 'qrcode.react';
-
-ReactDOM.render(
-  <QRCode value="https://reactjs.org/" renderAs="canvas" />,
-  document.getElementById('mountNode')
-);
-```
-
 ## Available Props
 
 | prop            | type                         | default value | note |
 | --------------- | ---------------------------- | ------------- | ---- |
 | `value`         | `string`                     |
-| `renderAs`      | `string` (`'canvas' 'svg'`)  | `'canvas'`    |
 | `size`          | `number`                     | `128`         |
 | `bgColor`       | `string`                     | `"#FFFFFF"`   | CSS color |
 | `fgColor`       | `string`                     | `"#000000"`   | CSS color |
