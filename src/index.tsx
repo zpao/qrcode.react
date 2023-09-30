@@ -470,8 +470,8 @@ const QRCodeDOM = (svg = document.createElement('svg'), props: QRProps) => {
   svg.appendChild(path1);
 
   const path2 = document.createElement('path');
-  path1.setAttribute('fill', fgColor);
-  path1.setAttribute('d', fgPath);
+  path2.setAttribute('fill', fgColor);
+  path2.setAttribute('d', fgPath);
   path2.setAttribute('shapeRendering', 'crispEdges');
 
   svg.appendChild(path2);
