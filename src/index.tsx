@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: ISC
  */
 
-import React, {useRef, useEffect, useState, useCallback} from 'react';
 import type {CSSProperties} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import qrcodegen from './third-party/qrcodegen';
 
 type Modules = ReturnType<qrcodegen.QrCode['getModules']>;
@@ -418,4 +418,68 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
 });
 QRCodeSVG.displayName = 'QRCodeSVG';
 
-export {QRCodeCanvas, QRCodeSVG};
+const QRCodeDOM = (
+  svg = document.createElement('svg'),
+  props: SVGSVGElement & QRProps
+) => {
+  const {
+    value,
+    size = DEFAULT_SIZE,
+    level = DEFAULT_LEVEL,
+    bgColor = DEFAULT_BGCOLOR,
+    fgColor = DEFAULT_FGCOLOR,
+    includeMargin = DEFAULT_INCLUDEMARGIN,
+    title,
+    marginSize,
+    imageSettings,
+    ...otherProps
+  } = props;
+
+  let cells = qrcodegen.QrCode.encodeText(
+    value,
+    ERROR_LEVEL_MAP[level]
+  ).getModules();
+
+  const margin = getMarginSize(includeMargin, marginSize);
+  const numCells = cells.length + margin * 2;
+
+  const fgPath = generatePath(cells, margin);
+
+  const svgProps = {
+    ...otherProps,
+    height: size,
+    width: size,
+    viewBox: `0 0 ${numCells} ${numCells}`,
+  };
+
+  Object.entries(svgProps).forEach(([key, val]) => {
+    svg.setAttribute(key, val);
+  });
+
+  // reset child nodes
+  while (svg.firstChild) svg.removeChild(svg.lastChild!);
+
+  if (title) {
+    const titleEl = document.createElement('title');
+    titleEl.textContent = title;
+    svg.appendChild(titleEl);
+  }
+
+  const path1 = document.createElement('path');
+  path1.setAttribute('fill', bgColor);
+  path1.setAttribute('d', `M0,0 h${numCells}v${numCells}H0z`);
+  path1.setAttribute('shapeRendering', 'crispEdges');
+
+  svg.appendChild(path1);
+
+  const path2 = document.createElement('path');
+  path1.setAttribute('fill', fgColor);
+  path1.setAttribute('d', fgPath);
+  path2.setAttribute('shapeRendering', 'crispEdges');
+
+  svg.appendChild(path2);
+
+  return svg;
+};
+
+export {QRCodeCanvas, QRCodeDOM, QRCodeSVG};
