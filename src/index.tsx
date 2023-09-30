@@ -418,10 +418,7 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
 });
 QRCodeSVG.displayName = 'QRCodeSVG';
 
-const QRCodeDOM = (
-  svg = document.createElement('svg'),
-  props: SVGSVGElement & QRProps
-) => {
+const QRCodeDOM = (svg = document.createElement('svg'), props: QRProps) => {
   const {
     value,
     size = DEFAULT_SIZE,
@@ -453,7 +450,7 @@ const QRCodeDOM = (
   };
 
   Object.entries(svgProps).forEach(([key, val]) => {
-    svg.setAttribute(key, val);
+    svg.setAttribute(key, val.toString());
   });
 
   // reset child nodes
