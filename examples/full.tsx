@@ -1,5 +1,5 @@
-import {QRCodeSVG, QRCodeCanvas} from '..';
-import React, {useState} from 'react';
+import { QRCodeSVG, QRCodeCanvas } from '..';
+import React, { useState } from 'react';
 
 function FullDemo() {
   const [value, setValue] = useState(
@@ -21,6 +21,26 @@ function FullDemo() {
   );
   const [imageExcavate, setImageExcavate] = useState(true);
   const [centerImage, setCenterImage] = useState(true);
+
+  //setSize
+  function updateSize(value: string | number) {
+
+    if (typeof value === 'number') {
+      // Handle numeric value
+      const numericValue = `${value}`;
+      setSize(parseInt(numericValue, 10));
+    } else if (typeof value === 'string' && value.match(/^-?\d+(\.\d+)?%$/)) {
+      // Handle percentage as a string, e.g., "50%"
+      return setSize(value);
+    } else {
+      // Handle invalid input
+      return setSize(0);
+    }
+  }
+
+
+
+
 
   function makeExampleCode(componentName: string) {
     const imageSettingsCode = includeImage
@@ -57,14 +77,14 @@ function FullDemo() {
     marginSize,
     imageSettings: includeImage
       ? {
-          src: imageSrc,
-          height: imageH,
-          width: imageW,
-          x: centerImage ? undefined : imageX,
-          y: centerImage ? undefined : imageY,
-          excavate: imageExcavate,
-          opacity: imageOpacity,
-        }
+        src: imageSrc,
+        height: imageH,
+        width: imageW,
+        x: centerImage ? undefined : imageX,
+        y: centerImage ? undefined : imageY,
+        excavate: imageExcavate,
+        opacity: imageOpacity,
+      }
       : undefined,
   };
 
@@ -77,8 +97,8 @@ function FullDemo() {
             <br />
             <input
               type="number"
-              onChange={(e) => setSize(parseInt(e.target.value, 10) || 0)}
-              value={size}
+              onChange={(e) => updateSize(e.target.value))}
+            value={size}
             />
           </label>
         </div>
@@ -295,4 +315,4 @@ function FullDemo() {
   );
 }
 
-export {FullDemo};
+export { FullDemo };

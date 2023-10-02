@@ -453,7 +453,7 @@ namespace qrcodegen {
 				let runColor = false;
 				let runX = 0;
 				let runHistory = [0,0,0,0,0,0,0];
-				for (let x = 0; x < this.size; x++) {
+				for (let x = 0; x < this.; x++) {
 					if (this.modules[y][x] == runColor) {
 						runX++;
 						if (runX == 5)

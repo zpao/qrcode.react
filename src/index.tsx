@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: ISC
  */
 
-import React, {useRef, useEffect, useState, useCallback} from 'react';
-import type {CSSProperties} from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
+import type { CSSProperties } from 'react';
 import qrcodegen from './third-party/qrcodegen';
 
 type Modules = ReturnType<qrcodegen.QrCode['getModules']>;
-type Excavation = {x: number; y: number; w: number; h: number};
+type Excavation = { x: number; y: number; w: number; h: number };
 
-const ERROR_LEVEL_MAP: {[index: string]: qrcodegen.QrCode.Ecc} = {
+const ERROR_LEVEL_MAP: { [index: string]: qrcodegen.QrCode.Ecc } = {
   L: qrcodegen.QrCode.Ecc.LOW,
   M: qrcodegen.QrCode.Ecc.MEDIUM,
   Q: qrcodegen.QrCode.Ecc.QUARTILE,
@@ -87,8 +87,7 @@ function generatePath(modules: Modules, margin: number = 0): string {
         } else {
           // Otherwise finish the current line.
           ops.push(
-            `M${start + margin},${y + margin} h${x + 1 - start}v1H${
-              start + margin
+            `M${start + margin},${y + margin} h${x + 1 - start}v1H${start + margin
             }z`
           );
         }
@@ -121,7 +120,7 @@ function excavateModules(modules: Modules, excavation: Excavation): Modules {
 
 function getImageSettings(
   cells: Modules,
-  size: number,
+  size: number | string,
   margin: number,
   imageSettings?: ImageSettings
 ): null | {
@@ -156,10 +155,10 @@ function getImageSettings(
     let floorY = Math.floor(y);
     let ceilW = Math.ceil(w + x - floorX);
     let ceilH = Math.ceil(h + y - floorY);
-    excavation = {x: floorX, y: floorY, w: ceilW, h: ceilH};
+    excavation = { x: floorX, y: floorY, w: ceilW, h: ceilH };
   }
 
-  return {x, y, h, w, excavation, opacity};
+  return { x, y, h, w, excavation, opacity };
 }
 
 function getMarginSize(includeMargin: boolean, marginSize?: number): number {
@@ -310,14 +309,14 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
     setIsImageLoaded(false);
   }, [imgSrc]);
 
-  const canvasStyle = {height: size, width: size, ...style};
+  const canvasStyle = { height: size, width: size, ...style };
   let img = null;
   if (imgSrc != null) {
     img = (
       <img
         src={imgSrc}
         key={imgSrc}
-        style={{display: 'none'}}
+        style={{ display: 'none' }}
         onLoad={() => {
           setIsImageLoaded(true);
         }}
@@ -418,4 +417,4 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
 });
 QRCodeSVG.displayName = 'QRCodeSVG';
 
-export {QRCodeCanvas, QRCodeSVG};
+export { QRCodeCanvas, QRCodeSVG };
