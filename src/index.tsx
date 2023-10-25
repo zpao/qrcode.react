@@ -40,6 +40,7 @@ type QRProps = {
   marginSize?: number;
   imageSettings?: ImageSettings;
   title?: string;
+  alt?: string;
 };
 type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
 type QRPropsSVG = QRProps & React.SVGAttributes<SVGSVGElement>;
