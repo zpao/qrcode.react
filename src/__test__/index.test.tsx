@@ -5,7 +5,6 @@ import {describe, expect, test} from '@jest/globals';
 
 const BASIC_PROPS = {
   value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
-  alt: 'Scan QR Code',
   size: 128,
   bgColor: '#ffffff',
   fgColor: '#000000',
