@@ -10,6 +10,7 @@ function FullDemo() {
   const [bgColor, setBgColor] = useState('#ffffff');
   const [level, setLevel] = useState('L');
   const [marginSize, setMarginSize] = useState(0);
+  const [title, setTitle] = useState('Title for my QR Code');
   const [includeImage, setIncludeImage] = useState(true);
   const [imageH, setImageH] = useState(24);
   const [imageW, setImageW] = useState(24);
@@ -38,6 +39,7 @@ function FullDemo() {
     return `import {${componentName}} from 'qrcode.react';
 <${componentName}
   value={"${value}"}
+  title={"${title}"}
   size={${size}}
   bgColor={"${bgColor}"}
   fgColor={"${fgColor}"}
@@ -50,6 +52,7 @@ function FullDemo() {
 
   const renderProps = {
     value,
+    title,
     size,
     fgColor,
     bgColor,
@@ -139,6 +142,17 @@ function FullDemo() {
               cols={80}
               onChange={(e) => setValue(e.target.value)}
               value={value}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Title:
+            <br />
+            <input
+              type="text"
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
             />
           </label>
         </div>
