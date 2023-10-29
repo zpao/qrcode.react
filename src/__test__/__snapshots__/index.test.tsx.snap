@@ -211,6 +211,7 @@ exports[`Canvas rendering renders Canvas variation ({ level: 'Q' }) correctly 1`
 exports[`Canvas rendering renders Canvas variation ({ minVersion: 22 }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -599,6 +600,7 @@ exports[`SVG rendering renders SVG variation ({ level: 'Q' }) correctly 1`] = `
 exports[`SVG rendering renders SVG variation ({ minVersion: 22 }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 105 105"
   width={128}
 >
