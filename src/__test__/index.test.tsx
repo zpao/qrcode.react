@@ -50,6 +50,10 @@ const TEST_CONFIGS = [
   {includeMargin: false, marginSize: 8},
   {includeMargin: false, marginSize: 6.5},
   {title: 'some descriptive title'},
+  // With our really small value, auto versioning would be really small. We
+  // aren't encoding version anywhere testable, so this will be a proxy test
+  // for ensuring minVersion is respected.
+  {minVersion: 22},
 ];
 
 describe('SVG rendering', () => {

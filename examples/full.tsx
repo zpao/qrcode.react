@@ -9,6 +9,7 @@ function FullDemo() {
   const [fgColor, setFgColor] = useState('#000000');
   const [bgColor, setBgColor] = useState('#ffffff');
   const [level, setLevel] = useState('L');
+  const [minVersion, setMinVersion] = useState(1);
   const [marginSize, setMarginSize] = useState(0);
   const [includeImage, setIncludeImage] = useState(true);
   const [imageH, setImageH] = useState(24);
@@ -35,6 +36,11 @@ function FullDemo() {
     excavate: ${imageExcavate},
   }}`
       : '';
+    const minVersionCode =
+      minVersion > 1
+        ? `minVersion={${minVersion}}
+`
+        : '';
     return `import {${componentName}} from 'qrcode.react';
 <${componentName}
   value={"${value}"}
@@ -42,7 +48,7 @@ function FullDemo() {
   bgColor={"${bgColor}"}
   fgColor={"${fgColor}"}
   level={"${level}"}
-  marginSize={${marginSize}}${imageSettingsCode}
+  ${minVersionCode}marginSize={${marginSize}}${imageSettingsCode}
 />`;
   }
   const svgCode = makeExampleCode('QRCodeSVG');
@@ -55,6 +61,7 @@ function FullDemo() {
     bgColor,
     level,
     marginSize,
+    minVersion,
     imageSettings: includeImage
       ? {
           src: imageSrc,
@@ -114,6 +121,19 @@ function FullDemo() {
               <option value="Q">Q</option>
               <option value="H">H</option>
             </select>
+          </label>
+        </div>
+        <div>
+          <label>
+            Minimum Version: {minVersion}
+            <br />
+            <input
+              type="range"
+              min={1}
+              max={40}
+              value={minVersion}
+              onChange={(e) => setMinVersion(parseInt(e.target.value, 10))}
+            />
           </label>
         </div>
         <div>
