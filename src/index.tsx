@@ -332,6 +332,7 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
         height={size}
         width={size}
         ref={setCanvasRef}
+        role="img"
         {...otherProps}
       />
       {img}
@@ -404,6 +405,7 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
       width={size}
       viewBox={`0 0 ${numCells} ${numCells}`}
       ref={forwardedRef}
+      role="img"
       {...otherProps}>
       {!!title && <title>{title}</title>}
       <path

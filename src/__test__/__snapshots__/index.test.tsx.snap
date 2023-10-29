@@ -13,6 +13,7 @@ exports[`Canvas rendering renders Canvas variation ({
 [
   <canvas
     height={128}
+    role="img"
     style={
       {
         "height": 128,
@@ -46,6 +47,7 @@ exports[`Canvas rendering renders Canvas variation ({
 [
   <canvas
     height={128}
+    role="img"
     style={
       {
         "height": 128,
@@ -69,6 +71,7 @@ exports[`Canvas rendering renders Canvas variation ({
 exports[`Canvas rendering renders Canvas variation ({ includeMargin: false }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -82,6 +85,7 @@ exports[`Canvas rendering renders Canvas variation ({ includeMargin: false }) co
 exports[`Canvas rendering renders Canvas variation ({ includeMargin: false, marginSize: 6.5 }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -95,6 +99,7 @@ exports[`Canvas rendering renders Canvas variation ({ includeMargin: false, marg
 exports[`Canvas rendering renders Canvas variation ({ includeMargin: false, marginSize: 8 }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -108,6 +113,7 @@ exports[`Canvas rendering renders Canvas variation ({ includeMargin: false, marg
 exports[`Canvas rendering renders Canvas variation ({ includeMargin: true }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -121,6 +127,7 @@ exports[`Canvas rendering renders Canvas variation ({ includeMargin: true }) cor
 exports[`Canvas rendering renders Canvas variation ({ includeMargin: true, marginSize: 0 }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -134,6 +141,7 @@ exports[`Canvas rendering renders Canvas variation ({ includeMargin: true, margi
 exports[`Canvas rendering renders Canvas variation ({ includeMargin: true, marginSize: 10 }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -147,6 +155,7 @@ exports[`Canvas rendering renders Canvas variation ({ includeMargin: true, margi
 exports[`Canvas rendering renders Canvas variation ({ level: 'H' }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -160,6 +169,7 @@ exports[`Canvas rendering renders Canvas variation ({ level: 'H' }) correctly 1`
 exports[`Canvas rendering renders Canvas variation ({ level: 'L' }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -173,6 +183,7 @@ exports[`Canvas rendering renders Canvas variation ({ level: 'L' }) correctly 1`
 exports[`Canvas rendering renders Canvas variation ({ level: 'M' }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -186,6 +197,7 @@ exports[`Canvas rendering renders Canvas variation ({ level: 'M' }) correctly 1`
 exports[`Canvas rendering renders Canvas variation ({ level: 'Q' }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -199,6 +211,7 @@ exports[`Canvas rendering renders Canvas variation ({ level: 'Q' }) correctly 1`
 exports[`Canvas rendering renders Canvas variation ({ title: 'some descriptive title' }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -213,6 +226,7 @@ exports[`Canvas rendering renders Canvas variation ({ title: 'some descriptive t
 exports[`Canvas rendering renders Canvas variation ({ value: '1234567890' }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -226,6 +240,7 @@ exports[`Canvas rendering renders Canvas variation ({ value: '1234567890' }) cor
 exports[`Canvas rendering renders Canvas variation ({ value: 'double byte emoji 👌' }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -239,6 +254,7 @@ exports[`Canvas rendering renders Canvas variation ({ value: 'double byte emoji 
 exports[`Canvas rendering renders Canvas variation ({ value: 'four byte emoji 👌🏽' }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -252,6 +268,7 @@ exports[`Canvas rendering renders Canvas variation ({ value: 'four byte emoji �
 exports[`Canvas rendering renders Canvas variation ({ value: 'single byte emoji ✅' }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -265,6 +282,7 @@ exports[`Canvas rendering renders Canvas variation ({ value: 'single byte emoji 
 exports[`Canvas rendering renders Canvas variation ({ value: '火と氷' }) correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -278,6 +296,7 @@ exports[`Canvas rendering renders Canvas variation ({ value: '火と氷' }) corr
 exports[`Canvas rendering renders basic Canvas correctly 1`] = `
 <canvas
   height={128}
+  role="img"
   style={
     {
       "height": 128,
@@ -300,6 +319,7 @@ exports[`SVG rendering renders SVG variation ({
 }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 29 29"
   width={128}
 >
@@ -337,6 +357,7 @@ exports[`SVG rendering renders SVG variation ({
 }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 29 29"
   width={128}
 >
@@ -365,6 +386,7 @@ exports[`SVG rendering renders SVG variation ({
 exports[`SVG rendering renders SVG variation ({ includeMargin: false }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 29 29"
   width={128}
 >
@@ -384,6 +406,7 @@ exports[`SVG rendering renders SVG variation ({ includeMargin: false }) correctl
 exports[`SVG rendering renders SVG variation ({ includeMargin: false, marginSize: 6.5 }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 41 41"
   width={128}
 >
@@ -403,6 +426,7 @@ exports[`SVG rendering renders SVG variation ({ includeMargin: false, marginSize
 exports[`SVG rendering renders SVG variation ({ includeMargin: false, marginSize: 8 }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 45 45"
   width={128}
 >
@@ -422,6 +446,7 @@ exports[`SVG rendering renders SVG variation ({ includeMargin: false, marginSize
 exports[`SVG rendering renders SVG variation ({ includeMargin: true }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 37 37"
   width={128}
 >
@@ -441,6 +466,7 @@ exports[`SVG rendering renders SVG variation ({ includeMargin: true }) correctly
 exports[`SVG rendering renders SVG variation ({ includeMargin: true, marginSize: 0 }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 29 29"
   width={128}
 >
@@ -460,6 +486,7 @@ exports[`SVG rendering renders SVG variation ({ includeMargin: true, marginSize:
 exports[`SVG rendering renders SVG variation ({ includeMargin: true, marginSize: 10 }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 49 49"
   width={128}
 >
@@ -479,6 +506,7 @@ exports[`SVG rendering renders SVG variation ({ includeMargin: true, marginSize:
 exports[`SVG rendering renders SVG variation ({ level: 'H' }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 41 41"
   width={128}
 >
@@ -498,6 +526,7 @@ exports[`SVG rendering renders SVG variation ({ level: 'H' }) correctly 1`] = `
 exports[`SVG rendering renders SVG variation ({ level: 'L' }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 29 29"
   width={128}
 >
@@ -517,6 +546,7 @@ exports[`SVG rendering renders SVG variation ({ level: 'L' }) correctly 1`] = `
 exports[`SVG rendering renders SVG variation ({ level: 'M' }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 33 33"
   width={128}
 >
@@ -536,6 +566,7 @@ exports[`SVG rendering renders SVG variation ({ level: 'M' }) correctly 1`] = `
 exports[`SVG rendering renders SVG variation ({ level: 'Q' }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 37 37"
   width={128}
 >
@@ -555,6 +586,7 @@ exports[`SVG rendering renders SVG variation ({ level: 'Q' }) correctly 1`] = `
 exports[`SVG rendering renders SVG variation ({ title: 'some descriptive title' }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 29 29"
   width={128}
 >
@@ -577,6 +609,7 @@ exports[`SVG rendering renders SVG variation ({ title: 'some descriptive title' 
 exports[`SVG rendering renders SVG variation ({ value: '1234567890' }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 21 21"
   width={128}
 >
@@ -596,6 +629,7 @@ exports[`SVG rendering renders SVG variation ({ value: '1234567890' }) correctly
 exports[`SVG rendering renders SVG variation ({ value: 'double byte emoji 👌' }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 25 25"
   width={128}
 >
@@ -615,6 +649,7 @@ exports[`SVG rendering renders SVG variation ({ value: 'double byte emoji 👌' 
 exports[`SVG rendering renders SVG variation ({ value: 'four byte emoji 👌🏽' }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 25 25"
   width={128}
 >
@@ -634,6 +669,7 @@ exports[`SVG rendering renders SVG variation ({ value: 'four byte emoji 👌🏽
 exports[`SVG rendering renders SVG variation ({ value: 'single byte emoji ✅' }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 25 25"
   width={128}
 >
@@ -653,6 +689,7 @@ exports[`SVG rendering renders SVG variation ({ value: 'single byte emoji ✅' }
 exports[`SVG rendering renders SVG variation ({ value: '火と氷' }) correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 21 21"
   width={128}
 >
@@ -672,6 +709,7 @@ exports[`SVG rendering renders SVG variation ({ value: '火と氷' }) correctly 
 exports[`SVG rendering renders basic SVG correctly 1`] = `
 <svg
   height={128}
+  role="img"
   viewBox="0 0 29 29"
   width={128}
 >
