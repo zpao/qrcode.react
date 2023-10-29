@@ -40,6 +40,7 @@ type QRProps = {
   marginSize?: number;
   imageSettings?: ImageSettings;
   title?: string;
+  minVersion?: number;
 };
 type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
 type QRPropsSVG = QRProps & React.SVGAttributes<SVGSVGElement>;
@@ -49,6 +50,7 @@ const DEFAULT_LEVEL = 'L';
 const DEFAULT_BGCOLOR = '#FFFFFF';
 const DEFAULT_FGCOLOR = '#000000';
 const DEFAULT_INCLUDEMARGIN = false;
+const DEFAULT_MINVERSION = 1;
 
 const SPEC_MARGIN_SIZE = 4;
 const DEFAULT_MARGIN_SIZE = 0;
@@ -169,6 +171,23 @@ function getMarginSize(includeMargin: boolean, marginSize?: number): number {
   return includeMargin ? SPEC_MARGIN_SIZE : DEFAULT_MARGIN_SIZE;
 }
 
+function makeQRCode({
+  value,
+  level,
+  minVersion,
+}: {
+  value: string;
+  level: string;
+  minVersion: number;
+}): qrcodegen.QrCode {
+  const segments = qrcodegen.QrSegment.makeSegments(value);
+  return qrcodegen.QrCode.encodeSegments(
+    segments,
+    ERROR_LEVEL_MAP[level],
+    minVersion
+  );
+}
+
 // For canvas we're going to switch our drawing mode based on whether or not
 // the environment supports Path2D. We only need the constructor to be
 // supported, but Edge doesn't actually support the path (string) type
@@ -194,6 +213,7 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
     bgColor = DEFAULT_BGCOLOR,
     fgColor = DEFAULT_FGCOLOR,
     includeMargin = DEFAULT_INCLUDEMARGIN,
+    minVersion = DEFAULT_MINVERSION,
     marginSize,
     style,
     imageSettings,
@@ -233,10 +253,12 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
         return;
       }
 
-      let cells = qrcodegen.QrCode.encodeText(
+      let qrcode = makeQRCode({
         value,
-        ERROR_LEVEL_MAP[level]
-      ).getModules();
+        level,
+        minVersion,
+      });
+      let cells = qrcode.getModules();
 
       const margin = getMarginSize(includeMargin, marginSize);
       const numCells = cells.length + margin * 2;
@@ -352,16 +374,19 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
     bgColor = DEFAULT_BGCOLOR,
     fgColor = DEFAULT_FGCOLOR,
     includeMargin = DEFAULT_INCLUDEMARGIN,
+    minVersion = DEFAULT_MINVERSION,
     title,
     marginSize,
     imageSettings,
     ...otherProps
   } = props;
 
-  let cells = qrcodegen.QrCode.encodeText(
+  let qrcode = makeQRCode({
     value,
-    ERROR_LEVEL_MAP[level]
-  ).getModules();
+    level,
+    minVersion,
+  });
+  let cells = qrcode.getModules();
 
   const margin = getMarginSize(includeMargin, marginSize);
   const numCells = cells.length + margin * 2;

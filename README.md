@@ -47,6 +47,7 @@ ReactDOM.render(
 | `bgColor`       | `string`                     | `"#FFFFFF"`   | CSS color |
 | `fgColor`       | `string`                     | `"#000000"`   | CSS color |
 | `level`         | `string` (`'L' 'M' 'Q' 'H'`) | `'L'`         |
+| `minVersion`    | `number` (1-40)              | `1`           | QR Code versions are 1-40. The optimal (lowest) version is determined for the `value` provided, using this minimum as the lower bound.
 | `includeMargin` | `boolean`                    | `false`       | **DEPRECATED**. This is being remvoed in favor of `marginSize` |
 | `marginSize`    | `number`                     | `0`           | Specifies the number of _modules_ to use for margin around the symbol. The QR Code specification requires `4`, however you may use other values. Values will be turned to integers with `Math.floor`. Overrides `includeMargin` default value when specified |
 | `imageSettings` | `object`                     |               | See below |
@@ -61,7 +62,7 @@ ReactDOM.render(
 | `height`   | `number`  | 10% of `size`     |
 | `width`    | `number`  | 10% of `size`     |
 | `excavate` | `boolean` | `false`           |
-| `opacity`  | `number`  | 1                 | 
+| `opacity`  | `number`  | 1                 |
 
 ## Custom Styles
 
