@@ -49,6 +49,7 @@ const TEST_CONFIGS = [
   {includeMargin: true, marginSize: 0},
   {includeMargin: false, marginSize: 8},
   {includeMargin: false, marginSize: 6.5},
+  {marginSize: -10},
   {title: 'some descriptive title'},
   // With our really small value, auto versioning would be really small. We
   // aren't encoding version anywhere testable, so this will be a proxy test
