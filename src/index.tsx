@@ -26,6 +26,7 @@ type ImageSettings = {
   x?: number;
   y?: number;
   opacity?: number;
+  crossOrigin?: 'anonymous' | 'use-credentials' | '';
 };
 
 type QRProps = {
@@ -133,6 +134,7 @@ function getImageSettings(
   w: number;
   excavation: Excavation | null;
   opacity: number;
+  crossOrigin: 'anonymous' | 'use-credentials' | '';
 } {
   if (imageSettings == null) {
     return null;
@@ -161,7 +163,9 @@ function getImageSettings(
     excavation = {x: floorX, y: floorY, w: ceilW, h: ceilH};
   }
 
-  return {x, y, h, w, excavation, opacity};
+  const crossOrigin = imageSettings.crossOrigin ?? 'anonymous';
+
+  return {x, y, h, w, excavation, opacity, crossOrigin};
 }
 
 function getMarginSize(includeMargin: boolean, marginSize?: number): number {
@@ -344,6 +348,7 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
           setIsImageLoaded(true);
         }}
         ref={_image}
+        crossOrigin={imageSettings?.crossOrigin ?? 'anonymous'}
       />
     );
   }
@@ -412,6 +417,7 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
         y={calculatedImageSettings.y + margin}
         preserveAspectRatio="none"
         opacity={calculatedImageSettings.opacity}
+        crossOrigin={calculatedImageSettings.crossOrigin}
       />
     );
   }
