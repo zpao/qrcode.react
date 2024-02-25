@@ -11,6 +11,7 @@ import qrcodegen from './third-party/qrcodegen';
 type Modules = ReturnType<qrcodegen.QrCode['getModules']>;
 type Excavation = {x: number; y: number; w: number; h: number};
 type ErrorCorrectionLevel = 'L' | 'M' | 'Q' | 'H';
+type CrossOrigin = 'anonymous' | 'use-credentials' | '';
 
 const ERROR_LEVEL_MAP: {[index: string]: qrcodegen.QrCode.Ecc} = {
   L: qrcodegen.QrCode.Ecc.LOW,
@@ -27,7 +28,7 @@ type ImageSettings = {
   x?: number;
   y?: number;
   opacity?: number;
-  crossOrigin?: 'anonymous' | 'use-credentials' | '';
+  crossOrigin?: CrossOrigin;
 };
 
 type QRProps = {
@@ -52,6 +53,7 @@ const DEFAULT_BGCOLOR = '#FFFFFF';
 const DEFAULT_FGCOLOR = '#000000';
 const DEFAULT_INCLUDEMARGIN = false;
 const DEFAULT_MINVERSION = 1;
+const DEFAULT_CROSS_ORIGIN: CrossOrigin = 'anonymous';
 
 const SPEC_MARGIN_SIZE = 4;
 const DEFAULT_MARGIN_SIZE = 0;
@@ -134,7 +136,7 @@ function getImageSettings(
   w: number;
   excavation: Excavation | null;
   opacity: number;
-  crossOrigin: 'anonymous' | 'use-credentials' | '';
+  crossOrigin: CrossOrigin;
 } {
   if (imageSettings == null) {
     return null;
@@ -163,7 +165,7 @@ function getImageSettings(
     excavation = {x: floorX, y: floorY, w: ceilW, h: ceilH};
   }
 
-  const crossOrigin = imageSettings.crossOrigin ?? 'anonymous';
+  const crossOrigin = imageSettings.crossOrigin ?? DEFAULT_CROSS_ORIGIN;
 
   return {x, y, h, w, excavation, opacity, crossOrigin};
 }
@@ -383,7 +385,9 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
           setIsImageLoaded(true);
         }}
         ref={_image}
-        crossOrigin={imageSettings?.crossOrigin ?? 'anonymous'}
+        crossOrigin={
+          calculatedImageSettings?.crossOrigin ?? DEFAULT_CROSS_ORIGIN
+        }
       />
     );
   }
