@@ -349,6 +349,7 @@ exports[`SVG rendering renders SVG variation ({
   />
   <image
     height={5.4375}
+    href="https://static.zpao.com/favicon.png"
     opacity={1}
     preserveAspectRatio="none"
     width={5.4375}
@@ -387,6 +388,7 @@ exports[`SVG rendering renders SVG variation ({
   />
   <image
     height={5.4375}
+    href="https://static.zpao.com/favicon.png"
     opacity={1}
     preserveAspectRatio="none"
     width={5.4375}
