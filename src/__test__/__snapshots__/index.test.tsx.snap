@@ -354,7 +354,6 @@ exports[`SVG rendering renders SVG variation ({
     preserveAspectRatio="none"
     width={5.4375}
     x={11.78125}
-    xlinkHref="https://static.zpao.com/favicon.png"
     y={11.78125}
   />
 </svg>
@@ -393,7 +392,6 @@ exports[`SVG rendering renders SVG variation ({
     preserveAspectRatio="none"
     width={5.4375}
     x={11.78125}
-    xlinkHref="https://static.zpao.com/favicon.png"
     y={11.78125}
   />
 </svg>

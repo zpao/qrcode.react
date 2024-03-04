@@ -436,7 +436,6 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
     image = (
       <image
         href={imageSettings.src}
-        xlinkHref={imageSettings.src}
         height={calculatedImageSettings.h}
         width={calculatedImageSettings.w}
         x={calculatedImageSettings.x + margin}
