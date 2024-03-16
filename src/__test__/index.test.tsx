@@ -22,6 +22,7 @@ type QRCodeSVGProps = Omit<
 >;
 type QRProps = QRCodeCanvasProps | QRCodeSVGProps;
 type PartialQRProps = Partial<QRCodeCanvasProps> | Partial<QRCodeSVGProps>;
+type CrossOrigin = NonNullable<QRProps['imageSettings']>['crossOrigin'];
 
 const BASIC_PROPS: QRProps = {
   value: 'http://picturesofpeoplescanningqrcodes.tumblr.com/',
@@ -30,6 +31,16 @@ const BASIC_PROPS: QRProps = {
   fgColor: '#000000',
   level: 'L',
   includeMargin: false,
+};
+
+// Expect some or all of these to be overridden in the test configs.
+const BASE_IMAGE_SETTINGS = {
+  src: 'https://static.zpao.com/favicon.png',
+  x: undefined,
+  y: undefined,
+  height: 24,
+  width: 24,
+  excavate: true,
 };
 
 const TEST_CONFIGS: PartialQRProps[] = [
@@ -41,21 +52,13 @@ const TEST_CONFIGS: PartialQRProps[] = [
   {level: 'H'},
   {
     imageSettings: {
-      src: 'https://static.zpao.com/favicon.png',
-      x: undefined,
-      y: undefined,
-      height: 24,
-      width: 24,
+      ...BASE_IMAGE_SETTINGS,
       excavate: true,
     },
   },
   {
     imageSettings: {
-      src: 'https://static.zpao.com/favicon.png',
-      x: undefined,
-      y: undefined,
-      height: 24,
-      width: 24,
+      ...BASE_IMAGE_SETTINGS,
       excavate: false,
     },
   },
@@ -74,6 +77,19 @@ const TEST_CONFIGS: PartialQRProps[] = [
   // aren't encoding version anywhere testable, so this will be a proxy test
   // for ensuring minVersion is respected.
   {minVersion: 22},
+  // Test all crossOrigin values. Important in case we remove other image
+  // settings tests and to ensure we do non-obvious things like map '' to
+  // 'anonymous'.
+  ...([undefined, '', 'anonymous', 'use-credentials'] as CrossOrigin[]).map(
+    (crossOrigin) => {
+      return {
+        imageSettings: {
+          ...BASE_IMAGE_SETTINGS,
+          crossOrigin: crossOrigin,
+        },
+      };
+    }
+  ),
 ];
 
 describe('SVG rendering', () => {
