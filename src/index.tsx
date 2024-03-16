@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: ISC
  */
 
-import React, {useRef, useEffect, useState, useCallback} from 'react';
+import React, {useRef, useEffect, useState, useCallback, useMemo} from 'react';
 import type {CSSProperties} from 'react';
 import qrcodegen from './third-party/qrcodegen';
 
 type Modules = ReturnType<qrcodegen.QrCode['getModules']>;
 type Excavation = {x: number; y: number; w: number; h: number};
+type ErrorCorrectionLevel = 'L' | 'M' | 'Q' | 'H';
 
 const ERROR_LEVEL_MAP: {[index: string]: qrcodegen.QrCode.Ecc} = {
   L: qrcodegen.QrCode.Ecc.LOW,
@@ -32,8 +33,7 @@ type ImageSettings = {
 type QRProps = {
   value: string;
   size?: number;
-  // Should be a real enum, but doesn't seem to be compatible with real code.
-  level?: string;
+  level?: ErrorCorrectionLevel;
   bgColor?: string;
   fgColor?: string;
   style?: CSSProperties;
@@ -47,7 +47,7 @@ type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
 type QRPropsSVG = QRProps & React.SVGAttributes<SVGSVGElement>;
 
 const DEFAULT_SIZE = 128;
-const DEFAULT_LEVEL = 'L';
+const DEFAULT_LEVEL: ErrorCorrectionLevel = 'L';
 const DEFAULT_BGCOLOR = '#FFFFFF';
 const DEFAULT_FGCOLOR = '#000000';
 const DEFAULT_INCLUDEMARGIN = false;
@@ -175,21 +175,58 @@ function getMarginSize(includeMargin: boolean, marginSize?: number): number {
   return includeMargin ? SPEC_MARGIN_SIZE : DEFAULT_MARGIN_SIZE;
 }
 
-function makeQRCode({
+function useQRCode({
   value,
   level,
   minVersion,
+  includeMargin,
+  marginSize,
+  imageSettings,
+  size,
 }: {
   value: string;
   level: string;
   minVersion: number;
-}): qrcodegen.QrCode {
-  const segments = qrcodegen.QrSegment.makeSegments(value);
-  return qrcodegen.QrCode.encodeSegments(
-    segments,
-    ERROR_LEVEL_MAP[level],
-    minVersion
-  );
+  includeMargin: boolean;
+  marginSize?: number;
+  imageSettings?: ImageSettings;
+  size: number;
+}) {
+  let qrcode = useMemo(() => {
+    const segments = qrcodegen.QrSegment.makeSegments(value);
+    return qrcodegen.QrCode.encodeSegments(
+      segments,
+      ERROR_LEVEL_MAP[level],
+      minVersion
+    );
+  }, [value, level, minVersion]);
+
+  const {cells, margin, numCells, calculatedImageSettings} = useMemo(() => {
+    let cells = qrcode.getModules();
+
+    const margin = getMarginSize(includeMargin, marginSize);
+    const numCells = cells.length + margin * 2;
+    const calculatedImageSettings = getImageSettings(
+      cells,
+      size,
+      margin,
+      imageSettings
+    );
+    return {
+      cells,
+      margin,
+      numCells,
+      calculatedImageSettings,
+    };
+  }, [qrcode, size, imageSettings, includeMargin, marginSize]);
+
+  return {
+    qrcode,
+    margin,
+    cells,
+    numCells,
+    calculatedImageSettings,
+  };
 }
 
 // For canvas we're going to switch our drawing mode based on whether or not
@@ -246,6 +283,16 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isImgLoaded, setIsImageLoaded] = useState(false);
 
+  const {margin, cells, numCells, calculatedImageSettings} = useQRCode({
+    value,
+    level,
+    minVersion,
+    includeMargin,
+    marginSize,
+    imageSettings,
+    size,
+  });
+
   useEffect(() => {
     // Always update the canvas. It's cheap enough and we want to be correct
     // with the current state.
@@ -257,22 +304,7 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
         return;
       }
 
-      let qrcode = makeQRCode({
-        value,
-        level,
-        minVersion,
-      });
-      let cells = qrcode.getModules();
-
-      const margin = getMarginSize(includeMargin, marginSize);
-      const numCells = cells.length + margin * 2;
-      const calculatedImageSettings = getImageSettings(
-        cells,
-        size,
-        margin,
-        imageSettings
-      );
-
+      let cellsToDraw = cells;
       const image = _image.current;
       const haveImageToRender =
         calculatedImageSettings != null &&
@@ -283,7 +315,10 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
 
       if (haveImageToRender) {
         if (calculatedImageSettings.excavation != null) {
-          cells = excavateModules(cells, calculatedImageSettings.excavation);
+          cellsToDraw = excavateModules(
+            cells,
+            calculatedImageSettings.excavation
+          );
         }
       }
 
@@ -303,7 +338,7 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
       ctx.fillStyle = fgColor;
       if (SUPPORTS_PATH2D) {
         // $FlowFixMe: Path2D c'tor doesn't support args yet.
-        ctx.fill(new Path2D(generatePath(cells, margin)));
+        ctx.fill(new Path2D(generatePath(cellsToDraw, margin)));
       } else {
         cells.forEach(function (row, rdx) {
           row.forEach(function (cell, cdx) {
@@ -386,31 +421,26 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
     ...otherProps
   } = props;
 
-  let qrcode = makeQRCode({
+  const {margin, cells, numCells, calculatedImageSettings} = useQRCode({
     value,
     level,
     minVersion,
-  });
-  let cells = qrcode.getModules();
-
-  const margin = getMarginSize(includeMargin, marginSize);
-  const numCells = cells.length + margin * 2;
-  const calculatedImageSettings = getImageSettings(
-    cells,
+    includeMargin,
+    marginSize,
+    imageSettings,
     size,
-    margin,
-    imageSettings
-  );
+  });
 
+  let cellsToDraw = cells;
   let image = null;
   if (imageSettings != null && calculatedImageSettings != null) {
     if (calculatedImageSettings.excavation != null) {
-      cells = excavateModules(cells, calculatedImageSettings.excavation);
+      cellsToDraw = excavateModules(cells, calculatedImageSettings.excavation);
     }
 
     image = (
       <image
-        xlinkHref={imageSettings.src}
+        href={imageSettings.src}
         height={calculatedImageSettings.h}
         width={calculatedImageSettings.w}
         x={calculatedImageSettings.x + margin}
@@ -428,7 +458,7 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
   // way faster than DOM ops.
   // For level 1, 441 nodes -> 2
   // For level 40, 31329 -> 2
-  const fgPath = generatePath(cells, margin);
+  const fgPath = generatePath(cellsToDraw, margin);
 
   return (
     <svg

@@ -1,5 +1,8 @@
 import {QRCodeSVG, QRCodeCanvas} from '..';
 import React, {useState} from 'react';
+import type {ComponentProps} from 'react';
+
+type ErrorCorrectionLevel = ComponentProps<typeof QRCodeSVG>['level'];
 
 function FullDemo() {
   const [value, setValue] = useState(
@@ -8,7 +11,7 @@ function FullDemo() {
   const [size, setSize] = useState(128);
   const [fgColor, setFgColor] = useState('#000000');
   const [bgColor, setBgColor] = useState('#ffffff');
-  const [level, setLevel] = useState('L');
+  const [level, setLevel] = useState<ErrorCorrectionLevel>('L');
   const [minVersion, setMinVersion] = useState(1);
   const [marginSize, setMarginSize] = useState(0);
   const [title, setTitle] = useState('Title for my QR Code');
@@ -118,7 +121,9 @@ function FullDemo() {
           <label>
             Error Level:
             <br />
-            <select onChange={(e) => setLevel(e.target.value)} value={level}>
+            <select
+              onChange={(e) => setLevel(e.target.value as ErrorCorrectionLevel)}
+              value={level}>
               <option value="L">L</option>
               <option value="M">M</option>
               <option value="Q">Q</option>
