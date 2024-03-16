@@ -11,7 +11,7 @@ import qrcodegen from './third-party/qrcodegen';
 type Modules = ReturnType<qrcodegen.QrCode['getModules']>;
 type Excavation = {x: number; y: number; w: number; h: number};
 type ErrorCorrectionLevel = 'L' | 'M' | 'Q' | 'H';
-type CrossOrigin = 'anonymous' | 'use-credentials' | '';
+type CrossOrigin = 'anonymous' | 'use-credentials' | '' | undefined;
 
 const ERROR_LEVEL_MAP: {[index: string]: qrcodegen.QrCode.Ecc} = {
   L: qrcodegen.QrCode.Ecc.LOW,
@@ -53,7 +53,6 @@ const DEFAULT_BGCOLOR = '#FFFFFF';
 const DEFAULT_FGCOLOR = '#000000';
 const DEFAULT_INCLUDEMARGIN = false;
 const DEFAULT_MINVERSION = 1;
-const DEFAULT_CROSS_ORIGIN: CrossOrigin = 'anonymous';
 
 const SPEC_MARGIN_SIZE = 4;
 const DEFAULT_MARGIN_SIZE = 0;
@@ -165,7 +164,7 @@ function getImageSettings(
     excavation = {x: floorX, y: floorY, w: ceilW, h: ceilH};
   }
 
-  const crossOrigin = imageSettings.crossOrigin ?? DEFAULT_CROSS_ORIGIN;
+  const crossOrigin = imageSettings.crossOrigin;
 
   return {x, y, h, w, excavation, opacity, crossOrigin};
 }
@@ -385,9 +384,7 @@ const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
           setIsImageLoaded(true);
         }}
         ref={_image}
-        crossOrigin={
-          calculatedImageSettings?.crossOrigin ?? DEFAULT_CROSS_ORIGIN
-        }
+        crossOrigin={calculatedImageSettings?.crossOrigin}
       />
     );
   }
@@ -451,6 +448,7 @@ const QRCodeSVG = React.forwardRef(function QRCodeSVG(
         y={calculatedImageSettings.y + margin}
         preserveAspectRatio="none"
         opacity={calculatedImageSettings.opacity}
+        // Note: specified here always, but undefined will result in no attribute.
         crossOrigin={calculatedImageSettings.crossOrigin}
       />
     );

@@ -23,7 +23,6 @@ exports[`Canvas rendering renders Canvas variation ({
     width={128}
   />,
   <img
-    crossOrigin="anonymous"
     onLoad={[Function]}
     src="https://static.zpao.com/favicon.png"
     style={
@@ -58,7 +57,6 @@ exports[`Canvas rendering renders Canvas variation ({
     width={128}
   />,
   <img
-    crossOrigin="anonymous"
     onLoad={[Function]}
     src="https://static.zpao.com/favicon.png"
     style={
@@ -350,7 +348,6 @@ exports[`SVG rendering renders SVG variation ({
     shapeRendering="crispEdges"
   />
   <image
-    crossOrigin="anonymous"
     height={5.4375}
     href="https://static.zpao.com/favicon.png"
     opacity={1}
@@ -389,7 +386,6 @@ exports[`SVG rendering renders SVG variation ({
     shapeRendering="crispEdges"
   />
   <image
-    crossOrigin="anonymous"
     height={5.4375}
     href="https://static.zpao.com/favicon.png"
     opacity={1}
