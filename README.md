@@ -43,7 +43,7 @@ ReactDOM.render(
 | prop            | type                         | default value | note |
 | --------------- | ---------------------------- | ------------- | ---- |
 | `value`         | `string`                     |
-| `size`          | `number`                     | `128`         |
+| `size`          | `number \| string`                     | `128`         |
 | `bgColor`       | `string`                     | `"#FFFFFF"`   | CSS color |
 | `fgColor`       | `string`                     | `"#000000"`   | CSS color |
 | `level`         | `string` (`'L' 'M' 'Q' 'H'`) | `'L'`         |

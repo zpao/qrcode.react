@@ -33,7 +33,7 @@ type ImageSettings = {
 
 type QRProps = {
   value: string;
-  size?: number;
+  size?: number | string;
   level?: ErrorCorrectionLevel;
   bgColor?: string;
   fgColor?: string;
