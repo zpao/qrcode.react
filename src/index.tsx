@@ -13,12 +13,16 @@ type Excavation = {x: number; y: number; w: number; h: number};
 type ErrorCorrectionLevel = 'L' | 'M' | 'Q' | 'H';
 type CrossOrigin = 'anonymous' | 'use-credentials' | '' | undefined;
 
-const ERROR_LEVEL_MAP: {[index: string]: qrcodegen.QrCode.Ecc} = {
+type ERROR_LEVEL_MAPPED_TYPE = {
+  [index in ErrorCorrectionLevel]: qrcodegen.QrCode.Ecc;
+};
+
+const ERROR_LEVEL_MAP: ERROR_LEVEL_MAPPED_TYPE = {
   L: qrcodegen.QrCode.Ecc.LOW,
   M: qrcodegen.QrCode.Ecc.MEDIUM,
   Q: qrcodegen.QrCode.Ecc.QUARTILE,
   H: qrcodegen.QrCode.Ecc.HIGH,
-};
+} as const;
 
 type ImageSettings = {
   src: string;
@@ -186,7 +190,7 @@ function useQRCode({
   size,
 }: {
   value: string;
-  level: string;
+  level: ErrorCorrectionLevel;
   minVersion: number;
   includeMargin: boolean;
   marginSize?: number;
@@ -244,243 +248,244 @@ const SUPPORTS_PATH2D = (function () {
   return true;
 })();
 
-const QRCodeCanvas = React.forwardRef(function QRCodeCanvas(
-  props: QRPropsCanvas,
-  forwardedRef: React.ForwardedRef<HTMLCanvasElement>
-) {
-  const {
-    value,
-    size = DEFAULT_SIZE,
-    level = DEFAULT_LEVEL,
-    bgColor = DEFAULT_BGCOLOR,
-    fgColor = DEFAULT_FGCOLOR,
-    includeMargin = DEFAULT_INCLUDEMARGIN,
-    minVersion = DEFAULT_MINVERSION,
-    marginSize,
-    style,
-    imageSettings,
-    ...otherProps
-  } = props;
-  const imgSrc = imageSettings?.src;
-  const _canvas = useRef<HTMLCanvasElement | null>(null);
-  const _image = useRef<HTMLImageElement>(null);
+const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
+  function QRCodeCanvas(props, forwardedRef) {
+    const {
+      value,
+      size = DEFAULT_SIZE,
+      level = DEFAULT_LEVEL,
+      bgColor = DEFAULT_BGCOLOR,
+      fgColor = DEFAULT_FGCOLOR,
+      includeMargin = DEFAULT_INCLUDEMARGIN,
+      minVersion = DEFAULT_MINVERSION,
+      marginSize,
+      style,
+      imageSettings,
+      ...otherProps
+    } = props;
+    const imgSrc = imageSettings?.src;
+    const _canvas = useRef<HTMLCanvasElement | null>(null);
+    const _image = useRef<HTMLImageElement>(null);
 
-  // Set the local ref (_canvas) and also the forwarded ref from outside
-  const setCanvasRef = useCallback(
-    (node: HTMLCanvasElement | null) => {
-      _canvas.current = node;
-      if (typeof forwardedRef === 'function') {
-        forwardedRef(node);
-      } else if (forwardedRef) {
-        forwardedRef.current = node;
-      }
-    },
-    [forwardedRef]
-  );
+    // Set the local ref (_canvas) and also the forwarded ref from outside
+    const setCanvasRef = useCallback(
+      (node: HTMLCanvasElement | null) => {
+        _canvas.current = node;
+        if (typeof forwardedRef === 'function') {
+          forwardedRef(node);
+        } else if (forwardedRef) {
+          forwardedRef.current = node;
+        }
+      },
+      [forwardedRef]
+    );
 
-  // We're just using this state to trigger rerenders when images load. We
-  // Don't actually read the value anywhere. A smarter use of useEffect would
-  // depend on this value.
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isImgLoaded, setIsImageLoaded] = useState(false);
+    // We're just using this state to trigger rerenders when images load. We
+    // Don't actually read the value anywhere. A smarter use of useEffect would
+    // depend on this value.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [isImgLoaded, setIsImageLoaded] = useState(false);
 
-  const {margin, cells, numCells, calculatedImageSettings} = useQRCode({
-    value,
-    level,
-    minVersion,
-    includeMargin,
-    marginSize,
-    imageSettings,
-    size,
-  });
+    const {margin, cells, numCells, calculatedImageSettings} = useQRCode({
+      value,
+      level,
+      minVersion,
+      includeMargin,
+      marginSize,
+      imageSettings,
+      size,
+    });
 
-  useEffect(() => {
-    // Always update the canvas. It's cheap enough and we want to be correct
-    // with the current state.
-    if (_canvas.current != null) {
-      const canvas = _canvas.current;
+    useEffect(() => {
+      // Always update the canvas. It's cheap enough and we want to be correct
+      // with the current state.
+      if (_canvas.current != null) {
+        const canvas = _canvas.current;
 
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        return;
-      }
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          return;
+        }
 
-      let cellsToDraw = cells;
-      const image = _image.current;
-      const haveImageToRender =
-        calculatedImageSettings != null &&
-        image !== null &&
-        image.complete &&
-        image.naturalHeight !== 0 &&
-        image.naturalWidth !== 0;
+        let cellsToDraw = cells;
+        const image = _image.current;
+        const haveImageToRender =
+          calculatedImageSettings != null &&
+          image !== null &&
+          image.complete &&
+          image.naturalHeight !== 0 &&
+          image.naturalWidth !== 0;
 
-      if (haveImageToRender) {
-        if (calculatedImageSettings.excavation != null) {
-          cellsToDraw = excavateModules(
-            cells,
-            calculatedImageSettings.excavation
+        if (haveImageToRender) {
+          if (calculatedImageSettings.excavation != null) {
+            cellsToDraw = excavateModules(
+              cells,
+              calculatedImageSettings.excavation
+            );
+          }
+        }
+
+        // We're going to scale this so that the number of drawable units
+        // matches the number of cells. This avoids rounding issues, but does
+        // result in some potentially unwanted single pixel issues between
+        // blocks, only in environments that don't support Path2D.
+        const pixelRatio = window.devicePixelRatio || 1;
+        canvas.height = canvas.width = size * pixelRatio;
+        const scale = (size / numCells) * pixelRatio;
+        ctx.scale(scale, scale);
+
+        // Draw solid background, only paint dark modules.
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(0, 0, numCells, numCells);
+
+        ctx.fillStyle = fgColor;
+        if (SUPPORTS_PATH2D) {
+          // $FlowFixMe: Path2D c'tor doesn't support args yet.
+          ctx.fill(new Path2D(generatePath(cellsToDraw, margin)));
+        } else {
+          cells.forEach(function (row, rdx) {
+            row.forEach(function (cell, cdx) {
+              if (cell) {
+                ctx.fillRect(cdx + margin, rdx + margin, 1, 1);
+              }
+            });
+          });
+        }
+
+        if (calculatedImageSettings) {
+          ctx.globalAlpha = calculatedImageSettings.opacity;
+        }
+
+        if (haveImageToRender) {
+          ctx.drawImage(
+            image,
+            calculatedImageSettings.x + margin,
+            calculatedImageSettings.y + margin,
+            calculatedImageSettings.w,
+            calculatedImageSettings.h
           );
         }
       }
+    });
 
-      // We're going to scale this so that the number of drawable units
-      // matches the number of cells. This avoids rounding issues, but does
-      // result in some potentially unwanted single pixel issues between
-      // blocks, only in environments that don't support Path2D.
-      const pixelRatio = window.devicePixelRatio || 1;
-      canvas.height = canvas.width = size * pixelRatio;
-      const scale = (size / numCells) * pixelRatio;
-      ctx.scale(scale, scale);
+    // Ensure we mark image loaded as false here so we trigger updating the
+    // canvas in our other effect.
+    useEffect(() => {
+      setIsImageLoaded(false);
+    }, [imgSrc]);
 
-      // Draw solid background, only paint dark modules.
-      ctx.fillStyle = bgColor;
-      ctx.fillRect(0, 0, numCells, numCells);
-
-      ctx.fillStyle = fgColor;
-      if (SUPPORTS_PATH2D) {
-        // $FlowFixMe: Path2D c'tor doesn't support args yet.
-        ctx.fill(new Path2D(generatePath(cellsToDraw, margin)));
-      } else {
-        cells.forEach(function (row, rdx) {
-          row.forEach(function (cell, cdx) {
-            if (cell) {
-              ctx.fillRect(cdx + margin, rdx + margin, 1, 1);
-            }
-          });
-        });
-      }
-
-      if (calculatedImageSettings) {
-        ctx.globalAlpha = calculatedImageSettings.opacity;
-      }
-
-      if (haveImageToRender) {
-        ctx.drawImage(
-          image,
-          calculatedImageSettings.x + margin,
-          calculatedImageSettings.y + margin,
-          calculatedImageSettings.w,
-          calculatedImageSettings.h
-        );
-      }
+    const canvasStyle = {height: size, width: size, ...style};
+    let img = null;
+    if (imgSrc != null) {
+      img = (
+        <img
+          src={imgSrc}
+          key={imgSrc}
+          style={{display: 'none'}}
+          onLoad={() => {
+            setIsImageLoaded(true);
+          }}
+          ref={_image}
+          crossOrigin={calculatedImageSettings?.crossOrigin}
+        />
+      );
     }
-  });
-
-  // Ensure we mark image loaded as false here so we trigger updating the
-  // canvas in our other effect.
-  useEffect(() => {
-    setIsImageLoaded(false);
-  }, [imgSrc]);
-
-  const canvasStyle = {height: size, width: size, ...style};
-  let img = null;
-  if (imgSrc != null) {
-    img = (
-      <img
-        src={imgSrc}
-        key={imgSrc}
-        style={{display: 'none'}}
-        onLoad={() => {
-          setIsImageLoaded(true);
-        }}
-        ref={_image}
-        crossOrigin={calculatedImageSettings?.crossOrigin}
-      />
+    return (
+      <>
+        <canvas
+          style={canvasStyle}
+          height={size}
+          width={size}
+          ref={setCanvasRef}
+          role="img"
+          {...otherProps}
+        />
+        {img}
+      </>
     );
   }
-  return (
-    <>
-      <canvas
-        style={canvasStyle}
-        height={size}
-        width={size}
-        ref={setCanvasRef}
-        role="img"
-        {...otherProps}
-      />
-      {img}
-    </>
-  );
-});
+);
 QRCodeCanvas.displayName = 'QRCodeCanvas';
 
-const QRCodeSVG = React.forwardRef(function QRCodeSVG(
-  props: QRPropsSVG,
-  forwardedRef: React.ForwardedRef<SVGSVGElement>
-) {
-  const {
-    value,
-    size = DEFAULT_SIZE,
-    level = DEFAULT_LEVEL,
-    bgColor = DEFAULT_BGCOLOR,
-    fgColor = DEFAULT_FGCOLOR,
-    includeMargin = DEFAULT_INCLUDEMARGIN,
-    minVersion = DEFAULT_MINVERSION,
-    title,
-    marginSize,
-    imageSettings,
-    ...otherProps
-  } = props;
+const QRCodeSVG = React.forwardRef<SVGSVGElement, QRPropsSVG>(
+  function QRCodeSVG(props, forwardedRef) {
+    const {
+      value,
+      size = DEFAULT_SIZE,
+      level = DEFAULT_LEVEL,
+      bgColor = DEFAULT_BGCOLOR,
+      fgColor = DEFAULT_FGCOLOR,
+      includeMargin = DEFAULT_INCLUDEMARGIN,
+      minVersion = DEFAULT_MINVERSION,
+      title,
+      marginSize,
+      imageSettings,
+      ...otherProps
+    } = props;
 
-  const {margin, cells, numCells, calculatedImageSettings} = useQRCode({
-    value,
-    level,
-    minVersion,
-    includeMargin,
-    marginSize,
-    imageSettings,
-    size,
-  });
+    const {margin, cells, numCells, calculatedImageSettings} = useQRCode({
+      value,
+      level,
+      minVersion,
+      includeMargin,
+      marginSize,
+      imageSettings,
+      size,
+    });
 
-  let cellsToDraw = cells;
-  let image = null;
-  if (imageSettings != null && calculatedImageSettings != null) {
-    if (calculatedImageSettings.excavation != null) {
-      cellsToDraw = excavateModules(cells, calculatedImageSettings.excavation);
+    let cellsToDraw = cells;
+    let image = null;
+    if (imageSettings != null && calculatedImageSettings != null) {
+      if (calculatedImageSettings.excavation != null) {
+        cellsToDraw = excavateModules(
+          cells,
+          calculatedImageSettings.excavation
+        );
+      }
+
+      image = (
+        <image
+          href={imageSettings.src}
+          height={calculatedImageSettings.h}
+          width={calculatedImageSettings.w}
+          x={calculatedImageSettings.x + margin}
+          y={calculatedImageSettings.y + margin}
+          preserveAspectRatio="none"
+          opacity={calculatedImageSettings.opacity}
+          // Note: specified here always, but undefined will result in no attribute.
+          crossOrigin={calculatedImageSettings.crossOrigin}
+        />
+      );
     }
 
-    image = (
-      <image
-        href={imageSettings.src}
-        height={calculatedImageSettings.h}
-        width={calculatedImageSettings.w}
-        x={calculatedImageSettings.x + margin}
-        y={calculatedImageSettings.y + margin}
-        preserveAspectRatio="none"
-        opacity={calculatedImageSettings.opacity}
-        // Note: specified here always, but undefined will result in no attribute.
-        crossOrigin={calculatedImageSettings.crossOrigin}
-      />
+    // Drawing strategy: instead of a rect per module, we're going to create a
+    // single path for the dark modules and layer that on top of a light rect,
+    // for a total of 2 DOM nodes. We pay a bit more in string concat but that's
+    // way faster than DOM ops.
+    // For level 1, 441 nodes -> 2
+    // For level 40, 31329 -> 2
+    const fgPath = generatePath(cellsToDraw, margin);
+
+    return (
+      <svg
+        height={size}
+        width={size}
+        viewBox={`0 0 ${numCells} ${numCells}`}
+        ref={forwardedRef}
+        role="img"
+        {...otherProps}>
+        {!!title && <title>{title}</title>}
+        <path
+          fill={bgColor}
+          d={`M0,0 h${numCells}v${numCells}H0z`}
+          shapeRendering="crispEdges"
+        />
+        <path fill={fgColor} d={fgPath} shapeRendering="crispEdges" />
+        {image}
+      </svg>
     );
   }
-
-  // Drawing strategy: instead of a rect per module, we're going to create a
-  // single path for the dark modules and layer that on top of a light rect,
-  // for a total of 2 DOM nodes. We pay a bit more in string concat but that's
-  // way faster than DOM ops.
-  // For level 1, 441 nodes -> 2
-  // For level 40, 31329 -> 2
-  const fgPath = generatePath(cellsToDraw, margin);
-
-  return (
-    <svg
-      height={size}
-      width={size}
-      viewBox={`0 0 ${numCells} ${numCells}`}
-      ref={forwardedRef}
-      role="img"
-      {...otherProps}>
-      {!!title && <title>{title}</title>}
-      <path
-        fill={bgColor}
-        d={`M0,0 h${numCells}v${numCells}H0z`}
-        shapeRendering="crispEdges"
-      />
-      <path fill={fgColor} d={fgPath} shapeRendering="crispEdges" />
-      {image}
-    </svg>
-  );
-});
+);
 QRCodeSVG.displayName = 'QRCodeSVG';
 
 export {QRCodeCanvas, QRCodeSVG};
