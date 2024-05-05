@@ -64,7 +64,7 @@
     "react-dom": "^18.0.0",
     "react-test-renderer": "^18.0.0",
     "ts-jest": "^29.1.0",
-    "tsup": "^7.2.0",
+    "tsup": "^8.0.2",
     "typescript": "^5.0.4"
   }
 }
