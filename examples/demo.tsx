@@ -3,6 +3,7 @@ import {createRoot} from 'react-dom/client';
 import {version} from '../package.json';
 import {FullDemo} from './full';
 import {DownloadDemo} from './download';
+import {ImageDemo} from './image';
 
 const DEMOS = {
   full: {
@@ -17,6 +18,13 @@ const DEMOS = {
       'Demo showing how to trigger a client-side download of the rendered QR Code.',
     component: DownloadDemo,
     file: 'examples/download.tsx',
+  },
+  image: {
+    label: '<img>',
+    description:
+      'Demo showing how to use refs to access the underlying canvas element and extract the image data to render an HTML <img>.',
+    component: ImageDemo,
+    file: 'examples/image.tsx',
   },
 };
 
