@@ -144,3 +144,21 @@ describe('Display Names set', () => {
     expect(QRCodeCanvas.displayName).toBe('QRCodeCanvas');
   });
 });
+
+// `style` was previously declared explicitly as a prop. Ensure it works.
+describe('`style` is passed to rendered nodes and merged correctly', () => {
+  const style = {height: 100};
+  test('QRCodeSVG', () => {
+    const tree = renderer
+      .create(<QRCodeSVG {...BASIC_PROPS} style={style} />)
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  test('QRCodeCanvas', () => {
+    const tree = renderer
+      .create(<QRCodeCanvas {...BASIC_PROPS} style={style} />)
+      .toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+});

@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-import type {CSSProperties} from 'react';
 import qrcodegen from './third-party/qrcodegen';
 
 type Modules = ReturnType<qrcodegen.QrCode['getModules']>;
@@ -41,7 +40,6 @@ type QRProps = {
   level?: ErrorCorrectionLevel;
   bgColor?: string;
   fgColor?: string;
-  style?: CSSProperties;
   includeMargin?: boolean;
   marginSize?: number;
   imageSettings?: ImageSettings;
@@ -260,10 +258,10 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       includeMargin = DEFAULT_INCLUDEMARGIN,
       minVersion = DEFAULT_MINVERSION,
       marginSize,
-      style,
       imageSettings,
-      ...otherProps
+      ...extraProps
     } = props;
+    const {style, ...otherProps} = extraProps;
     const imgSrc = imageSettings?.src;
     const _canvas = React.useRef<HTMLCanvasElement | null>(null);
     const _image = React.useRef<HTMLImageElement>(null);
