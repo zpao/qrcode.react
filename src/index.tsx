@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: ISC
  */
 
-import React, {useRef, useEffect, useState, useCallback, useMemo} from 'react';
+import React from 'react';
 import type {CSSProperties} from 'react';
 import qrcodegen from './third-party/qrcodegen';
 
@@ -197,7 +197,7 @@ function useQRCode({
   imageSettings?: ImageSettings;
   size: number;
 }) {
-  let qrcode = useMemo(() => {
+  let qrcode = React.useMemo(() => {
     const segments = qrcodegen.QrSegment.makeSegments(value);
     return qrcodegen.QrCode.encodeSegments(
       segments,
@@ -206,7 +206,7 @@ function useQRCode({
     );
   }, [value, level, minVersion]);
 
-  const {cells, margin, numCells, calculatedImageSettings} = useMemo(() => {
+  const {cells, margin, numCells, calculatedImageSettings} = React.useMemo(() => {
     let cells = qrcode.getModules();
 
     const margin = getMarginSize(includeMargin, marginSize);
@@ -264,11 +264,11 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       ...otherProps
     } = props;
     const imgSrc = imageSettings?.src;
-    const _canvas = useRef<HTMLCanvasElement | null>(null);
-    const _image = useRef<HTMLImageElement>(null);
+    const _canvas = React.useRef<HTMLCanvasElement | null>(null);
+    const _image = React.useRef<HTMLImageElement>(null);
 
     // Set the local ref (_canvas) and also the forwarded ref from outside
-    const setCanvasRef = useCallback(
+    const setCanvasRef = React.useCallback(
       (node: HTMLCanvasElement | null) => {
         _canvas.current = node;
         if (typeof forwardedRef === 'function') {
@@ -281,10 +281,10 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
     );
 
     // We're just using this state to trigger rerenders when images load. We
-    // Don't actually read the value anywhere. A smarter use of useEffect would
+    // Don't actually read the value anywhere. A smarter use of React.useEffect would
     // depend on this value.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [isImgLoaded, setIsImageLoaded] = useState(false);
+    const [isImgLoaded, setIsImageLoaded] = React.useState(false);
 
     const {margin, cells, numCells, calculatedImageSettings} = useQRCode({
       value,
@@ -296,7 +296,7 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       size,
     });
 
-    useEffect(() => {
+    React.useEffect(() => {
       // Always update the canvas. It's cheap enough and we want to be correct
       // with the current state.
       if (_canvas.current != null) {
@@ -370,7 +370,7 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
 
     // Ensure we mark image loaded as false here so we trigger updating the
     // canvas in our other effect.
-    useEffect(() => {
+    React.useEffect(() => {
       setIsImageLoaded(false);
     }, [imgSrc]);
 
