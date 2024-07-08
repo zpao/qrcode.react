@@ -206,24 +206,25 @@ function useQRCode({
     );
   }, [value, level, minVersion]);
 
-  const {cells, margin, numCells, calculatedImageSettings} = React.useMemo(() => {
-    let cells = qrcode.getModules();
+  const {cells, margin, numCells, calculatedImageSettings} =
+    React.useMemo(() => {
+      let cells = qrcode.getModules();
 
-    const margin = getMarginSize(includeMargin, marginSize);
-    const numCells = cells.length + margin * 2;
-    const calculatedImageSettings = getImageSettings(
-      cells,
-      size,
-      margin,
-      imageSettings
-    );
-    return {
-      cells,
-      margin,
-      numCells,
-      calculatedImageSettings,
-    };
-  }, [qrcode, size, imageSettings, includeMargin, marginSize]);
+      const margin = getMarginSize(includeMargin, marginSize);
+      const numCells = cells.length + margin * 2;
+      const calculatedImageSettings = getImageSettings(
+        cells,
+        size,
+        margin,
+        imageSettings
+      );
+      return {
+        cells,
+        margin,
+        numCells,
+        calculatedImageSettings,
+      };
+    }, [qrcode, size, imageSettings, includeMargin, marginSize]);
 
   return {
     qrcode,
