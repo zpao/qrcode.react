@@ -41,7 +41,7 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install
       - name: Install React deps (@v${{ matrix.react_version }})
-        run: pnpm add -D --no-lockfile react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }} react-test-renderer@${{ matrix.react_version }}
+        run: pnpm add -D --no-lockfile react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }}
       - run: pnpm test
   lint:
     needs: build
