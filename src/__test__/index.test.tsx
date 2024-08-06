@@ -109,6 +109,9 @@ describe('Canvas rendering', () => {
   test('renders basic Canvas correctly', () => {
     const {container} = render(<QRCodeCanvas {...BASIC_PROPS} />);
     expect(container.firstChild).toMatchSnapshot();
+    expect(
+      (container.firstChild as HTMLCanvasElement).toDataURL('image/png')
+    ).toMatchSnapshot('image data (PNG)');
   });
 
   test.each(TEST_CONFIGS)(
@@ -118,6 +121,9 @@ describe('Canvas rendering', () => {
       // Some of these render an embedded image. So we want to make sure that's
       // included in the snapshot as it was with react-test-renderer.
       expect(Array.from(container.children)).toMatchSnapshot();
+      expect(
+        (container.firstChild as HTMLCanvasElement).toDataURL('image/png')
+      ).toMatchSnapshot('image data (PNG)');
     }
   );
 });
