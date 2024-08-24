@@ -1,7 +1,7 @@
 import React from 'react';
 import {QRCodeSVG, QRCodeCanvas} from '..';
 import {describe, expect, test} from '@jest/globals';
-import {render} from '@testing-library/react';
+import {act, render} from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import type {ComponentPropsWithoutRef} from 'react';
@@ -91,6 +91,15 @@ const TEST_CONFIGS: PartialQRProps[] = [
       };
     }
   ),
+  // Data URI. Make sure it's possible. This will also be the only case where
+  // the embedded image is in the snapshot.
+  {
+    imageSettings: {
+      ...BASE_IMAGE_SETTINGS,
+      // 24x24 red PNG
+      src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAADVJREFUSEvt0rEJAAAMAkHdf+hkhK9S5a0F4bCTTA5TB0hXIhKKRBKhABZ8kUQogAVf9IBoAYUiL+kU3konAAAAAElFTkSuQmCC',
+    },
+  },
 ];
 
 describe('SVG rendering', () => {
@@ -116,11 +125,24 @@ describe('Canvas rendering', () => {
 
   test.each(TEST_CONFIGS)(
     'renders Canvas variation (%o) correctly',
-    (config) => {
+    async (config) => {
       const {container} = render(<QRCodeCanvas {...BASIC_PROPS} {...config} />);
-      // Some of these render an embedded image. So we want to make sure that's
-      // included in the snapshot as it was with react-test-renderer.
+      // Some of these render an embedded image. Internally that results in
+      // rendering an additional DOM node (<img>). We should make sure that's
+      // there.
       expect(Array.from(container.children)).toMatchSnapshot();
+
+      // Embedded images won't actually be fetched, so this isn't terribly
+      // useful. It will be helpful if we do make that work. It will also work
+      // when using data URIs, so there's some use.
+      // Let the event loop spin so the image can be "fetched".
+      if (config.imageSettings?.src != null) {
+        await act(async () => {
+          await new Promise((r) => {
+            setTimeout(r, 50);
+          });
+        });
+      }
       expect(
         (container.firstChild as HTMLCanvasElement).toDataURL('image/png')
       ).toMatchSnapshot('image data (PNG)');
