@@ -8,11 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-      - run: yarn install
+          cache: 'pnpm'
+      - run: pnpm install
       - run: make
       - uses: actions/upload-artifact@v4.3.0
         with:
@@ -21,9 +22,11 @@ jobs:
             lib
             examples/**/*.js
   test:
+    name: Test against React (@v${{ matrix.react_version }})
     needs: build
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         react_version:
           - '16'
@@ -31,36 +34,39 @@ jobs:
           - '18'
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-      - run: yarn install
+          cache: 'pnpm'
+      - run: pnpm install
       - name: Install React deps (@v${{ matrix.react_version }})
-        run: npm install --no-save --no-package-lock react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }} react-test-renderer@${{ matrix.react_version }}
-      - run: yarn test
+        run: pnpm add -D --no-lockfile react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }} react-test-renderer@${{ matrix.react_version }}
+      - run: pnpm test
   lint:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-      - run: yarn install
-      - run: yarn lint
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm lint
   typecheck:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-      - run: yarn install
+          cache: 'pnpm'
+      - run: pnpm install
       - uses: actions/download-artifact@v4
         with:
           name: build-output
-      - run: yarn typecheck
+      - run: pnpm typecheck
