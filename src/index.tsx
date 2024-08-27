@@ -173,7 +173,7 @@ function getImageSettings(
 
 function getMarginSize(includeMargin: boolean, marginSize?: number): number {
   if (marginSize != null) {
-    return Math.floor(marginSize);
+    return Math.max(Math.floor(marginSize), 0);
   }
   return includeMargin ? SPEC_MARGIN_SIZE : DEFAULT_MARGIN_SIZE;
 }
