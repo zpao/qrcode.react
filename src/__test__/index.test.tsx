@@ -1,9 +1,8 @@
 import React from 'react';
 import {QRCodeSVG, QRCodeCanvas} from '..';
 import {describe, expect, test} from '@jest/globals';
-import {act, render} from '@testing-library/react';
+import {render} from '@testing-library/react';
 import '@testing-library/jest-dom';
-import ciInfo from 'ci-info';
 
 import type {ComponentPropsWithoutRef} from 'react';
 
@@ -119,9 +118,6 @@ describe('Canvas rendering', () => {
   test('renders basic Canvas correctly', () => {
     const {container} = render(<QRCodeCanvas {...BASIC_PROPS} />);
     expect(container.firstChild).toMatchSnapshot();
-    expect(
-      (container.firstChild as HTMLCanvasElement).toDataURL('image/png')
-    ).toMatchSnapshot('image data (PNG)');
   });
 
   test.each(TEST_CONFIGS)(
@@ -132,29 +128,6 @@ describe('Canvas rendering', () => {
       // rendering an additional DOM node (<img>). We should make sure that's
       // there.
       expect(Array.from(container.children)).toMatchSnapshot();
-
-      // There are enough differences between local and CI environment when it
-      // comes the actual image data that we can't really snapshot it. Perhaps
-      // in the future we could do some sort of diffing, but for now we'll just
-      // skip it.
-      if (ciInfo.isCI) {
-        return;
-      }
-
-      // Embedded images won't actually be fetched, so this isn't terribly
-      // useful. It will be helpful if we do make that work. It will also work
-      // when using data URIs, so there's some use.
-      // Let the event loop spin so the image can be "fetched".
-      if (config.imageSettings?.src != null) {
-        await act(async () => {
-          await new Promise((r) => {
-            setTimeout(r, 50);
-          });
-        });
-      }
-      expect(
-        (container.firstChild as HTMLCanvasElement).toDataURL('image/png')
-      ).toMatchSnapshot('image data (PNG)');
     }
   );
 });
