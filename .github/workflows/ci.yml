@@ -22,6 +22,7 @@ jobs:
             lib
             examples/**/*.js
   test:
+    # Perhaps in the future we'll bring back matrix testing so we'll leave the support in.
     name: Test against React (@v${{ matrix.react_version }})
     needs: build
     runs-on: ubuntu-latest
@@ -29,8 +30,6 @@ jobs:
       fail-fast: false
       matrix:
         react_version:
-          - '16'
-          - '17'
           - '18'
     steps:
       - uses: actions/checkout@v4
@@ -40,8 +39,9 @@ jobs:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
       - run: pnpm install
-      - name: Install React deps (@v${{ matrix.react_version }})
-        run: pnpm add -D --no-lockfile react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }}
+      # Only testing with one version of React, as specified in dependencies.
+      # - name: Install React deps (@v${{ matrix.react_version }})
+      #   run: pnpm add -D --no-lockfile react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }}
       - run: pnpm test
   lint:
     needs: build
