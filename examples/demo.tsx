@@ -1,4 +1,4 @@
-import React, {useState, StrictMode} from 'react';
+import React, {useState, StrictMode, useCallback, useEffect} from 'react';
 import {createRoot} from 'react-dom/client';
 import {version} from '../package.json';
 import {FullDemo} from './full';
@@ -30,8 +30,35 @@ const DEMOS = {
 
 type DemoComponentKeys = keyof typeof DEMOS;
 
+function getInitialDemo(): DemoComponentKeys {
+  const urlParams = new URLSearchParams(window.location.search);
+  const demo = urlParams.get('demo');
+  return demo && demo in DEMOS ? (demo as DemoComponentKeys) : 'full';
+}
+
 function Demo() {
-  const [demo, setDemo] = useState<DemoComponentKeys>('full');
+  const [demo, setDemo] = useState<DemoComponentKeys>(getInitialDemo());
+
+  const handleDemoChange = useCallback((nextDemo: DemoComponentKeys) => {
+    setDemo(nextDemo);
+    history.pushState({demo: nextDemo}, '', `?demo=${nextDemo}`);
+  }, []);
+
+  // handle back/forward navigation
+  useEffect(() => {
+    function handlePopState(e: PopStateEvent) {
+      setDemo(e.state?.demo || 'full');
+    }
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  });
+
+  // update document title
+  useEffect(() => {
+    document.title = `QRCode.react Demo - ${DEMOS[demo].label}`;
+  }, [demo]);
 
   const demoData = DEMOS[demo];
 
@@ -49,7 +76,9 @@ function Demo() {
       <div className="container">
         <label>
           <select
-            onChange={(e) => setDemo(e.target.value as DemoComponentKeys)}
+            onChange={(e) =>
+              handleDemoChange(e.target.value as DemoComponentKeys)
+            }
             value={demo}>
             {Object.keys(DEMOS).map((key) => {
               const data = DEMOS[key as DemoComponentKeys];
