@@ -122,7 +122,7 @@ describe('Canvas rendering', () => {
 
   test.each(TEST_CONFIGS)(
     'renders Canvas variation (%o) correctly',
-    async (config) => {
+    (config) => {
       const {container} = render(<QRCodeCanvas {...BASIC_PROPS} {...config} />);
       // Some of these render an embedded image. Internally that results in
       // rendering an additional DOM node (<img>). We should make sure that's
