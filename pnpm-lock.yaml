@@ -38,6 +38,9 @@ importers:
       canvas:
         specifier: ^2.11.2
         version: 2.11.2
+      ci-info:
+        specifier: ^4.0.0
+        version: 4.0.0
       eslint:
         specifier: ^8.6.0
         version: 8.57.0
@@ -1077,6 +1080,10 @@ packages:
 
   ci-info@3.9.0:
     resolution: {integrity: sha512-NIxF55hv4nSqQswkAeiOi1r83xy8JldOFDTWiug55KBu9Jnblncd2U6ViHmYgHf01TPZS77NJBhBMKdWj9HQMQ==}
+    engines: {node: '>=8'}
+
+  ci-info@4.0.0:
+    resolution: {integrity: sha512-TdHqgGf9odd8SXNuxtUBVx8Nv+qZOejE6qyqiy5NtbYYQOeFa6zmHkxlPzmaLxWWHsU6nJmB7AETdVPi+2NBUg==}
     engines: {node: '>=8'}
 
   cjs-module-lexer@1.3.1:
@@ -4170,6 +4177,8 @@ snapshots:
   chownr@2.0.0: {}
 
   ci-info@3.9.0: {}
+
+  ci-info@4.0.0: {}
 
   cjs-module-lexer@1.3.1: {}
 

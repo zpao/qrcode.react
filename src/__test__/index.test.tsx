@@ -3,6 +3,7 @@ import {QRCodeSVG, QRCodeCanvas} from '..';
 import {describe, expect, test} from '@jest/globals';
 import {act, render} from '@testing-library/react';
 import '@testing-library/jest-dom';
+import ciInfo from 'ci-info';
 
 import type {ComponentPropsWithoutRef} from 'react';
 
@@ -131,6 +132,14 @@ describe('Canvas rendering', () => {
       // rendering an additional DOM node (<img>). We should make sure that's
       // there.
       expect(Array.from(container.children)).toMatchSnapshot();
+
+      // There are enough differences between local and CI environment when it
+      // comes the actual image data that we can't really snapshot it. Perhaps
+      // in the future we could do some sort of diffing, but for now we'll just
+      // skip it.
+      if (ciInfo.isCI) {
+        return;
+      }
 
       // Embedded images won't actually be fetched, so this isn't terribly
       // useful. It will be helpful if we do make that work. It will also work

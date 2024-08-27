@@ -39,7 +39,6 @@
   "files": [
     "lib"
   ],
-  "dependencies": {},
   "peerDependencies": {
     "react": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
@@ -54,6 +53,7 @@
     "@typescript-eslint/eslint-plugin": "^6.3.0",
     "@typescript-eslint/parser": "^6.3.0",
     "canvas": "^2.11.2",
+    "ci-info": "^4.0.0",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-jest": "^27.1.3",
