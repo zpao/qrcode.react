@@ -70,9 +70,10 @@ type ImageSettings = {
 
 type QRProps = {
   /**
-   * The value to encode into the QR Code.
+   * The value to encode into the QR Code. An array of strings can be passed in
+   * to represent multiple segments to further optimize the QR Code.
    */
-  value: string;
+  value: string | string[];
   /**
    * The size, in pixels, to render the QR Code.
    * @defaultValue 128
@@ -122,6 +123,13 @@ type QRProps = {
    * @defaultValue 1
    */
   minVersion?: number;
+  /**
+   * If enabled, the Error Correction Level of the result may be higher than
+   * the specified Error Correction Level option if it can be done without
+   * increasing the version.
+   * @defaultValue true
+   */
+  boostLevel?: boolean;
   /**
    * The settings for the embedded image.
    */
@@ -267,23 +275,32 @@ function useQRCode({
   marginSize,
   imageSettings,
   size,
+  boostLevel,
 }: {
-  value: string;
+  value: string | string[];
   level: ErrorCorrectionLevel;
   minVersion: number;
   includeMargin: boolean;
   marginSize?: number;
   imageSettings?: ImageSettings;
   size: number;
+  boostLevel?: boolean;
 }) {
   let qrcode = React.useMemo(() => {
-    const segments = qrcodegen.QrSegment.makeSegments(value);
+    const values = Array.isArray(value) ? value : [value];
+    const segments = values.reduce<qrcodegen.QrSegment[]>((accum, v) => {
+      accum.push(...qrcodegen.QrSegment.makeSegments(v));
+      return accum;
+    }, []);
     return qrcodegen.QrCode.encodeSegments(
       segments,
       ERROR_LEVEL_MAP[level],
-      minVersion
+      minVersion,
+      undefined,
+      undefined,
+      boostLevel
     );
-  }, [value, level, minVersion]);
+  }, [value, level, minVersion, boostLevel]);
 
   const {cells, margin, numCells, calculatedImageSettings} =
     React.useMemo(() => {
@@ -338,6 +355,7 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       fgColor = DEFAULT_FGCOLOR,
       includeMargin = DEFAULT_INCLUDEMARGIN,
       minVersion = DEFAULT_MINVERSION,
+      boostLevel,
       marginSize,
       imageSettings,
       ...extraProps
@@ -370,6 +388,7 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       value,
       level,
       minVersion,
+      boostLevel,
       includeMargin,
       marginSize,
       imageSettings,
@@ -497,6 +516,7 @@ const QRCodeSVG = React.forwardRef<SVGSVGElement, QRPropsSVG>(
       fgColor = DEFAULT_FGCOLOR,
       includeMargin = DEFAULT_INCLUDEMARGIN,
       minVersion = DEFAULT_MINVERSION,
+      boostLevel,
       title,
       marginSize,
       imageSettings,
@@ -507,6 +527,7 @@ const QRCodeSVG = React.forwardRef<SVGSVGElement, QRPropsSVG>(
       value,
       level,
       minVersion,
+      boostLevel,
       includeMargin,
       marginSize,
       imageSettings,

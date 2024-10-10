@@ -47,9 +47,10 @@ Below is a condensed type definition of the props `QRCodeSVG` and `QRCodeCanvas`
 ```ts
 type QRProps = {
   /**
-   * The value to encode into the QR Code.
+   * The value to encode into the QR Code. An array of strings can be passed in
+   * to represent multiple segments to further optimize the QR Code.
    */
-  value: string;
+  value: string | string[];
   /**
    * The size, in pixels, to render the QR Code.
    * @defaultValue 128
@@ -99,6 +100,13 @@ type QRProps = {
    * @defaultValue 1
    */
   minVersion?: number;
+  /**
+   * If enabled, the Error Correction Level of the result may be higher than
+   * the specified Error Correction Level option if it can be done without
+   * increasing the version.
+   * @defaultValue true
+   */
+  boostLevel?: boolean;
   /**
    * The settings for the embedded image.
    */
@@ -153,9 +161,9 @@ type QRProps = {
 
 The value to encode into the QR Code. See [Encoding Mode](#encoding-mode) for additional details.
 
-| Type     | Default Value |
-| -------- | ------------- |
-| `string` | —             |
+| Type                | Default Value |
+| ------------------- | ------------- |
+| `string \| string[]` | —            |
 
 ### `size`
 
@@ -230,6 +238,14 @@ The minimum version used when encoding the QR Code. Valid values are 1-40 with h
 | Type     | Default Value |
 | -------- | ------------- |
 | `number` | `1`           |
+
+### `boostLevel`
+
+If enabled, the Error Correction Level of the result may be higher than the specified Error Correction Level option if it can be done without increasing the version.
+
+| Type      | Default Value |
+| --------- | ------------- |
+| `boolean` | `true`        |
 
 ### `imageSettings`
 

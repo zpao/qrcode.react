@@ -64,6 +64,7 @@ const TEST_CONFIGS: PartialQRProps[] = [
     },
   },
   {value: '1234567890'},
+  {value: ['12345', '/ABC/DEF', 'abcDEF123']},
   {value: 'single byte emoji ✅'},
   {value: 'double byte emoji 👌'},
   {value: 'four byte emoji 👌🏽'},
@@ -79,6 +80,7 @@ const TEST_CONFIGS: PartialQRProps[] = [
   // aren't encoding version anywhere testable, so this will be a proxy test
   // for ensuring minVersion is respected.
   {minVersion: 22},
+  {level: 'L', boostLevel: false},
   // Test all crossOrigin values. Important in case we remove other image
   // settings tests and to ensure we do non-obvious things like map '' to
   // 'anonymous'.

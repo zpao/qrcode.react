@@ -12,6 +12,7 @@ function FullDemo() {
   const [fgColor, setFgColor] = useState('#000000');
   const [bgColor, setBgColor] = useState('#ffffff');
   const [level, setLevel] = useState<ErrorCorrectionLevel>('L');
+  const [boostLevel, setBoostLevel] = useState<boolean>(true);
   const [minVersion, setMinVersion] = useState(1);
   const [marginSize, setMarginSize] = useState(0);
   const [title, setTitle] = useState('Title for my QR Code');
@@ -45,6 +46,10 @@ function FullDemo() {
         ? `minVersion={${minVersion}}
 `
         : '';
+    const boostLevelCode = !boostLevel
+      ? `boostLevel={${boostLevel}}
+`
+      : '';
     return `import {${componentName}} from 'qrcode.react';
 <${componentName}
   value={"${value}"}
@@ -53,7 +58,7 @@ function FullDemo() {
   bgColor={"${bgColor}"}
   fgColor={"${fgColor}"}
   level={"${level}"}
-  ${minVersionCode}marginSize={${marginSize}}${imageSettingsCode}
+  ${minVersionCode}${boostLevelCode}marginSize={${marginSize}}${imageSettingsCode}
 />`;
   }
   const svgCode = makeExampleCode('QRCodeSVG');
@@ -68,6 +73,7 @@ function FullDemo() {
     level,
     marginSize,
     minVersion,
+    boostLevel,
     imageSettings: includeImage
       ? {
           src: imageSrc,
@@ -141,6 +147,17 @@ function FullDemo() {
               max={40}
               value={minVersion}
               onChange={(e) => setMinVersion(parseInt(e.target.value, 10))}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Boost Level:
+            <br />
+            <input
+              type="checkbox"
+              checked={boostLevel}
+              onChange={(e) => setBoostLevel(e.target.checked)}
             />
           </label>
         </div>
