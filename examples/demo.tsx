@@ -1,5 +1,12 @@
-import React, {useState, StrictMode, useCallback, useEffect} from 'react';
+import React, {
+  useState,
+  StrictMode,
+  useCallback,
+  useEffect,
+  version as reactVersion,
+} from 'react';
 import {createRoot} from 'react-dom/client';
+import {version as reactDOMVersion} from 'react-dom';
 import {version} from '../package.json';
 import {FullDemo} from './full';
 import {DownloadDemo} from './download';
@@ -72,6 +79,12 @@ function Demo() {
             v{version}
           </a>
         </h1>
+      </div>
+      <div className="container">
+        <p>
+          Using <code>react@{reactVersion}</code> &{' '}
+          <code>react-dom@{reactDOMVersion}</code>
+        </p>
       </div>
       <div className="container">
         <label>
