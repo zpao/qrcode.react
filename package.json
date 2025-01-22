@@ -23,6 +23,7 @@
       }
     }
   },
+  "sideEffects": false,
   "scripts": {
     "build": "pnpm run build:code && pnpm run build:examples",
     "build:code": "tsup src/index.tsx -d lib --format esm,cjs --dts --legacy-output --target=es2017 --platform=browser",
