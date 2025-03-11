@@ -73,7 +73,7 @@ type QRProps = {
    * The value to encode into the QR Code. An array of strings can be passed in
    * to represent multiple segments to further optimize the QR Code.
    */
-  value: string | string[];
+  value: string | Uint8Array | (string | Uint8Array)[];
   /**
    * The size, in pixels, to render the QR Code.
    * @defaultValue 128
@@ -277,7 +277,7 @@ function useQRCode({
   size,
   boostLevel,
 }: {
-  value: string | string[];
+  value: string | Uint8Array | (string | Uint8Array)[];
   level: ErrorCorrectionLevel;
   minVersion: number;
   includeMargin: boolean;
@@ -289,7 +289,11 @@ function useQRCode({
   let qrcode = React.useMemo(() => {
     const values = Array.isArray(value) ? value : [value];
     const segments = values.reduce<qrcodegen.QrSegment[]>((accum, v) => {
-      accum.push(...qrcodegen.QrSegment.makeSegments(v));
+      const seg =
+        typeof v === 'string'
+          ? qrcodegen.QrSegment.makeSegments(v)
+          : [qrcodegen.QrSegment.makeBytes([...v])];
+      accum.push(...seg);
       return accum;
     }, []);
     return qrcodegen.QrCode.encodeSegments(
