@@ -1,3 +1,66 @@
+## [4.2.0] - 2024-12-11
+
+### Added
+- Added React v19 to `peerDependencies` (#381)
+
+
+## [4.1.0] - 2024-10-21
+
+### Added
+- Added support for new `boostLevel` prop, allowing the disabling of the underlying encoder's default of automatically boosting the ECL. (#374)
+- Added support for accepting an array of strings for `value`, which enables encoding of each part into independent segments. (#374)
+
+
+## [3.2.0] - 2024-08-31
+
+### Fixed
+- Improved support for dual publishing of ESM/CJS modules for better compatibility with tools. (#301, #368)
+- Mitigated warnings when using QRCodeSVG in server components (#352)
+
+### Changed
+- Added `@deprecated` JSDoc to default export for additional visibility in editors to TypeScript users.
+
+
+## [4.0.1] - 2024-08-28
+
+### Fixed
+- Corrected issue with loading types in Typescript when configured with `"moduleResolution": "Bundler"` or `"module": "ESNext"`. (#368)
+
+
+## [4.0.0] - 2024-08-27
+
+### Added
+
+- Added proper support for `ref`, enabling direct access for underlying `canvas` or `svg` nodes. This also resulted in much more accurate type defitions. (#202)
+- Added support for `marginSize` prop, replacing the now deprecated `includeMargin`. This enables margins of any value, not just `0` or `4`. (#281)
+- Added Support for Setting Image Opacity via `imageSettings.opacity` (#292)
+- Added `minVersion` prop to give better control over QR Code generated (#323)
+- Added support for specifying `cross-origin` for embedded images via `imageSettings.crossOrigin`. (#324)
+
+### Changed
+
+- Improved accessibility for `QRCodeSVG` by rendering a `<title>` node instead of setting a `title` attribute. (#284)
+- Improved accessibility with explicit `role` set on rendered SVG and Canvas. (#321)
+- Improved documentation (#358)
+- Used better types in TypeScript for ErrorCorrectionLevel, resulting in better developer experience. (#291)
+
+### Deprecated
+
+- The `includeMargin` prop has been deprecated in favor of `marginSize`. (#281)
+
+### Removed
+
+- Removed default export which was deprecated in v3. (#208)
+- Remove explicit `style` prop. This still works identically as it was passed through and the type definitions are unaffected as they were improved via the `ref` changes (#357)
+
+### Fixed
+
+- Improved support for dual publishing of ESM/CJS modules for better compatibility with tools. (#301)
+- Set explicit display names for improved debugging experience. (#304)
+- Improved SVG compatibility by using `href` in place of `xlink:href` for embedded images. (#336)
+- Mitigated warnings when using QRCodeSVG in server components (#352)
+
+
 ## [3.1.0] - 2022-06-25
 
 ### Fixed

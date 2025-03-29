@@ -7,60 +7,66 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-      - run: yarn install
+          cache: 'pnpm'
+      - run: pnpm install
       - run: make
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4.3.0
         with:
           name: build-output
           path: |
             lib
             examples/**/*.js
   test:
+    # Perhaps in the future we'll bring back matrix testing so we'll leave the support in.
+    name: Test against React (@v${{ matrix.react_version }})
     needs: build
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         react_version:
-          - '16'
-          - '17'
-          - '18'
+          - '19'
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-      - run: yarn install
-      - name: Install React deps (@v${{ matrix.react_version }})
-        run: npm install --no-save --no-package-lock react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }} react-test-renderer@${{ matrix.react_version }}
-      - run: yarn test
+          cache: 'pnpm'
+      - run: pnpm install
+      # Only testing with one version of React, as specified in dependencies.
+      # - name: Install React deps (@v${{ matrix.react_version }})
+      #   run: pnpm add -D --no-lockfile react@${{ matrix.react_version }} react-dom@${{ matrix.react_version }}
+      - run: pnpm test
   lint:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-      - run: yarn install
-      - run: yarn lint
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm lint
   typecheck:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-      - run: yarn install
-      - uses: actions/download-artifact@v3
+          cache: 'pnpm'
+      - run: pnpm install
+      - uses: actions/download-artifact@v4
         with:
           name: build-output
-      - run: yarn typecheck
+      - run: pnpm typecheck

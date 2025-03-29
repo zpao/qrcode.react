@@ -1,5 +1,8 @@
 import {QRCodeSVG, QRCodeCanvas} from '..';
 import React, {useState} from 'react';
+import type {ComponentProps} from 'react';
+
+type ErrorCorrectionLevel = ComponentProps<typeof QRCodeSVG>['level'];
 
 function FullDemo() {
   const [value, setValue] = useState(
@@ -8,13 +11,17 @@ function FullDemo() {
   const [size, setSize] = useState(128);
   const [fgColor, setFgColor] = useState('#000000');
   const [bgColor, setBgColor] = useState('#ffffff');
-  const [level, setLevel] = useState('L');
+  const [level, setLevel] = useState<ErrorCorrectionLevel>('L');
+  const [boostLevel, setBoostLevel] = useState<boolean>(true);
+  const [minVersion, setMinVersion] = useState(1);
   const [marginSize, setMarginSize] = useState(0);
+  const [title, setTitle] = useState('Title for my QR Code');
   const [includeImage, setIncludeImage] = useState(true);
   const [imageH, setImageH] = useState(24);
   const [imageW, setImageW] = useState(24);
   const [imageX, setImageX] = useState(0);
   const [imageY, setImageY] = useState(0);
+  const [imageOpacity, setImageOpacity] = useState(1);
   const [imageSrc, setImageSrc] = useState(
     'https://static.zpao.com/favicon.png'
   );
@@ -23,24 +30,33 @@ function FullDemo() {
 
   function makeExampleCode(componentName: string) {
     const imageSettingsCode = includeImage
-      ? `
-  imageSettings={{
+      ? `imageSettings={{
     src: "${imageSrc}",
     x: ${centerImage ? 'undefined' : imageX},
     y: ${centerImage ? 'undefined' : imageY},
     height: ${imageH},
     width: ${imageW},
+    opacity: ${imageOpacity},
     excavate: ${imageExcavate},
   }}`
-      : '';
+      : undefined;
+    const propLines = [
+      `value={"${value}"}`,
+      `title={"${title}"}`,
+      `size={${size}}`,
+      `bgColor={"${bgColor}"}`,
+      `fgColor={"${fgColor}"}`,
+      `level={"${level}"}`,
+      minVersion > 1 ? `minVersion={${minVersion}}` : undefined,
+      !boostLevel ? `boostLevel={${boostLevel}}` : undefined,
+      marginSize !== 0 ? `marginSize={${marginSize}}` : undefined,
+      imageSettingsCode,
+    ]
+      .filter(Boolean)
+      .join('\n  ');
     return `import {${componentName}} from 'qrcode.react';
 <${componentName}
-  value={"${value}"}
-  size={${size}}
-  bgColor={"${bgColor}"}
-  fgColor={"${fgColor}"}
-  level={"${level}"}
-  marginSize={${marginSize}}${imageSettingsCode}
+  ${propLines}
 />`;
   }
   const svgCode = makeExampleCode('QRCodeSVG');
@@ -48,11 +64,14 @@ function FullDemo() {
 
   const renderProps = {
     value,
+    title,
     size,
     fgColor,
     bgColor,
     level,
-    marginSize,
+    marginSize: marginSize > 0 ? marginSize : undefined,
+    minVersion: minVersion > 1 ? minVersion : undefined,
+    boostLevel: !boostLevel || undefined,
     imageSettings: includeImage
       ? {
           src: imageSrc,
@@ -61,6 +80,7 @@ function FullDemo() {
           x: centerImage ? undefined : imageX,
           y: centerImage ? undefined : imageY,
           excavate: imageExcavate,
+          opacity: imageOpacity,
         }
       : undefined,
   };
@@ -105,12 +125,38 @@ function FullDemo() {
           <label>
             Error Level:
             <br />
-            <select onChange={(e) => setLevel(e.target.value)} value={level}>
+            <select
+              onChange={(e) => setLevel(e.target.value as ErrorCorrectionLevel)}
+              value={level}>
               <option value="L">L</option>
               <option value="M">M</option>
               <option value="Q">Q</option>
               <option value="H">H</option>
             </select>
+          </label>
+        </div>
+        <div>
+          <label>
+            Minimum Version: {minVersion}
+            <br />
+            <input
+              type="range"
+              min={1}
+              max={40}
+              value={minVersion}
+              onChange={(e) => setMinVersion(parseInt(e.target.value, 10))}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Boost Level:
+            <br />
+            <input
+              type="checkbox"
+              checked={boostLevel}
+              onChange={(e) => setBoostLevel(e.target.checked)}
+            />
           </label>
         </div>
         <div>
@@ -136,6 +182,17 @@ function FullDemo() {
               cols={80}
               onChange={(e) => setValue(e.target.value)}
               value={value}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Title:
+            <br />
+            <input
+              type="text"
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
             />
           </label>
         </div>
@@ -185,6 +242,18 @@ function FullDemo() {
                 type="number"
                 value={imageH}
                 onChange={(e) => setImageH(parseInt(e.target.value, 10))}
+              />
+            </label>
+          </div>
+          <div>
+            <label>
+              Image Opacity: {imageOpacity}
+              <br />
+              <input
+                type="number"
+                value={imageOpacity}
+                step="0.1"
+                onChange={(e) => setImageOpacity(Number(e.target.value))}
               />
             </label>
           </div>
