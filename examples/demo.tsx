@@ -54,7 +54,7 @@ function Demo() {
   // handle back/forward navigation
   useEffect(() => {
     function handlePopState(e: PopStateEvent) {
-      setDemo(e.state?.demo || 'full');
+      setDemo((e.state as {demo?: DemoComponentKeys} | null)?.demo || 'full');
     }
     window.addEventListener('popstate', handlePopState);
     return () => {
