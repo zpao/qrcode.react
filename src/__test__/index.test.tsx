@@ -63,6 +63,20 @@ const TEST_CONFIGS: PartialQRProps[] = [
       excavate: false,
     },
   },
+  {
+    imageSettings: {
+      ...BASE_IMAGE_SETTINGS,
+      excavate: true,
+    },
+    cellSize: 8,
+  },
+  {
+    imageSettings: {
+      ...BASE_IMAGE_SETTINGS,
+      excavate: false,
+    },
+    cellSize: 8,
+  },
   {value: '1234567890'},
   {value: ['12345', '/ABC/DEF', 'abcDEF123']},
   {value: 'single byte emoji ✅'},
@@ -75,6 +89,8 @@ const TEST_CONFIGS: PartialQRProps[] = [
   {includeMargin: false, marginSize: 8},
   {includeMargin: false, marginSize: 6.5},
   {marginSize: -10},
+  {cellSize: 1},
+  {cellSize: 48},
   {title: 'some descriptive title'},
   // With our really small value, auto versioning would be really small. We
   // aren't encoding version anywhere testable, so this will be a proxy test

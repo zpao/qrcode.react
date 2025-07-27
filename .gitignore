@@ -1,4 +1,7 @@
 .DS_Store
+.idea/
+*~
+.*.swp
 node_modules/
 lib/
 examples/bundle.js
