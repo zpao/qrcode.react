@@ -134,6 +134,13 @@ type QRProps = {
    * The settings for the embedded image.
    */
   imageSettings?: ImageSettings;
+  /**
+   * The size of each square module in the QR code, in pixels.
+   *
+   * If set, overrides the size property.
+   * @defaultValue undefined
+   */
+  cellSize?: number;
 };
 type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
 type QRPropsSVG = QRProps & React.SVGAttributes<SVGSVGElement>;
@@ -215,8 +222,8 @@ function excavateModules(modules: Modules, excavation: Excavation): Modules {
 }
 
 function getImageSettings(
-  cells: Modules,
-  size: number,
+  numCells: number,
+  qrSize: number,
   margin: number,
   imageSettings?: ImageSettings
 ): null | {
@@ -231,19 +238,15 @@ function getImageSettings(
   if (imageSettings == null) {
     return null;
   }
-  const numCells = cells.length + margin * 2;
-  const defaultSize = Math.floor(size * DEFAULT_IMG_SCALE);
-  const scale = numCells / size;
+  const midpoint = numCells / 2 - margin;
+  const defaultSize = Math.floor(qrSize * DEFAULT_IMG_SCALE);
+  const scale = numCells / qrSize;
   const w = (imageSettings.width || defaultSize) * scale;
   const h = (imageSettings.height || defaultSize) * scale;
   const x =
-    imageSettings.x == null
-      ? cells.length / 2 - w / 2
-      : imageSettings.x * scale;
+    imageSettings.x == null ? midpoint - w / 2 : imageSettings.x * scale;
   const y =
-    imageSettings.y == null
-      ? cells.length / 2 - h / 2
-      : imageSettings.y * scale;
+    imageSettings.y == null ? midpoint - h / 2 : imageSettings.y * scale;
   const opacity = imageSettings.opacity == null ? 1 : imageSettings.opacity;
 
   let excavation = null;
@@ -275,6 +278,7 @@ function useQRCode({
   marginSize,
   imageSettings,
   size,
+  cellSize,
   boostLevel,
 }: {
   value: string | string[];
@@ -284,6 +288,7 @@ function useQRCode({
   marginSize?: number;
   imageSettings?: ImageSettings;
   size: number;
+  cellSize: number | undefined;
   boostLevel?: boolean;
 }) {
   let qrcode = React.useMemo(() => {
@@ -302,15 +307,16 @@ function useQRCode({
     );
   }, [value, level, minVersion, boostLevel]);
 
-  const {cells, margin, numCells, calculatedImageSettings} =
+  const {cells, margin, numCells, calculatedImageSettings, qrSize} =
     React.useMemo(() => {
       let cells = qrcode.getModules();
 
       const margin = getMarginSize(includeMargin, marginSize);
       const numCells = cells.length + margin * 2;
+      const qrSize = cellSize === undefined ? size : cellSize * numCells;
       const calculatedImageSettings = getImageSettings(
-        cells,
-        size,
+        numCells,
+        qrSize,
         margin,
         imageSettings
       );
@@ -319,8 +325,9 @@ function useQRCode({
         margin,
         numCells,
         calculatedImageSettings,
+        qrSize,
       };
-    }, [qrcode, size, imageSettings, includeMargin, marginSize]);
+    }, [qrcode, size, cellSize, imageSettings, includeMargin, marginSize]);
 
   return {
     qrcode,
@@ -328,6 +335,7 @@ function useQRCode({
     cells,
     numCells,
     calculatedImageSettings,
+    qrSize,
   };
 }
 
@@ -358,6 +366,7 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       boostLevel,
       marginSize,
       imageSettings,
+      cellSize,
       ...extraProps
     } = props;
     const {style, ...otherProps} = extraProps;
@@ -384,16 +393,18 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isImgLoaded, setIsImageLoaded] = React.useState(false);
 
-    const {margin, cells, numCells, calculatedImageSettings} = useQRCode({
-      value,
-      level,
-      minVersion,
-      boostLevel,
-      includeMargin,
-      marginSize,
-      imageSettings,
-      size,
-    });
+    const {margin, cells, numCells, calculatedImageSettings, qrSize} =
+      useQRCode({
+        value,
+        level,
+        minVersion,
+        boostLevel,
+        includeMargin,
+        marginSize,
+        imageSettings,
+        size,
+        cellSize,
+      });
 
     React.useEffect(() => {
       // Always update the canvas. It's cheap enough and we want to be correct
@@ -429,8 +440,8 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
         // result in some potentially unwanted single pixel issues between
         // blocks, only in environments that don't support Path2D.
         const pixelRatio = window.devicePixelRatio || 1;
-        canvas.height = canvas.width = size * pixelRatio;
-        const scale = (size / numCells) * pixelRatio;
+        canvas.height = canvas.width = qrSize * pixelRatio;
+        const scale = (qrSize / numCells) * pixelRatio;
         ctx.scale(scale, scale);
 
         // Draw solid background, only paint dark modules.
@@ -473,7 +484,7 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       setIsImageLoaded(false);
     }, [imgSrc]);
 
-    const canvasStyle = {height: size, width: size, ...style};
+    const canvasStyle = {height: qrSize, width: qrSize, ...style};
     let img = null;
     if (imgSrc != null) {
       img = (
@@ -493,8 +504,8 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       <>
         <canvas
           style={canvasStyle}
-          height={size}
-          width={size}
+          height={qrSize}
+          width={qrSize}
           ref={setCanvasRef}
           role="img"
           {...otherProps}
@@ -520,19 +531,22 @@ const QRCodeSVG = React.forwardRef<SVGSVGElement, QRPropsSVG>(
       title,
       marginSize,
       imageSettings,
+      cellSize,
       ...otherProps
     } = props;
 
-    const {margin, cells, numCells, calculatedImageSettings} = useQRCode({
-      value,
-      level,
-      minVersion,
-      boostLevel,
-      includeMargin,
-      marginSize,
-      imageSettings,
-      size,
-    });
+    const {margin, cells, numCells, calculatedImageSettings, qrSize} =
+      useQRCode({
+        value,
+        level,
+        minVersion,
+        boostLevel,
+        includeMargin,
+        marginSize,
+        imageSettings,
+        size,
+        cellSize,
+      });
 
     let cellsToDraw = cells;
     let image = null;
@@ -569,8 +583,8 @@ const QRCodeSVG = React.forwardRef<SVGSVGElement, QRPropsSVG>(
 
     return (
       <svg
-        height={size}
-        width={size}
+        height={qrSize}
+        width={qrSize}
         viewBox={`0 0 ${numCells} ${numCells}`}
         ref={forwardedRef}
         role="img"
