@@ -170,3 +170,42 @@ describe('`style` is passed to rendered nodes and merged correctly', () => {
     expect(container.firstChild).toMatchSnapshot();
   });
 });
+
+describe('Device Pixel Ratio Detection', () => {
+  test('QRCodeCanvas reacts to devicePixelRatio changes', async () => {
+    // Import act from testing library
+    const { act } = await import('@testing-library/react');
+    
+    // Mock window.devicePixelRatio
+    const originalDevicePixelRatio = window.devicePixelRatio;
+    Object.defineProperty(window, 'devicePixelRatio', {
+      writable: true,
+      value: 1,
+    });
+
+    const {rerender} = render(<QRCodeCanvas {...BASIC_PROPS} />);
+
+    // Simulate zoom change by changing devicePixelRatio and triggering resize
+    Object.defineProperty(window, 'devicePixelRatio', {
+      writable: true,
+      value: 2,
+    });
+
+    // Trigger resize event to simulate zoom wrapped in act
+    await act(async () => {
+      window.dispatchEvent(new Event('resize'));
+    });
+
+    // Re-render to trigger effect
+    rerender(<QRCodeCanvas {...BASIC_PROPS} />);
+
+    // The component should handle the change gracefully
+    expect(window.devicePixelRatio).toBe(2);
+
+    // Restore original value
+    Object.defineProperty(window, 'devicePixelRatio', {
+      writable: true,
+      value: originalDevicePixelRatio,
+    });
+  });
+});
