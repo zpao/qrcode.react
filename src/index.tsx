@@ -154,6 +154,8 @@ const DEFAULT_MARGIN_SIZE = 0;
 // get an explicit height or width, I'd rather default to something than throw.
 const DEFAULT_IMG_SCALE = 0.1;
 
+const EXCAVATE_THICKNESS = 2;
+
 function generatePath(modules: Modules, margin: number = 0): string {
   const ops: Array<string> = [];
   modules.forEach(function (row, y) {
@@ -198,22 +200,6 @@ function generatePath(modules: Modules, margin: number = 0): string {
   return ops.join('');
 }
 
-// We could just do this in generatePath, except that we want to support
-// non-Path2D canvas, so we need to keep it an explicit step.
-function excavateModules(modules: Modules, excavation: Excavation): Modules {
-  return modules.slice().map((row, y) => {
-    if (y < excavation.y || y >= excavation.y + excavation.h) {
-      return row;
-    }
-    return row.map((cell, x) => {
-      if (x < excavation.x || x >= excavation.x + excavation.w) {
-        return cell;
-      }
-      return false;
-    });
-  });
-}
-
 function getImageSettings(
   cells: Modules,
   size: number,
@@ -248,11 +234,14 @@ function getImageSettings(
 
   let excavation = null;
   if (imageSettings.excavate) {
-    let floorX = Math.floor(x);
-    let floorY = Math.floor(y);
-    let ceilW = Math.ceil(w + x - floorX);
-    let ceilH = Math.ceil(h + y - floorY);
-    excavation = {x: floorX, y: floorY, w: ceilW, h: ceilH};
+    const thickness = EXCAVATE_THICKNESS / (size / numCells);
+
+    excavation = {
+      x: Math.max(0, x - thickness),
+      y: Math.max(0, y - thickness),
+      w: w + thickness * 2,
+      h: h + thickness * 2,
+    };
   }
 
   const crossOrigin = imageSettings.crossOrigin;
@@ -415,15 +404,6 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
           image.naturalHeight !== 0 &&
           image.naturalWidth !== 0;
 
-        if (haveImageToRender) {
-          if (calculatedImageSettings.excavation != null) {
-            cellsToDraw = excavateModules(
-              cells,
-              calculatedImageSettings.excavation
-            );
-          }
-        }
-
         // We're going to scale this so that the number of drawable units
         // matches the number of cells. This avoids rounding issues, but does
         // result in some potentially unwanted single pixel issues between
@@ -449,6 +429,18 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
               }
             });
           });
+        }
+
+        // Draw background rect over image area when excavate=true
+        if (haveImageToRender && calculatedImageSettings.excavation != null) {
+          ctx.fillStyle = bgColor;
+          ctx.fillRect(
+            calculatedImageSettings.excavation.x + margin,
+            calculatedImageSettings.excavation.y + margin,
+            calculatedImageSettings.excavation.w,
+            calculatedImageSettings.excavation.h
+          );
+          ctx.fillStyle = fgColor;
         }
 
         if (calculatedImageSettings) {
@@ -535,12 +527,19 @@ const QRCodeSVG = React.forwardRef<SVGSVGElement, QRPropsSVG>(
     });
 
     let cellsToDraw = cells;
+    let excavationRect = null;
     let image = null;
     if (imageSettings != null && calculatedImageSettings != null) {
+      // Create a background rect for the excavated area
       if (calculatedImageSettings.excavation != null) {
-        cellsToDraw = excavateModules(
-          cells,
-          calculatedImageSettings.excavation
+        excavationRect = (
+          <rect
+            x={calculatedImageSettings.excavation.x + margin}
+            y={calculatedImageSettings.excavation.y + margin}
+            width={calculatedImageSettings.excavation.w}
+            height={calculatedImageSettings.excavation.h}
+            fill={bgColor}
+          />
         );
       }
 
@@ -582,6 +581,7 @@ const QRCodeSVG = React.forwardRef<SVGSVGElement, QRPropsSVG>(
           shapeRendering="crispEdges"
         />
         <path fill={fgColor} d={fgPath} shapeRendering="crispEdges" />
+        {excavationRect}
         {image}
       </svg>
     );
