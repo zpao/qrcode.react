@@ -135,7 +135,14 @@ type QRProps = {
    */
   imageSettings?: ImageSettings;
 };
-type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
+export type QRCodeCanvasUpdateAPIs = {
+  toDataURL: HTMLCanvasElement['toDataURL'];
+  toBlob: HTMLCanvasElement['toBlob'];
+};
+type QRPropsCanvas = QRProps &
+  React.CanvasHTMLAttributes<HTMLCanvasElement> & {
+    onUpdate?: (apis: QRCodeCanvasUpdateAPIs) => void;
+  };
 type QRPropsSVG = QRProps & React.SVGAttributes<SVGSVGElement>;
 
 const DEFAULT_SIZE = 128;
@@ -358,12 +365,29 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       boostLevel,
       marginSize,
       imageSettings,
+      onUpdate,
       ...extraProps
     } = props;
     const {style, ...otherProps} = extraProps;
     const imgSrc = imageSettings?.src;
     const _canvas = React.useRef<HTMLCanvasElement | null>(null);
     const _image = React.useRef<HTMLImageElement>(null);
+
+    const apis = React.useMemo<QRCodeCanvasUpdateAPIs>(() => {
+      return {
+        toDataURL: (type?: string, quality?: number) => {
+          return _canvas.current?.toDataURL(type, quality) ?? '';
+        },
+        toBlob: (callback: BlobCallback, type?: string, quality?: number) => {
+          _canvas.current?.toBlob(callback, type, quality);
+        },
+      };
+    }, []);
+
+    const onUpdateRef = React.useRef(onUpdate);
+    React.useEffect(() => {
+      onUpdateRef.current = onUpdate;
+    });
 
     // Set the local ref (_canvas) and also the forwarded ref from outside
     const setCanvasRef = React.useCallback(
@@ -463,6 +487,10 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
             calculatedImageSettings.w,
             calculatedImageSettings.h
           );
+        }
+
+        if (onUpdateRef.current) {
+          onUpdateRef.current(apis);
         }
       }
     });
