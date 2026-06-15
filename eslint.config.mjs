@@ -1,11 +1,11 @@
-const js = require('@eslint/js');
-const tsPlugin = require('@typescript-eslint/eslint-plugin');
-const tsParser = require('@typescript-eslint/parser');
-const prettierConfig = require('eslint-config-prettier');
-const jest = require('eslint-plugin-jest');
-const prettier = require('eslint-plugin-prettier');
-const reactHooks = require('eslint-plugin-react-hooks');
-const globals = require('globals');
+import js from '@eslint/js';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import prettierConfig from 'eslint-config-prettier';
+import jest from 'eslint-plugin-jest';
+import prettier from 'eslint-plugin-prettier';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
 
 const tsFiles = ['**/*.{ts,tsx,mts,cts}'];
 
@@ -29,7 +29,7 @@ const tsRecommended = tsPlugin.configs['flat/recommended'].map((config) => ({
   },
 }));
 
-module.exports = [
+export default [
   {
     ignores: [
       'lib/',
@@ -42,10 +42,21 @@ module.exports = [
   },
   js.configs.recommended,
   {
-    files: ['**/*.{js,cjs,mjs}'],
+    files: ['**/*.{js,cjs}'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'commonjs',
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
+  {
+    files: ['**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
       globals: {
         ...globals.browser,
         ...globals.node,
