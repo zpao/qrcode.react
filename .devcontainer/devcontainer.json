@@ -1,0 +1,13 @@
+{
+  "name": "qrcode.react",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:24",
+  "features": {
+    "ghcr.io/devcontainers-extra/features/pnpm:2": {}
+  },
+  "initializeCommand": "chmod -R a+w . && chmod -R go-w .git",
+  "mounts": [
+    "source=qrcode-react-node-modules,target=/workspaces/QRCode.react/node_modules,type=volume"
+  ],
+  "forwardPorts": [3000],
+  "postCreateCommand": "sudo chown node:node node_modules && pnpm config set store-dir /home/node/.local/share/pnpm/store && pnpm install"
+}

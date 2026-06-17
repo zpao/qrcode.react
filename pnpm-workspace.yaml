@@ -1,0 +1,4 @@
+allowBuilds:
+  canvas: true
+  esbuild: true
+  unrs-resolver: true
