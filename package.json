@@ -33,6 +33,7 @@
     "prepack": "make clean && make all && pnpm run typecheck",
     "prepublish-docs": "make clean && make all",
     "publish-docs": "gh-pages --dist=examples --src='{index.html,iife/demo.js}'",
+    "serve:examples": "npx serve examples -l 3000",
     "test": "jest",
     "typecheck": "tsc --noEmit"
   },
