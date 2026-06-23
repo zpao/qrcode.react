@@ -29,7 +29,7 @@
     "build:examples": "tsup examples/demo.tsx -d examples --format iife --env.NODE_ENV production --minify --target=es2017 --legacy-output",
     "build:examples:dev": "tsup examples/demo.tsx -d examples --format iife --env.NODE_ENV development --target=es2017 --legacy-output",
     "lint": "eslint .",
-    "pretty": "prettier --write '**/*.{html,js,json,mjs,ts,tsx}'",
+    "pretty": "prettier --write '**/*.{html,js,json,mjs,ts,tsx,yml}'",
     "prepack": "make clean && make all && pnpm run typecheck",
     "prepublish-docs": "make clean && make all",
     "publish-docs": "gh-pages --dist=examples --src='{index.html,iife/demo.js}'",
