@@ -34,7 +34,7 @@ export default [
     ignores: [
       'lib/',
       'node_modules/',
-      'website/iife/demo.js',
+      'website/dist/',
       'third-party/',
       'src/third-party/',
       '**/.DS_Store',

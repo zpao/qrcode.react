@@ -3,4 +3,4 @@ node_modules/
 .pnpm-store/
 lib/
 package-lock.json
-website/iife
+website/dist

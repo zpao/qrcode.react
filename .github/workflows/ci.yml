@@ -15,12 +15,13 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install
       - run: make
+      - run: pnpm website:build
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: build-output
           path: |
             lib
-            website/**/*.js
+            website/dist
   test:
     # Perhaps in the future we'll bring back matrix testing so we'll leave the support in.
     name: Test against React (@v${{ matrix.react_version }})
