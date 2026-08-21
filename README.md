@@ -108,6 +108,13 @@ type QRProps = {
    */
   boostLevel?: boolean;
   /**
+   * Custom function to generate the QR Code path.
+   * @param modules The modules of the QR Code.
+   * @param margin The margin size.
+   * @returns The generated path as a string.
+   */
+  generatePath?: (modules: boolean[][], margin?: number) => string;
+  /**
    * The settings for the embedded image.
    */
   imageSettings?: {
@@ -246,6 +253,10 @@ If enabled, the Error Correction Level of the result may be higher than the spec
 | Type      | Default Value |
 | --------- | ------------- |
 | `boolean` | `true`        |
+
+### `generatePath`
+
+To support more styles, users can pass this callback function to generate a custom QR code path using the QR code matrix and margin.
 
 ### `imageSettings`
 

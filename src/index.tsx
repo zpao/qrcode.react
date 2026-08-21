@@ -134,6 +134,14 @@ type QRProps = {
    * The settings for the embedded image.
    */
   imageSettings?: ImageSettings;
+
+  /**
+   * Custom function to generate the QR Code path.
+   * @param modules The modules of the QR Code.
+   * @param margin The margin size.
+   * @returns The generated path as a string.
+   */
+  generatePath?: typeof generatePathDefault;
 };
 type QRPropsCanvas = QRProps & React.CanvasHTMLAttributes<HTMLCanvasElement>;
 type QRPropsSVG = QRProps & React.SVGAttributes<SVGSVGElement>;
@@ -154,7 +162,7 @@ const DEFAULT_MARGIN_SIZE = 0;
 // get an explicit height or width, I'd rather default to something than throw.
 const DEFAULT_IMG_SCALE = 0.1;
 
-function generatePath(modules: Modules, margin: number = 0): string {
+function generatePathDefault(modules: Modules, margin: number = 0): string {
   const ops: Array<string> = [];
   modules.forEach(function (row, y) {
     let start: number | null = null;
@@ -358,6 +366,7 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       boostLevel,
       marginSize,
       imageSettings,
+      generatePath,
       ...extraProps
     } = props;
     const {style, ...otherProps} = extraProps;
@@ -440,7 +449,12 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
         ctx.fillStyle = fgColor;
         if (SUPPORTS_PATH2D) {
           // $FlowFixMe: Path2D c'tor doesn't support args yet.
-          ctx.fill(new Path2D(generatePath(cellsToDraw, margin)));
+          ctx.fill(
+            new Path2D(
+              generatePath?.(cellsToDraw, margin) ||
+                generatePathDefault(cellsToDraw, margin)
+            )
+          );
         } else {
           cells.forEach(function (row, rdx) {
             row.forEach(function (cell, cdx) {
@@ -520,6 +534,7 @@ const QRCodeSVG = React.forwardRef<SVGSVGElement, QRPropsSVG>(
       title,
       marginSize,
       imageSettings,
+      generatePath,
       ...otherProps
     } = props;
 
@@ -565,7 +580,9 @@ const QRCodeSVG = React.forwardRef<SVGSVGElement, QRPropsSVG>(
     // way faster than DOM ops.
     // For level 1, 441 nodes -> 2
     // For level 40, 31329 -> 2
-    const fgPath = generatePath(cellsToDraw, margin);
+    const fgPath =
+      generatePath?.(cellsToDraw, margin) ||
+      generatePathDefault(cellsToDraw, margin);
 
     return (
       <svg
