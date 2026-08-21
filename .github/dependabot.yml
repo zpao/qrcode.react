@@ -1,6 +1,20 @@
 version: 2
 updates:
-  - package-ecosystem: 'github-actions'
+  - package-ecosystem: 'npm'
     directory: '/'
     schedule:
       interval: 'daily'
+    allow:
+      - dependency-type: 'all'
+    groups:
+      npm-minor-patch:
+        patterns: ['*']
+        update-types: ['minor', 'patch']
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns: ['*']
