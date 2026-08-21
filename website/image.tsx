@@ -1,4 +1,4 @@
-import {QRCodeCanvas} from '..';
+import {QRCodeCanvas} from 'qrcode.react';
 import React, {useEffect, useRef, useState} from 'react';
 
 function ImageDemo() {

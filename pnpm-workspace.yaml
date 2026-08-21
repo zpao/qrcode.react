@@ -1,3 +1,7 @@
+packages:
+  - '.'
+  - 'website'
+
 allowBuilds:
   canvas: true
   esbuild: true

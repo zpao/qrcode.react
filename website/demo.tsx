@@ -17,21 +17,21 @@ const DEMOS = {
     label: 'Full',
     description: 'Fully configurable demo with ability to set all props.',
     component: FullDemo,
-    file: 'examples/full.tsx',
+    file: 'website/full.tsx',
   },
   download: {
     label: 'Download',
     description:
       'Demo showing how to trigger a client-side download of the rendered QR Code.',
     component: DownloadDemo,
-    file: 'examples/download.tsx',
+    file: 'website/download.tsx',
   },
   image: {
     label: '<img>',
     description:
       'Demo showing how to use refs to access the underlying canvas element and extract the image data to render an HTML <img>.',
     component: ImageDemo,
-    file: 'examples/image.tsx',
+    file: 'website/image.tsx',
   },
 };
 

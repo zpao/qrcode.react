@@ -1,6 +1,6 @@
 .DS_Store
 node_modules/
+.pnpm-store/
 lib/
-examples/bundle.js
 package-lock.json
-examples/iife
+website/iife

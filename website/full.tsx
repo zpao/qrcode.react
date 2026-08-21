@@ -1,4 +1,4 @@
-import {QRCodeSVG, QRCodeCanvas} from '..';
+import {QRCodeSVG, QRCodeCanvas} from 'qrcode.react';
 import React, {useState} from 'react';
 import type {ComponentProps} from 'react';
 

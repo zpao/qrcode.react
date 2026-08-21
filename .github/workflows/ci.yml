@@ -20,7 +20,7 @@ jobs:
           name: build-output
           path: |
             lib
-            examples/**/*.js
+            website/**/*.js
   test:
     # Perhaps in the future we'll bring back matrix testing so we'll leave the support in.
     name: Test against React (@v${{ matrix.react_version }})
