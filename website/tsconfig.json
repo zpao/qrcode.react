@@ -3,5 +3,6 @@
   "compilerOptions": {
     "composite": false
   },
-  "include": ["./**/*.tsx"]
+  "include": ["./**/*.ts", "./**/*.tsx", "vite.config.ts"],
+  "exclude": ["dist"]
 }

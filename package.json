@@ -24,16 +24,16 @@
     }
   },
   "scripts": {
-    "build": "pnpm run build:code && pnpm run build:examples",
+    "build": "pnpm run build:code",
     "build:code": "tsup src/index.tsx -d lib --format esm,cjs --dts --legacy-output --target=es2017 --platform=browser",
-    "build:examples": "pnpm --filter website build",
-    "build:examples:dev": "pnpm --filter website build:dev",
     "lint": "eslint .",
     "pretty": "prettier --write '**/*.{html,js,json,mjs,ts,tsx,yml}'",
     "prepack": "make clean && make all && pnpm run typecheck",
     "prepublish-docs": "make clean && make all",
-    "publish-docs": "gh-pages --dist=website --src='{index.html,iife/demo.js}'",
-    "serve:examples": "pnpm --filter website serve",
+    "publish-docs": "gh-pages --dist=website/dist",
+    "website": "pnpm --filter website dev",
+    "website:build": "pnpm --filter website build",
+    "website:preview": "pnpm --filter website preview",
     "test": "jest",
     "typecheck": "tsc --noEmit && pnpm --filter website typecheck"
   },

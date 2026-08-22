@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import {createRoot} from 'react-dom/client';
 import {version as reactDOMVersion} from 'react-dom';
-import {version} from '../package.json';
 import {FullDemo} from './full';
 import {DownloadDemo} from './download';
 import {ImageDemo} from './image';
@@ -51,7 +50,6 @@ function Demo() {
     history.pushState({demo: nextDemo}, '', `?demo=${nextDemo}`);
   }, []);
 
-  // handle back/forward navigation
   useEffect(() => {
     function handlePopState(e: PopStateEvent) {
       setDemo(e.state?.demo || 'full');
@@ -60,9 +58,8 @@ function Demo() {
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  });
+  }, []);
 
-  // update document title
   useEffect(() => {
     document.title = `QRCode.react Demo - ${DEMOS[demo].label}`;
   }, [demo]);
@@ -75,8 +72,9 @@ function Demo() {
       <div className="container">
         <h1>
           QRCode.react Demo -{' '}
-          <a href={`https://www.npmjs.com/package/qrcode.react/v/${version}`}>
-            v{version}
+          <a
+            href={`https://www.npmjs.com/package/qrcode.react/v/${__APP_VERSION__}`}>
+            v{__APP_VERSION__}
           </a>
         </h1>
       </div>
