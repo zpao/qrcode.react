@@ -10,6 +10,7 @@ import {version as reactDOMVersion} from 'react-dom';
 import {FullDemo} from './full';
 import {DownloadDemo} from './download';
 import {ImageDemo} from './image';
+import {PayloadsDemo} from './payloads';
 
 const DEMOS = {
   full: {
@@ -31,6 +32,13 @@ const DEMOS = {
       'Demo showing how to use refs to access the underlying canvas element and extract the image data to render an HTML <img>.',
     component: ImageDemo,
     file: 'website/image.tsx',
+  },
+  payloads: {
+    label: 'Payloads',
+    description:
+      'Real-world QR contents: Wi-Fi, contact, calendar, SMS, email, TOTP, geo.',
+    component: PayloadsDemo,
+    file: 'website/payloads.tsx',
   },
 };
 
