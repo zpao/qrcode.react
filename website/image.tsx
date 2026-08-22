@@ -1,5 +1,9 @@
 import {QRCodeCanvas} from 'qrcode.react';
 import React, {useEffect, useRef, useState} from 'react';
+import {Code} from '@astryxdesign/core/Code';
+import {Text} from '@astryxdesign/core/Text';
+import {VStack} from '@astryxdesign/core/VStack';
+import {DemoPage, QrPreview} from './demo-tool';
 
 function ImageDemo() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -15,29 +19,31 @@ function ImageDemo() {
   }, [canvasRef]);
 
   return (
-    <>
-      <p>
-        Similar to the Download demo, this demo shows how you can use{' '}
-        <code>ref</code>s to access the underlying DOM nodes. In this case it
-        will be used to render a proper <code>&lt;img&gt;</code> element. This
-        is done by getting the raw image data from the rendered QRCodeCanvas.
-      </p>
-      <p>
-        While browsers typically treat canvas elements as images in most ways,
-        there are some advantages to img elements. For example, on in Mobile
-        Safari, long pressing on eSIM QR Codes in img elements enables a native
-        install method. This does not happen for canvas elements.
-      </p>
-
-      <div className="container">
-        <div>
-          <div style={{display: 'none'}}>
+    <DemoPage
+      title="<img>"
+      description="Read the canvas through a ref and render the pixels as an HTML image.">
+      <VStack gap={4}>
+        <Text display="block">
+          Browsers treat canvas like an image in most ways, but an{' '}
+          <Code>&lt;img&gt;</Code> still wins in a few cases. On Mobile Safari,
+          a long press on an eSIM QR in an img element offers a native install.
+          That does not happen for canvas.
+        </Text>
+        <QrPreview title="Image output">
+          <VStack
+            aria-hidden={true}
+            style={{position: 'absolute', left: -9999}}>
             <QRCodeCanvas ref={canvasRef} value="hello world" size={256} />
-          </div>
-          <img src={imgDataURL} height={256} width={256} />
-        </div>
-      </div>
-    </>
+          </VStack>
+          <img
+            src={imgDataURL}
+            height={256}
+            width={256}
+            alt="Generated QR code"
+          />
+        </QrPreview>
+      </VStack>
+    </DemoPage>
   );
 }
 

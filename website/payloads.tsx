@@ -1,6 +1,17 @@
 import {QRCodeSVG} from 'qrcode.react';
 import React, {useState} from 'react';
 import type {ReactNode} from 'react';
+import {FormLayout} from '@astryxdesign/core/FormLayout';
+import {Heading} from '@astryxdesign/core/Heading';
+import {HStack} from '@astryxdesign/core/HStack';
+import {Section} from '@astryxdesign/core/Section';
+import {Selector} from '@astryxdesign/core/Selector';
+import {Switch} from '@astryxdesign/core/Switch';
+import {Text} from '@astryxdesign/core/Text';
+import {TextArea} from '@astryxdesign/core/TextArea';
+import {TextInput} from '@astryxdesign/core/TextInput';
+import {VStack} from '@astryxdesign/core/VStack';
+import {DemoPage, QrPreview} from './demo-tool';
 
 type FieldEntry = readonly [
   key: string,
@@ -296,59 +307,50 @@ type PayloadExample = {
   Card: () => React.ReactElement;
 };
 
-function Field(props: {label: string; children: ReactNode}) {
-  return (
-    <div>
-      <label>
-        {props.label}
-        <br />
-        {props.children}
-      </label>
-    </div>
-  );
-}
-
-function PayloadOutput(props: {payload: string; children: ReactNode}) {
-  const snippet = `import {QRCodeSVG} from 'qrcode.react';
+function makePayloadSnippet(payload: string): string {
+  return `import {QRCodeSVG} from 'qrcode.react';
 <QRCodeSVG
-  value={${JSON.stringify(props.payload)}}
+  value={${JSON.stringify(payload)}}
   size={192}
   marginSize={4}
 />`;
+}
+
+function PayloadOutput(props: {
+  title: string;
+  description: string;
+  payload: string;
+  children: ReactNode;
+}) {
+  const snippet = makePayloadSnippet(props.payload);
   const bytes = new TextEncoder().encode(props.payload).length;
   const payloadRows = Math.max(4, props.payload.split(/\r\n|\n/).length);
   return (
-    <div className="container">
-      <div className="form">{props.children}</div>
-      <div className="output">
-        <div>
-          <label>
-            Payload:
-            <br />
-            <textarea
-              rows={payloadRows}
-              cols={80}
-              readOnly={true}
+    <Section padding={0}>
+      <VStack gap={3}>
+        <Heading level={2}>{props.title}</Heading>
+        <Text display="block" color="secondary">
+          {props.description}
+        </Text>
+        <HStack wrap="wrap" gap={6} vAlign="start">
+          <VStack width={380}>
+            <FormLayout>{props.children}</FormLayout>
+          </VStack>
+          <VStack gap={3}>
+            <QrPreview title={`${props.title} QR code`} code={snippet}>
+              <QRCodeSVG value={props.payload} size={192} marginSize={4} />
+            </QrPreview>
+            <TextArea
+              label="Payload"
               value={props.payload}
+              rows={payloadRows}
+              isReadOnly
             />
-          </label>
-        </div>
-        <p>{bytes} bytes</p>
-        <QRCodeSVG value={props.payload} size={192} marginSize={4} />
-        <div>
-          <label>
-            React:
-            <br />
-            <textarea
-              rows={snippet.split('\n').length}
-              cols={80}
-              readOnly={true}
-              value={snippet}
-            />
-          </label>
-        </div>
-      </div>
-    </div>
+            <Text display="block">{bytes} bytes</Text>
+          </VStack>
+        </HStack>
+      </VStack>
+    </Section>
   );
 }
 
@@ -360,44 +362,42 @@ function WifiCard() {
     hidden: false,
   });
   return (
-    <PayloadOutput payload={encodeWifi(fields)}>
-      <Field label="Network name (SSID):">
-        <input
-          type="text"
-          value={fields.ssid}
-          onChange={(e) => setFields({...fields, ssid: e.target.value})}
-        />
-      </Field>
-      <Field label="Security:">
-        <select
-          value={fields.security}
-          onChange={(e) =>
-            setFields({
-              ...fields,
-              security: e.target.value as WifiFields['security'],
-            })
-          }>
-          <option value="WPA">WPA/WPA2</option>
-          <option value="WEP">WEP</option>
-          <option value="nopass">None</option>
-        </select>
-      </Field>
+    <PayloadOutput
+      title="Wi-Fi"
+      description="Joins a network without typing the password. Camera on recent iOS and Android Wi-Fi settings often offer to join. WPA3-only networks may need T:SAE, which older scanners ignore."
+      payload={encodeWifi(fields)}>
+      <TextInput
+        label="Network name (SSID)"
+        value={fields.ssid}
+        onChange={(ssid) => setFields({...fields, ssid})}
+      />
+      <Selector
+        label="Security"
+        value={fields.security}
+        options={[
+          {value: 'WPA', label: 'WPA/WPA2'},
+          {value: 'WEP', label: 'WEP'},
+          {value: 'nopass', label: 'None'},
+        ]}
+        onChange={(security) =>
+          setFields({
+            ...fields,
+            security: security as WifiFields['security'],
+          })
+        }
+      />
       {fields.security !== 'nopass' ? (
-        <Field label="Password:">
-          <input
-            type="text"
-            value={fields.password ?? ''}
-            onChange={(e) => setFields({...fields, password: e.target.value})}
-          />
-        </Field>
-      ) : null}
-      <Field label="Hidden network:">
-        <input
-          type="checkbox"
-          checked={fields.hidden}
-          onChange={(e) => setFields({...fields, hidden: e.target.checked})}
+        <TextInput
+          label="Password"
+          value={fields.password ?? ''}
+          onChange={(password) => setFields({...fields, password})}
         />
-      </Field>
+      ) : null}
+      <Switch
+        label="Hidden network"
+        value={fields.hidden}
+        onChange={(hidden) => setFields({...fields, hidden})}
+      />
     </PayloadOutput>
   );
 }
@@ -414,69 +414,60 @@ function ContactCard() {
     url: 'https://example.com',
   });
   return (
-    <PayloadOutput payload={encodeContact(fields)}>
-      <Field label="Format:">
-        <select
-          value={fields.format}
-          onChange={(e) =>
-            setFields({
-              ...fields,
-              format: e.target.value as ContactFields['format'],
-            })
-          }>
-          <option value="vcard">vCard</option>
-          <option value="mecard">MECARD</option>
-        </select>
-      </Field>
-      <Field label="First name:">
-        <input
-          type="text"
-          value={fields.first}
-          onChange={(e) => setFields({...fields, first: e.target.value})}
-        />
-      </Field>
-      <Field label="Last name:">
-        <input
-          type="text"
-          value={fields.last}
-          onChange={(e) => setFields({...fields, last: e.target.value})}
-        />
-      </Field>
-      <Field label="Organization:">
-        <input
-          type="text"
-          value={fields.org}
-          onChange={(e) => setFields({...fields, org: e.target.value})}
-        />
-      </Field>
-      <Field label="Title:">
-        <input
-          type="text"
-          value={fields.title}
-          onChange={(e) => setFields({...fields, title: e.target.value})}
-        />
-      </Field>
-      <Field label="Phone:">
-        <input
-          type="tel"
-          value={fields.phone}
-          onChange={(e) => setFields({...fields, phone: e.target.value})}
-        />
-      </Field>
-      <Field label="Email:">
-        <input
-          type="email"
-          value={fields.email}
-          onChange={(e) => setFields({...fields, email: e.target.value})}
-        />
-      </Field>
-      <Field label="URL:">
-        <input
-          type="url"
-          value={fields.url}
-          onChange={(e) => setFields({...fields, url: e.target.value})}
-        />
-      </Field>
+    <PayloadOutput
+      title="Contact"
+      description="Offers a vCard or MECARD the scanner can import. vCard 3.0 usually imports. MECARD is shorter and some scanners skip fields."
+      payload={encodeContact(fields)}>
+      <Selector
+        label="Format"
+        value={fields.format}
+        options={[
+          {value: 'vcard', label: 'vCard'},
+          {value: 'mecard', label: 'MECARD'},
+        ]}
+        onChange={(format) =>
+          setFields({
+            ...fields,
+            format: format as ContactFields['format'],
+          })
+        }
+      />
+      <TextInput
+        label="First name"
+        value={fields.first}
+        onChange={(first) => setFields({...fields, first})}
+      />
+      <TextInput
+        label="Last name"
+        value={fields.last}
+        onChange={(last) => setFields({...fields, last})}
+      />
+      <TextInput
+        label="Organization"
+        value={fields.org}
+        onChange={(org) => setFields({...fields, org})}
+      />
+      <TextInput
+        label="Title"
+        value={fields.title}
+        onChange={(title) => setFields({...fields, title})}
+      />
+      <TextInput
+        label="Phone"
+        value={fields.phone}
+        onChange={(phone) => setFields({...fields, phone})}
+      />
+      <TextInput
+        label="Email"
+        type="email"
+        value={fields.email}
+        onChange={(email) => setFields({...fields, email})}
+      />
+      <TextInput
+        label="URL"
+        value={fields.url}
+        onChange={(url) => setFields({...fields, url})}
+      />
     </PayloadOutput>
   );
 }
@@ -489,35 +480,30 @@ function EventCard() {
     allDay: false,
   });
   return (
-    <PayloadOutput payload={encodeEvent(fields)}>
-      <Field label="Summary:">
-        <input
-          type="text"
-          value={fields.summary}
-          onChange={(e) => setFields({...fields, summary: e.target.value})}
-        />
-      </Field>
-      <Field label="Location:">
-        <input
-          type="text"
-          value={fields.location}
-          onChange={(e) => setFields({...fields, location: e.target.value})}
-        />
-      </Field>
-      <Field label="Start (UTC, e.g. 20260821T180000Z):">
-        <input
-          type="text"
-          value={fields.start}
-          onChange={(e) => setFields({...fields, start: e.target.value})}
-        />
-      </Field>
-      <Field label="All day:">
-        <input
-          type="checkbox"
-          checked={Boolean(fields.allDay)}
-          onChange={(e) => setFields({...fields, allDay: e.target.checked})}
-        />
-      </Field>
+    <PayloadOutput
+      title="Calendar event"
+      description="Offers an iCalendar event the scanner can add. Calendar apps that understand iCalendar often offer to add the event. Time zone handling varies."
+      payload={encodeEvent(fields)}>
+      <TextInput
+        label="Summary"
+        value={fields.summary}
+        onChange={(summary) => setFields({...fields, summary})}
+      />
+      <TextInput
+        label="Location"
+        value={fields.location}
+        onChange={(location) => setFields({...fields, location})}
+      />
+      <TextInput
+        label="Start (UTC, e.g. 20260821T180000Z)"
+        value={fields.start}
+        onChange={(start) => setFields({...fields, start})}
+      />
+      <Switch
+        label="All day"
+        value={Boolean(fields.allDay)}
+        onChange={(allDay) => setFields({...fields, allDay})}
+      />
     </PayloadOutput>
   );
 }
@@ -529,29 +515,27 @@ function EmailCard() {
     body: 'Meet me at 10',
   });
   return (
-    <PayloadOutput payload={encodeEmail(fields)}>
-      <Field label="To:">
-        <input
-          type="email"
-          value={fields.to}
-          onChange={(e) => setFields({...fields, to: e.target.value})}
-        />
-      </Field>
-      <Field label="Subject:">
-        <input
-          type="text"
-          value={fields.subject}
-          onChange={(e) => setFields({...fields, subject: e.target.value})}
-        />
-      </Field>
-      <Field label="Body:">
-        <textarea
-          rows={4}
-          cols={40}
-          value={fields.body}
-          onChange={(e) => setFields({...fields, body: e.target.value})}
-        />
-      </Field>
+    <PayloadOutput
+      title="Email"
+      description="Opens a mailto draft with subject and body filled in. Scanners that handle mailto: typically open a draft. They do not send mail on their own."
+      payload={encodeEmail(fields)}>
+      <TextInput
+        label="To"
+        type="email"
+        value={fields.to}
+        onChange={(to) => setFields({...fields, to})}
+      />
+      <TextInput
+        label="Subject"
+        value={fields.subject}
+        onChange={(subject) => setFields({...fields, subject})}
+      />
+      <TextArea
+        label="Body"
+        value={fields.body}
+        onChange={(body) => setFields({...fields, body})}
+        rows={4}
+      />
     </PayloadOutput>
   );
 }
@@ -562,22 +546,21 @@ function SmsCard() {
     body: 'Meet me at 10',
   });
   return (
-    <PayloadOutput payload={encodeSms(fields)}>
-      <Field label="Number:">
-        <input
-          type="tel"
-          value={fields.number}
-          onChange={(e) => setFields({...fields, number: e.target.value})}
-        />
-      </Field>
-      <Field label="Body:">
-        <textarea
-          rows={4}
-          cols={40}
-          value={fields.body}
-          onChange={(e) => setFields({...fields, body: e.target.value})}
-        />
-      </Field>
+    <PayloadOutput
+      title="SMS"
+      description="Opens a text message draft. Uses sms: with ?body=. Some iOS versions expect sms:number&body= instead."
+      payload={encodeSms(fields)}>
+      <TextInput
+        label="Number"
+        value={fields.number}
+        onChange={(number) => setFields({...fields, number})}
+      />
+      <TextArea
+        label="Body"
+        value={fields.body}
+        onChange={(body) => setFields({...fields, body})}
+        rows={4}
+      />
     </PayloadOutput>
   );
 }
@@ -592,34 +575,34 @@ function TotpCard() {
   });
   const secretLooksValid = BASE32_SECRET.test(fields.secret);
   return (
-    <PayloadOutput payload={encodeTotp(fields)}>
-      <Field label="Issuer:">
-        <input
-          type="text"
-          value={fields.issuer}
-          onChange={(e) => setFields({...fields, issuer: e.target.value})}
-        />
-      </Field>
-      <Field label="Account:">
-        <input
-          type="text"
-          value={fields.account}
-          onChange={(e) => setFields({...fields, account: e.target.value})}
-        />
-      </Field>
-      <Field label="Secret (Base32):">
-        <input
-          type="text"
-          value={fields.secret}
-          onChange={(e) => setFields({...fields, secret: e.target.value})}
-        />
-      </Field>
-      {secretLooksValid ? null : (
-        <p>
-          Secret should be Base32 (A-Z and 2-7). The encoder still uses it as
-          typed.
-        </p>
-      )}
+    <PayloadOutput
+      title="Authenticator (TOTP)"
+      description="Adds a one-time-password account to an authenticator app. Apps that implement otpauth URIs typically add the account. Digits, period, and algorithm are 6 / 30 / SHA1."
+      payload={encodeTotp(fields)}>
+      <TextInput
+        label="Issuer"
+        value={fields.issuer}
+        onChange={(issuer) => setFields({...fields, issuer})}
+      />
+      <TextInput
+        label="Account"
+        value={fields.account}
+        onChange={(account) => setFields({...fields, account})}
+      />
+      <TextInput
+        label="Secret (Base32)"
+        value={fields.secret}
+        onChange={(secret) => setFields({...fields, secret})}
+        status={
+          secretLooksValid
+            ? undefined
+            : {
+                type: 'warning',
+                message:
+                  'Secret should be Base32 (A-Z and 2-7). The encoder still uses it as typed.',
+              }
+        }
+      />
     </PayloadOutput>
   );
 }
@@ -634,21 +617,12 @@ function GeoCard() {
       ? encodeGeo({lat: latNum, lon: lonNum})
       : '';
   return (
-    <PayloadOutput payload={payload}>
-      <Field label="Latitude:">
-        <input
-          type="text"
-          value={lat}
-          onChange={(e) => setLat(e.target.value)}
-        />
-      </Field>
-      <Field label="Longitude:">
-        <input
-          type="text"
-          value={lon}
-          onChange={(e) => setLon(e.target.value)}
-        />
-      </Field>
+    <PayloadOutput
+      title="Location"
+      description="Opens a maps app at the coordinates. Scanners that handle geo: typically open a maps app at the coordinates."
+      payload={payload}>
+      <TextInput label="Latitude" value={lat} onChange={setLat} />
+      <TextInput label="Longitude" value={lon} onChange={setLon} />
     </PayloadOutput>
   );
 }
@@ -714,16 +688,14 @@ const PAYLOADS: readonly PayloadExample[] = [
 
 function PayloadsDemo() {
   return (
-    <>
-      {PAYLOADS.map((payload) => (
-        <section key={payload.id} id={payload.id}>
-          <h2>{payload.label}</h2>
-          <p>{payload.summary}</p>
-          <p>{payload.support}</p>
-          <payload.Card />
-        </section>
-      ))}
-    </>
+    <DemoPage
+      title="Payloads"
+      description="Real-world QR contents: Wi-Fi, contact, calendar, SMS, email, TOTP, geo.">
+      {PAYLOADS.map((payload) => {
+        const Card = payload.Card;
+        return <Card key={payload.id} />;
+      })}
+    </DemoPage>
   );
 }
 

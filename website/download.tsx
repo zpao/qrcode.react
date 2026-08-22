@@ -1,5 +1,9 @@
 import {QRCodeCanvas, QRCodeSVG} from 'qrcode.react';
 import React, {useRef} from 'react';
+import {Button} from '@astryxdesign/core/Button';
+import {Grid} from '@astryxdesign/core/Grid';
+import {VStack} from '@astryxdesign/core/VStack';
+import {DemoPage, QrPreview} from './demo-tool';
 
 function downloadStringAsFile(data: string, filename: string) {
   let a = document.createElement('a');
@@ -17,7 +21,6 @@ function DownloadDemo() {
     if (node == null) {
       return;
     }
-    // For canvas, we just extract the image data and send that directly.
     const dataURI = node.toDataURL('image/png');
 
     downloadStringAsFile(dataURI, 'qrcode-canvas.png');
@@ -29,11 +32,6 @@ function DownloadDemo() {
       return;
     }
 
-    // For SVG, we need to get the markup and turn it into XML.
-    // Using XMLSerializer is the easiest way to ensure the markup
-    // contains the xmlns. Then we make sure it gets the right DOCTYPE,
-    // encode all of that to be safe to be encoded as a URI (which we
-    // need to stuff into href).
     const serializer = new XMLSerializer();
     const fileURI =
       'data:image/svg+xml;charset=utf-8,' +
@@ -46,30 +44,24 @@ function DownloadDemo() {
   }
 
   return (
-    <>
-      <p>
-        This demo shows how you can use <code>ref</code>s to access the
-        underlying DOM nodes. This allows you to then get the raw image data (in
-        the case of <code>QRCodeCanvas</code>) or the serialized markup (in the
-        case of <code>QRQCodeSVG</code>). With this you can trigger downloading
-        a file directly.
-      </p>
-
-      <div className="container">
-        <div>
-          <QRCodeCanvas ref={canvasRef} value="hello world" />
-          <button onClick={onCanvasButtonClick} style={{display: 'block'}}>
-            download canvas
-          </button>
-        </div>
-        <div>
-          <QRCodeSVG ref={svgRef} value="hello world" />
-          <button onClick={onSVGButtonClick} style={{display: 'block'}}>
-            download svg
-          </button>
-        </div>
-      </div>
-    </>
+    <DemoPage
+      title="Download"
+      description="Use refs to reach the rendered canvas or SVG, then download the image data or serialized markup.">
+      <Grid columns={{minWidth: 280}} gap={4}>
+        <VStack gap={3}>
+          <QrPreview title="Canvas">
+            <QRCodeCanvas ref={canvasRef} value="hello world" />
+          </QrPreview>
+          <Button label="Download canvas" onClick={onCanvasButtonClick} />
+        </VStack>
+        <VStack gap={3}>
+          <QrPreview title="SVG">
+            <QRCodeSVG ref={svgRef} value="hello world" />
+          </QrPreview>
+          <Button label="Download svg" onClick={onSVGButtonClick} />
+        </VStack>
+      </Grid>
+    </DemoPage>
   );
 }
 

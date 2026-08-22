@@ -9,11 +9,16 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@astryxdesign/core": "^0.4.5",
+    "@astryxdesign/theme-neutral": "^0.4.5",
+    "@stylexjs/stylex": "^0.19.0",
+    "lucide-react": "^1.33.0",
     "qrcode.react": "workspace:*",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
+    "@astryxdesign/cli": "^0.4.5",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.1.0",
