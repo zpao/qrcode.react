@@ -26,16 +26,16 @@
   "scripts": {
     "build": "pnpm run build:code && pnpm run build:examples",
     "build:code": "tsup src/index.tsx -d lib --format esm,cjs --dts --legacy-output --target=es2017 --platform=browser",
-    "build:examples": "tsup examples/demo.tsx -d examples --format iife --env.NODE_ENV production --minify --target=es2017 --legacy-output",
-    "build:examples:dev": "tsup examples/demo.tsx -d examples --format iife --env.NODE_ENV development --target=es2017 --legacy-output",
+    "build:examples": "pnpm --filter website build",
+    "build:examples:dev": "pnpm --filter website build:dev",
     "lint": "eslint .",
     "pretty": "prettier --write '**/*.{html,js,json,mjs,ts,tsx,yml}'",
     "prepack": "make clean && make all && pnpm run typecheck",
     "prepublish-docs": "make clean && make all",
-    "publish-docs": "gh-pages --dist=examples --src='{index.html,iife/demo.js}'",
-    "serve:examples": "npx serve examples -l 3000",
+    "publish-docs": "gh-pages --dist=website --src='{index.html,iife/demo.js}'",
+    "serve:examples": "pnpm --filter website serve",
     "test": "jest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && pnpm --filter website typecheck"
   },
   "author": "Paul O’Shannessy <paul@oshannessy.com>",
   "repository": {

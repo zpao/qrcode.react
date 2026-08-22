@@ -1,0 +1,22 @@
+{
+  "name": "website",
+  "private": true,
+  "scripts": {
+    "build": "tsup demo.tsx -d . --format iife --env.NODE_ENV production --minify --target=es2017 --legacy-output",
+    "build:dev": "tsup demo.tsx -d . --format iife --env.NODE_ENV development --target=es2017 --legacy-output",
+    "serve": "serve . -l 3000",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "qrcode.react": "workspace:*",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "serve": "^14.2.4",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
+  }
+}

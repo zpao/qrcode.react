@@ -1,4 +1,4 @@
-import {QRCodeCanvas, QRCodeSVG} from '..';
+import {QRCodeCanvas, QRCodeSVG} from 'qrcode.react';
 import React, {useRef} from 'react';
 
 function downloadStringAsFile(data: string, filename: string) {
