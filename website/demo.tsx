@@ -1,16 +1,17 @@
-import React, {
-  useState,
-  StrictMode,
-  useCallback,
-  useEffect,
-  version as reactVersion,
-} from 'react';
+import '@astryxdesign/core/reset.css';
+import '@astryxdesign/core/astryx.css';
+
+import React, {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
-import {version as reactDOMVersion} from 'react-dom';
-import {FullDemo} from './full';
+import {AppShell} from '@astryxdesign/core/AppShell';
+import {Theme} from '@astryxdesign/core/theme';
+import {DemoTopNav, useDemoNavigation} from './demo-nav';
+import type {DemoEntry} from './demo-nav';
 import {DownloadDemo} from './download';
+import {FullDemo} from './full';
 import {ImageDemo} from './image';
 import {PayloadsDemo} from './payloads';
+import {neutralTheme} from './theme/neutralTheme';
 
 const DEMOS = {
   full: {
@@ -40,79 +41,26 @@ const DEMOS = {
     component: PayloadsDemo,
     file: 'website/payloads.tsx',
   },
-};
-
-type DemoComponentKeys = keyof typeof DEMOS;
-
-function getInitialDemo(): DemoComponentKeys {
-  const urlParams = new URLSearchParams(window.location.search);
-  const demo = urlParams.get('demo');
-  return demo && demo in DEMOS ? (demo as DemoComponentKeys) : 'full';
-}
+} satisfies Record<string, DemoEntry> & {readonly full: DemoEntry};
 
 function Demo() {
-  const [demo, setDemo] = useState<DemoComponentKeys>(getInitialDemo());
+  const [demo, navigateToDemo] = useDemoNavigation(DEMOS);
+  const ActiveDemo = DEMOS[demo].component;
 
-  const handleDemoChange = useCallback((nextDemo: DemoComponentKeys) => {
-    setDemo(nextDemo);
-    history.pushState({demo: nextDemo}, '', `?demo=${nextDemo}`);
-  }, []);
-
-  useEffect(() => {
-    function handlePopState(e: PopStateEvent) {
-      setDemo(e.state?.demo || 'full');
-    }
-    window.addEventListener('popstate', handlePopState);
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-    };
-  }, []);
-
-  useEffect(() => {
-    document.title = `QRCode.react Demo - ${DEMOS[demo].label}`;
-  }, [demo]);
-
-  const demoData = DEMOS[demo];
-
-  const Component = demoData.component;
   return (
-    <>
-      <div className="container">
-        <h1>
-          QRCode.react Demo -{' '}
-          <a
-            href={`https://www.npmjs.com/package/qrcode.react/v/${__APP_VERSION__}`}>
-            v{__APP_VERSION__}
-          </a>
-        </h1>
-      </div>
-      <div className="container">
-        <p>
-          Using <code>react@{reactVersion}</code> &{' '}
-          <code>react-dom@{reactDOMVersion}</code>
-        </p>
-      </div>
-      <div className="container">
-        <label>
-          <select
-            onChange={(e) =>
-              handleDemoChange(e.target.value as DemoComponentKeys)
-            }
-            value={demo}>
-            {Object.keys(DEMOS).map((key) => {
-              const data = DEMOS[key as DemoComponentKeys];
-              return (
-                <option key={key} value={key} title={data.description}>
-                  {data.label} - {data.description}
-                </option>
-              );
-            })}
-          </select>
-        </label>
-      </div>
-      <hr />
-      <Component />
-    </>
+    <AppShell
+      height={demo === 'full' ? 'fill' : 'auto'}
+      contentPadding={0}
+      variant="section"
+      topNav={
+        <DemoTopNav
+          demos={DEMOS}
+          selectedKey={demo}
+          onSelect={navigateToDemo}
+        />
+      }>
+      <ActiveDemo />
+    </AppShell>
   );
 }
 
@@ -120,6 +68,8 @@ const container = document.getElementById('demo');
 const root = createRoot(container!);
 root.render(
   <StrictMode>
-    <Demo />
+    <Theme theme={neutralTheme} mode="system">
+      <Demo />
+    </Theme>
   </StrictMode>
 );

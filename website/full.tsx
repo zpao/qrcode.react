@@ -1,8 +1,23 @@
 import {QRCodeSVG, QRCodeCanvas} from 'qrcode.react';
 import React, {useState} from 'react';
 import type {ComponentProps} from 'react';
+import {FormLayout} from '@astryxdesign/core/FormLayout';
+import {Grid} from '@astryxdesign/core/Grid';
+import {Heading} from '@astryxdesign/core/Heading';
+import {NumberInput} from '@astryxdesign/core/NumberInput';
+import {Selector} from '@astryxdesign/core/Selector';
+import {Slider} from '@astryxdesign/core/Slider';
+import {Switch} from '@astryxdesign/core/Switch';
+import {TextArea} from '@astryxdesign/core/TextArea';
+import {TextInput} from '@astryxdesign/core/TextInput';
+import {DemoTool, QrPreview} from './demo-tool';
+import {ColorField} from './fields';
 
-type ErrorCorrectionLevel = ComponentProps<typeof QRCodeSVG>['level'];
+type ErrorCorrectionLevel = NonNullable<
+  ComponentProps<typeof QRCodeSVG>['level']
+>;
+
+const ERROR_LEVELS: readonly ErrorCorrectionLevel[] = ['L', 'M', 'Q', 'H'];
 
 function FullDemo() {
   const [value, setValue] = useState(
@@ -71,7 +86,7 @@ function FullDemo() {
     level,
     marginSize: marginSize > 0 ? marginSize : undefined,
     minVersion: minVersion > 1 ? minVersion : undefined,
-    boostLevel: !boostLevel || undefined,
+    boostLevel: boostLevel ? undefined : false,
     imageSettings: includeImage
       ? {
           src: imageSrc,
@@ -85,267 +100,144 @@ function FullDemo() {
       : undefined,
   };
 
+  const imageControlsDisabled = !includeImage;
+  const imagePositionDisabled = !includeImage || centerImage;
+
   return (
-    <div className="container">
-      <div className="form">
-        <div>
-          <label>
-            Size(px):
-            <br />
-            <input
-              type="number"
-              onChange={(e) => setSize(parseInt(e.target.value, 10) || 0)}
-              value={size}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Background Color:
-            <br />
-            <input
-              type="color"
-              onChange={(e) => setBgColor(e.target.value)}
-              value={bgColor}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Foreground Color:
-            <br />
-            <input
-              type="color"
-              onChange={(e) => setFgColor(e.target.value)}
-              value={fgColor}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Error Level:
-            <br />
-            <select
-              onChange={(e) => setLevel(e.target.value as ErrorCorrectionLevel)}
-              value={level}>
-              <option value="L">L</option>
-              <option value="M">M</option>
-              <option value="Q">Q</option>
-              <option value="H">H</option>
-            </select>
-          </label>
-        </div>
-        <div>
-          <label>
-            Minimum Version: {minVersion}
-            <br />
-            <input
-              type="range"
-              min={1}
-              max={40}
-              value={minVersion}
-              onChange={(e) => setMinVersion(parseInt(e.target.value, 10))}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Boost Level:
-            <br />
-            <input
-              type="checkbox"
-              checked={boostLevel}
-              onChange={(e) => setBoostLevel(e.target.checked)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Margin Size:
-            <br />
-            <input
-              type="number"
-              step={1}
-              value={marginSize}
-              onChange={(e) =>
-                setMarginSize(Math.floor(e.target.valueAsNumber))
-              }
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Value:
-            <br />
-            <textarea
-              rows={6}
-              cols={80}
-              onChange={(e) => setValue(e.target.value)}
-              value={value}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Title:
-            <br />
-            <input
-              type="text"
-              onChange={(e) => setTitle(e.target.value)}
-              value={title}
-            />
-          </label>
-        </div>
-
-        <div>
-          <label>
-            Include Image:
-            <br />
-            <input
-              type="checkbox"
-              checked={includeImage}
-              onChange={(e) => setIncludeImage(e.target.checked)}
-            />
-          </label>
-        </div>
-
-        <fieldset disabled={!includeImage}>
-          <legend>Image Settings</legend>
-
-          <div>
-            <label>
-              Source:
-              <br />
-              <input
-                type="text"
-                onChange={(e) => setImageSrc(e.target.value)}
-                value={imageSrc}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Image Width: {imageW}
-              <br />
-              <input
-                type="number"
-                value={imageW}
-                onChange={(e) => setImageW(parseInt(e.target.value, 10))}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Image Height: {imageH}
-              <br />
-              <input
-                type="number"
-                value={imageH}
-                onChange={(e) => setImageH(parseInt(e.target.value, 10))}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Image Opacity: {imageOpacity}
-              <br />
-              <input
-                type="number"
-                value={imageOpacity}
-                step="0.1"
-                onChange={(e) => setImageOpacity(Number(e.target.value))}
-              />
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Center Image:
-              <br />
-              <input
-                type="checkbox"
-                checked={centerImage}
-                onChange={(e) => setCenterImage(e.target.checked)}
-              />
-            </label>
-          </div>
-          <fieldset disabled={centerImage}>
-            <legend>Image Settings</legend>
-            <div>
-              <label>
-                Image X: {imageX}
-                <br />
-                <input
-                  type="range"
-                  min={0}
-                  max={size - imageW}
-                  value={imageX}
-                  onChange={(e) => setImageX(parseInt(e.target.value, 10))}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Image Y: {imageY}
-                <br />
-                <input
-                  type="range"
-                  min={0}
-                  max={size - imageH}
-                  value={imageY}
-                  onChange={(e) => setImageY(parseInt(e.target.value, 10))}
-                />
-              </label>
-            </div>
-          </fieldset>
-          <div>
-            <label>
-              Excavate ("dig" foreground to nearest whole module):
-              <br />
-              <input
-                type="checkbox"
-                checked={imageExcavate}
-                onChange={(e) => setImageExcavate(e.target.checked)}
-              />
-            </label>
-          </div>
-        </fieldset>
-      </div>
-
-      <div className="output">
-        <div>
-          <h2>
-            <pre>QRCodeSVG</pre>
-          </h2>
-          <div>
-            <textarea
-              rows={svgCode.split('\n').length}
-              cols={80}
-              readOnly={true}
-              value={svgCode}
-            />
-          </div>
-
-          <QRCodeSVG {...renderProps} />
-        </div>
-
-        <div>
-          <h2>
-            <pre>QRCodeCanvas</pre>
-          </h2>
-          <div>
-            <textarea
-              rows={canvasCode.split('\n').length}
-              cols={80}
-              readOnly={true}
-              value={canvasCode}
-            />
-          </div>
-
-          <QRCodeCanvas {...renderProps} />
-        </div>
-      </div>
-    </div>
+    <DemoTool
+      title="Full"
+      description="Fully configurable demo with ability to set all props."
+      panel={
+        <FormLayout>
+          <NumberInput
+            label="Size (px)"
+            value={size}
+            onChange={setSize}
+            min={0}
+            isIntegerOnly
+            isWheelEnabled={false}
+          />
+          <ColorField
+            label="Background Color"
+            value={bgColor}
+            onChange={setBgColor}
+          />
+          <ColorField
+            label="Foreground Color"
+            value={fgColor}
+            onChange={setFgColor}
+          />
+          <Selector
+            label="Error Level"
+            options={[...ERROR_LEVELS]}
+            value={level}
+            onChange={(next) => setLevel(next as ErrorCorrectionLevel)}
+          />
+          <Slider
+            label="Minimum Version"
+            value={minVersion}
+            onChange={setMinVersion}
+            min={1}
+            max={40}
+            valueDisplay="text"
+          />
+          <Switch
+            label="Boost Level"
+            value={boostLevel}
+            onChange={setBoostLevel}
+          />
+          <NumberInput
+            label="Margin Size"
+            value={marginSize}
+            onChange={setMarginSize}
+            min={0}
+            isIntegerOnly
+            isWheelEnabled={false}
+          />
+          <TextArea label="Value" value={value} onChange={setValue} rows={6} />
+          <TextInput label="Title" value={title} onChange={setTitle} />
+          <Switch
+            label="Include Image"
+            value={includeImage}
+            onChange={setIncludeImage}
+          />
+          <Heading level={3}>Image Settings</Heading>
+          <TextInput
+            label="Image source"
+            value={imageSrc}
+            onChange={setImageSrc}
+            isDisabled={imageControlsDisabled}
+          />
+          <NumberInput
+            label="Image Width"
+            value={imageW}
+            onChange={setImageW}
+            isIntegerOnly
+            isDisabled={imageControlsDisabled}
+            isWheelEnabled={false}
+          />
+          <NumberInput
+            label="Image Height"
+            value={imageH}
+            onChange={setImageH}
+            isIntegerOnly
+            isDisabled={imageControlsDisabled}
+            isWheelEnabled={false}
+          />
+          <NumberInput
+            label="Image Opacity"
+            value={imageOpacity}
+            onChange={setImageOpacity}
+            min={0}
+            max={1}
+            step={0.1}
+            isDisabled={imageControlsDisabled}
+            isWheelEnabled={false}
+          />
+          <Switch
+            label="Center Image"
+            value={centerImage}
+            onChange={setCenterImage}
+            isDisabled={imageControlsDisabled}
+          />
+          <Slider
+            label="Image X"
+            value={imageX}
+            onChange={setImageX}
+            min={0}
+            max={Math.max(0, size - imageW)}
+            isDisabled={imagePositionDisabled}
+            valueDisplay="text"
+          />
+          <Slider
+            label="Image Y"
+            value={imageY}
+            onChange={setImageY}
+            min={0}
+            max={Math.max(0, size - imageH)}
+            isDisabled={imagePositionDisabled}
+            valueDisplay="text"
+          />
+          <Switch
+            label="Excavate"
+            description="Dig foreground to nearest whole module"
+            value={imageExcavate}
+            onChange={setImageExcavate}
+            isDisabled={imageControlsDisabled}
+          />
+        </FormLayout>
+      }
+      content={
+        <Grid columns={{minWidth: 280}} gap={4}>
+          <QrPreview title="QRCodeSVG" code={svgCode}>
+            <QRCodeSVG {...renderProps} />
+          </QrPreview>
+          <QrPreview title="QRCodeCanvas" code={canvasCode}>
+            <QRCodeCanvas {...renderProps} />
+          </QrPreview>
+        </Grid>
+      }
+    />
   );
 }
 
