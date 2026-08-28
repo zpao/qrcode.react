@@ -384,6 +384,11 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isImgLoaded, setIsImageLoaded] = React.useState(false);
 
+    // Track devicePixelRatio to re-render when zoom changes
+    const [devicePixelRatio, setDevicePixelRatio] = React.useState(
+      () => (typeof window !== 'undefined' ? window.devicePixelRatio : 1) || 1
+    );
+
     const {margin, cells, numCells, calculatedImageSettings} = useQRCode({
       value,
       level,
@@ -394,6 +399,23 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       imageSettings,
       size,
     });
+
+    // Listen for resize events to detect zoom changes
+    React.useEffect(() => {
+      if (typeof window === 'undefined') return;
+
+      const handleResize = () => {
+        const newPixelRatio = window.devicePixelRatio || 1;
+        if (newPixelRatio !== devicePixelRatio) {
+          setDevicePixelRatio(newPixelRatio);
+        }
+      };
+
+      window.addEventListener('resize', handleResize);
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, [devicePixelRatio]);
 
     React.useEffect(() => {
       // Always update the canvas. It's cheap enough and we want to be correct
@@ -428,7 +450,7 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
         // matches the number of cells. This avoids rounding issues, but does
         // result in some potentially unwanted single pixel issues between
         // blocks, only in environments that don't support Path2D.
-        const pixelRatio = window.devicePixelRatio || 1;
+        const pixelRatio = devicePixelRatio;
         canvas.height = canvas.width = size * pixelRatio;
         const scale = (size / numCells) * pixelRatio;
         ctx.scale(scale, scale);
@@ -465,7 +487,17 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
           );
         }
       }
-    });
+    }, [
+      cells,
+      numCells,
+      size,
+      bgColor,
+      fgColor,
+      margin,
+      calculatedImageSettings,
+      isImgLoaded,
+      devicePixelRatio,
+    ]);
 
     // Ensure we mark image loaded as false here so we trigger updating the
     // canvas in our other effect.
