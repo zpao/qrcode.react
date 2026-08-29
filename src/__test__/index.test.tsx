@@ -1,6 +1,7 @@
 import React from 'react';
 import {QRCodeSVG, QRCodeCanvas} from '..';
-import {describe, expect, test} from '@jest/globals';
+import type {QRCodeCanvasUpdateAPIs} from '..';
+import {describe, expect, test, jest, beforeAll, afterAll} from '@jest/globals';
 import {render} from '@testing-library/react';
 import '@testing-library/jest-dom';
 
@@ -168,5 +169,62 @@ describe('`style` is passed to rendered nodes and merged correctly', () => {
   test('QRCodeCanvas', () => {
     const {container} = render(<QRCodeCanvas {...BASIC_PROPS} style={style} />);
     expect(container.firstChild).toMatchSnapshot();
+  });
+});
+
+describe('onUpdate prop', () => {
+  beforeAll(() => {
+    jest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue({
+      fillRect: jest.fn(),
+      scale: jest.fn(),
+      drawImage: jest.fn(),
+    } as unknown as CanvasRenderingContext2D);
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+
+  test('calls onUpdate with canvas APIs', () => {
+    const onUpdateMock = jest.fn();
+    render(<QRCodeCanvas {...BASIC_PROPS} onUpdate={onUpdateMock} />);
+    expect(onUpdateMock).toHaveBeenCalledTimes(1);
+    expect(onUpdateMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        toDataURL: expect.any(Function),
+        toBlob: expect.any(Function),
+      })
+    );
+  });
+
+  test('keeps api reference stable on rerenders to prevent infinite loops', () => {
+    const onUpdateMock = jest.fn();
+    const {rerender} = render(
+      <QRCodeCanvas {...BASIC_PROPS} onUpdate={onUpdateMock} />
+    );
+
+    expect(onUpdateMock).toHaveBeenCalledTimes(1);
+    const firstApis = onUpdateMock.mock.calls[0][0] as QRCodeCanvasUpdateAPIs;
+
+    // Rerender with different props (e.g. value changes)
+    rerender(
+      <QRCodeCanvas
+        {...BASIC_PROPS}
+        value="https://example.com/updated"
+        onUpdate={onUpdateMock}
+      />
+    );
+
+    expect(onUpdateMock).toHaveBeenCalledTimes(2);
+    const secondApis = onUpdateMock.mock.calls[1][0] as QRCodeCanvasUpdateAPIs;
+
+    // The API object reference must remain identical
+    expect(firstApis).toBe(secondApis);
+    expect(firstApis.toDataURL).toBe(secondApis.toDataURL);
+    expect(firstApis.toBlob).toBe(secondApis.toBlob);
+
+    // Verify calling toDataURL works and returns a string
+    const dataUrl = firstApis.toDataURL();
+    expect(typeof dataUrl).toBe('string');
   });
 });
