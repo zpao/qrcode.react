@@ -81,6 +81,7 @@ const TEST_CONFIGS: PartialQRProps[] = [
   // for ensuring minVersion is respected.
   {minVersion: 22},
   {level: 'L', boostLevel: false},
+  {maskPattern: 1},
   // Test all crossOrigin values. Important in case we remove other image
   // settings tests and to ensure we do non-obvious things like map '' to
   // 'anonymous'.

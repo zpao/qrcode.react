@@ -124,6 +124,12 @@ type QRProps = {
    */
   minVersion?: number;
   /**
+   * The masking pattern (0-7) for the QR code.
+   * @see https://en.wikipedia.org/wiki/QR_code#Encoding
+   * @defaultValue -1
+   */
+  maskPattern?: number;
+  /**
    * If enabled, the Error Correction Level of the result may be higher than
    * the specified Error Correction Level option if it can be done without
    * increasing the version.
@@ -276,6 +282,7 @@ function useQRCode({
   imageSettings,
   size,
   boostLevel,
+  maskPattern,
 }: {
   value: string | string[];
   level: ErrorCorrectionLevel;
@@ -284,6 +291,7 @@ function useQRCode({
   marginSize?: number;
   imageSettings?: ImageSettings;
   size: number;
+  maskPattern?: number;
   boostLevel?: boolean;
 }) {
   let qrcode = React.useMemo(() => {
@@ -297,10 +305,10 @@ function useQRCode({
       ERROR_LEVEL_MAP[level],
       minVersion,
       undefined,
-      undefined,
+      maskPattern,
       boostLevel
     );
-  }, [value, level, minVersion, boostLevel]);
+  }, [value, level, minVersion, maskPattern, boostLevel]);
 
   const {cells, margin, numCells, calculatedImageSettings} =
     React.useMemo(() => {
@@ -355,6 +363,7 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       fgColor = DEFAULT_FGCOLOR,
       includeMargin = DEFAULT_INCLUDEMARGIN,
       minVersion = DEFAULT_MINVERSION,
+      maskPattern,
       boostLevel,
       marginSize,
       imageSettings,
@@ -388,6 +397,7 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
       value,
       level,
       minVersion,
+      maskPattern,
       boostLevel,
       includeMargin,
       marginSize,
@@ -516,6 +526,7 @@ const QRCodeSVG = React.forwardRef<SVGSVGElement, QRPropsSVG>(
       fgColor = DEFAULT_FGCOLOR,
       includeMargin = DEFAULT_INCLUDEMARGIN,
       minVersion = DEFAULT_MINVERSION,
+      maskPattern,
       boostLevel,
       title,
       marginSize,
@@ -527,6 +538,7 @@ const QRCodeSVG = React.forwardRef<SVGSVGElement, QRPropsSVG>(
       value,
       level,
       minVersion,
+      maskPattern,
       boostLevel,
       includeMargin,
       marginSize,
