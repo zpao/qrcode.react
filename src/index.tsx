@@ -381,7 +381,7 @@ const QRCodeCanvas = React.forwardRef<HTMLCanvasElement, QRPropsCanvas>(
     // We're just using this state to trigger rerenders when images load. We
     // Don't actually read the value anywhere. A smarter use of React.useEffect would
     // depend on this value.
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // oxlint-disable-next-line no-unused-vars
     const [isImgLoaded, setIsImageLoaded] = React.useState(false);
 
     const {margin, cells, numCells, calculatedImageSettings} = useQRCode({

@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "vitest"],
+  "categories": {
+    "correctness": "error"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "ignorePatterns": ["lib/", "examples/iife/", "src/third-party/"],
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {"ignoreRestSiblings": true, "caughtErrors": "none"}
+    ],
+    "typescript/no-inferrable-types": ["error", {"ignoreParameters": true}],
+    "typescript/no-explicit-any": "error",
+    "typescript/ban-ts-comment": "error",
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/set-state-in-effect": "off",
+    "vitest/no-disabled-tests": "warn",
+    "vitest/no-focused-tests": "error",
+    "vitest/expect-expect": "error"
+  }
+}
