@@ -9,25 +9,18 @@
   ],
   "homepage": "http://zpao.github.io/qrcode.react",
   "main": "./lib/index.js",
-  "module": "./lib/esm/index.js",
   "types": "./lib/index.d.ts",
   "exports": {
     ".": {
-      "import": {
-        "types": "./lib/index.d.mts",
-        "default": "./lib/esm/index.js"
-      },
-      "require": {
-        "types": "./lib/index.d.ts",
-        "default": "./lib/index.js"
-      }
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
     }
   },
   "scripts": {
     "build": "pnpm run build:code && pnpm run build:examples",
-    "build:code": "tsup src/index.tsx -d lib --format esm,cjs --dts --legacy-output --target=es2017 --platform=browser",
-    "build:examples": "tsup examples/demo.tsx -d examples --format iife --env.NODE_ENV production --minify --target=es2017 --legacy-output",
-    "build:examples:dev": "tsup examples/demo.tsx -d examples --format iife --env.NODE_ENV development --target=es2017 --legacy-output",
+    "build:code": "tsdown --filter lib",
+    "build:examples": "tsdown --filter examples",
+    "build:examples:dev": "NODE_ENV=development tsdown --filter examples",
     "lint": "oxlint && oxfmt --check",
     "pretty": "oxfmt",
     "prepack": "make clean && make all && pnpm run typecheck",
@@ -64,9 +57,10 @@
     "oxlint": "^1.86.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "tsup": "^8.5.1",
+    "tsdown": "^0.23.0",
     "typescript": "^6.0.3",
     "vitest": "^5.0.3"
   },
-  "packageManager": "pnpm@11.7.0+sha512.19cc852c120c7125760f2443ee6be0ca5b40f9f50598de1a09a1f177503e010e57c23c77646e01e761de59bf874fb22a3398c33ab9691fc13eb946b6f0f4d620"
+  "packageManager": "pnpm@11.7.0+sha512.19cc852c120c7125760f2443ee6be0ca5b40f9f50598de1a09a1f177503e010e57c23c77646e01e761de59bf874fb22a3398c33ab9691fc13eb946b6f0f4d620",
+  "type": "module"
 }
