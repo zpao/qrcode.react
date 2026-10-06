@@ -1,8 +1,6 @@
 import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import prettierConfig from 'eslint-config-prettier';
-import prettier from 'eslint-plugin-prettier';
 import reactHooks from 'eslint-plugin-react-hooks';
 import vitest from '@vitest/eslint-plugin';
 import globals from 'globals';
@@ -98,15 +96,6 @@ export default [
         'error',
         {ignoreParameters: true},
       ],
-    },
-  },
-  {
-    plugins: {
-      prettier,
-    },
-    rules: {
-      ...prettierConfig.rules,
-      'prettier/prettier': 'error',
     },
   },
 ];

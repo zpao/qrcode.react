@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "bracketSpacing": false,
+  "bracketSameLine": true,
+  "arrowParens": "always",
+  "printWidth": 80,
+  "sortPackageJson": false,
+  "ignorePatterns": [
+    "package.json",
+    "node_modules",
+    "lib",
+    "examples/bundle.js",
+    "third-party",
+    "CHANGELOG.md",
+    "examples/iife",
+    "pnpm-lock.yaml"
+  ]
+}
