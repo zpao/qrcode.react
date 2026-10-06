@@ -44,65 +44,68 @@ const BASE_IMAGE_SETTINGS = {
   excavate: true,
 };
 
-const TEST_CONFIGS: PartialQRProps[] = [
-  {includeMargin: true},
-  {includeMargin: false},
-  {level: 'L'},
-  {level: 'M'},
-  {level: 'Q'},
-  {level: 'H'},
-  {
-    imageSettings: {
-      ...BASE_IMAGE_SETTINGS,
-      excavate: true,
-    },
-  },
-  {
-    imageSettings: {
-      ...BASE_IMAGE_SETTINGS,
-      excavate: false,
-    },
-  },
-  {value: '1234567890'},
-  {value: ['12345', '/ABC/DEF', 'abcDEF123']},
-  {value: 'single byte emoji ✅'},
-  {value: 'double byte emoji 👌'},
-  {value: 'four byte emoji 👌🏽'},
-  {value: '火と氷'},
+const TEST_CONFIGS: Array<[string, PartialQRProps]> = [
+  ['includeMargin true', {includeMargin: true}],
+  ['includeMargin false', {includeMargin: false}],
+  ['level L', {level: 'L'}],
+  ['level M', {level: 'M'}],
+  ['level Q', {level: 'Q'}],
+  ['level H', {level: 'H'}],
+  [
+    'imageSettings excavate true',
+    {imageSettings: {...BASE_IMAGE_SETTINGS, excavate: true}},
+  ],
+  [
+    'imageSettings excavate false',
+    {imageSettings: {...BASE_IMAGE_SETTINGS, excavate: false}},
+  ],
+  ['numeric value', {value: '1234567890'}],
+  ['multiple segments', {value: ['12345', '/ABC/DEF', 'abcDEF123']}],
+  ['single byte emoji', {value: 'single byte emoji ✅'}],
+  ['double byte emoji', {value: 'double byte emoji 👌'}],
+  ['four byte emoji', {value: 'four byte emoji 👌🏽'}],
+  ['CJK value', {value: '火と氷'}],
   // The snapshots for these are only useful for SVG & looking at widths.
-  {includeMargin: true, marginSize: 10},
-  {includeMargin: true, marginSize: 0},
-  {includeMargin: false, marginSize: 8},
-  {includeMargin: false, marginSize: 6.5},
-  {marginSize: -10},
-  {title: 'some descriptive title'},
+  ['includeMargin true, marginSize 10', {includeMargin: true, marginSize: 10}],
+  ['includeMargin true, marginSize 0', {includeMargin: true, marginSize: 0}],
+  ['includeMargin false, marginSize 8', {includeMargin: false, marginSize: 8}],
+  [
+    'includeMargin false, marginSize 6.5',
+    {includeMargin: false, marginSize: 6.5},
+  ],
+  ['negative marginSize', {marginSize: -10}],
+  ['title', {title: 'some descriptive title'}],
   // With our really small value, auto versioning would be really small. We
   // aren't encoding version anywhere testable, so this will be a proxy test
   // for ensuring minVersion is respected.
-  {minVersion: 22},
-  {level: 'L', boostLevel: false},
+  ['minVersion 22', {minVersion: 22}],
+  ['level L, boostLevel false', {level: 'L', boostLevel: false}],
   // Test all crossOrigin values. Important in case we remove other image
   // settings tests and to ensure we do non-obvious things like map '' to
   // 'anonymous'.
-  ...([undefined, '', 'anonymous', 'use-credentials'] as CrossOrigin[]).map(
-    (crossOrigin) => {
-      return {
-        imageSettings: {
-          ...BASE_IMAGE_SETTINGS,
-          crossOrigin: crossOrigin,
-        },
-      };
-    }
-  ),
+  ...(
+    [
+      ['undefined', undefined],
+      ['empty string', ''],
+      ['anonymous', 'anonymous'],
+      ['use-credentials', 'use-credentials'],
+    ] as Array<[string, CrossOrigin]>
+  ).map(([label, crossOrigin]): [string, PartialQRProps] => [
+    `imageSettings crossOrigin ${label}`,
+    {imageSettings: {...BASE_IMAGE_SETTINGS, crossOrigin}},
+  ]),
   // Data URI. Make sure it's possible. This will also be the only case where
   // the embedded image is in the snapshot.
-  {
-    imageSettings: {
-      ...BASE_IMAGE_SETTINGS,
-      // 24x24 red PNG
-      src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAADVJREFUSEvt0rEJAAAMAkHdf+hkhK9S5a0F4bCTTA5TB0hXIhKKRBKhABZ8kUQogAVf9IBoAYUiL+kU3konAAAAAElFTkSuQmCC',
+  [
+    'imageSettings data URI',
+    {
+      imageSettings: {
+        ...BASE_IMAGE_SETTINGS,
+        // 24x24 red PNG
+        src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAADVJREFUSEvt0rEJAAAMAkHdf+hkhK9S5a0F4bCTTA5TB0hXIhKKRBKhABZ8kUQogAVf9IBoAYUiL+kU3konAAAAAElFTkSuQmCC',
+      },
     },
-  },
+  ],
 ];
 
 describe('SVG rendering', () => {
@@ -111,7 +114,7 @@ describe('SVG rendering', () => {
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  test.each(TEST_CONFIGS)('renders SVG variation (%o) correctly', (config) => {
+  test.each(TEST_CONFIGS)('renders SVG variation: %s', (_name, config) => {
     const {container} = render(<QRCodeSVG {...BASIC_PROPS} {...config} />);
     expect(container.firstChild).toMatchSnapshot();
   });
@@ -123,16 +126,13 @@ describe('Canvas rendering', () => {
     expect(container.firstChild).toMatchSnapshot();
   });
 
-  test.each(TEST_CONFIGS)(
-    'renders Canvas variation (%o) correctly',
-    (config) => {
-      const {container} = render(<QRCodeCanvas {...BASIC_PROPS} {...config} />);
-      // Some of these render an embedded image. Internally that results in
-      // rendering an additional DOM node (<img>). We should make sure that's
-      // there.
-      expect(Array.from(container.children)).toMatchSnapshot();
-    }
-  );
+  test.each(TEST_CONFIGS)('renders Canvas variation: %s', (_name, config) => {
+    const {container} = render(<QRCodeCanvas {...BASIC_PROPS} {...config} />);
+    // Some of these render an embedded image. Internally that results in
+    // rendering an additional DOM node (<img>). We should make sure that's
+    // there.
+    expect(Array.from(container.children)).toMatchSnapshot();
+  });
 });
 
 describe('TypeScript Support', () => {
