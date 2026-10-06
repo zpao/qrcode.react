@@ -2,9 +2,9 @@ import js from '@eslint/js';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import prettierConfig from 'eslint-config-prettier';
-import jest from 'eslint-plugin-jest';
 import prettier from 'eslint-plugin-prettier';
 import reactHooks from 'eslint-plugin-react-hooks';
+import vitest from '@vitest/eslint-plugin';
 import globals from 'globals';
 
 const tsFiles = ['**/*.{ts,tsx,mts,cts}'];
@@ -80,7 +80,7 @@ export default [
       'src/**/__test__/**/*.{ts,tsx}',
       'src/**/__tests__/**/*.{ts,tsx}',
     ],
-    ...jest.configs['flat/recommended'],
+    ...vitest.configs.recommended,
   },
   {
     rules: {
