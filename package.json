@@ -20,7 +20,7 @@
     "build": "pnpm run build:code && pnpm run build:examples",
     "build:code": "tsdown --filter lib",
     "build:examples": "tsdown --filter examples",
-    "build:examples:dev": "NODE_ENV=development tsdown --filter examples",
+    "build:examples:dev": "tsdown --filter examples --no-minify --env.NODE_ENV=development",
     "lint": "oxlint && oxfmt --check",
     "pretty": "oxfmt",
     "prepack": "make clean && make all && pnpm run typecheck",
