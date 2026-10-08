@@ -14,7 +14,7 @@ npm install qrcode.react
 
 `qrcode.react` exports two components, supporting rendering as SVG or Canvas. SVG is generally recommended as it is more flexible, but Canvas may be preferable.
 
-All examples are shown using modern JavaScript modules and syntax. CommonJS `require('qrcode.react')` is also supported.
+All examples are shown using modern JavaScript modules and syntax. The package is ESM-only.
 
 ### `QRCodeSVG`
 
