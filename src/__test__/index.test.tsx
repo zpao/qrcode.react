@@ -1,8 +1,7 @@
 import React from 'react';
 import {QRCodeSVG, QRCodeCanvas} from '..';
-import {describe, expect, test} from '@jest/globals';
+import {describe, expect, test} from 'vitest';
 import {render} from '@testing-library/react';
-import '@testing-library/jest-dom';
 
 import type {ComponentPropsWithoutRef} from 'react';
 

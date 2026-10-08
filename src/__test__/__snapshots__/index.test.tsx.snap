@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`\`style\` is passed to rendered nodes and merged correctly QRCodeCanvas 1`] = `
+exports[`\`style\` is passed to rendered nodes and merged correctly > QRCodeCanvas 1`] = `
 <canvas
   height="128"
   role="img"
@@ -9,7 +9,7 @@ exports[`\`style\` is passed to rendered nodes and merged correctly QRCodeCanvas
 />
 `;
 
-exports[`\`style\` is passed to rendered nodes and merged correctly QRCodeSVG 1`] = `
+exports[`\`style\` is passed to rendered nodes and merged correctly > QRCodeSVG 1`] = `
 <svg
   height="128"
   role="img"
@@ -30,7 +30,7 @@ exports[`\`style\` is passed to rendered nodes and merged correctly QRCodeSVG 1`
 </svg>
 `;
 
-exports[`Canvas rendering renders Canvas variation: CJK value 1`] = `
+exports[`Canvas rendering > renders Canvas variation: CJK value 1`] = `
 [
   <canvas
     height="128"
@@ -41,7 +41,7 @@ exports[`Canvas rendering renders Canvas variation: CJK value 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: double byte emoji 1`] = `
+exports[`Canvas rendering > renders Canvas variation: double byte emoji 1`] = `
 [
   <canvas
     height="128"
@@ -52,7 +52,7 @@ exports[`Canvas rendering renders Canvas variation: double byte emoji 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: four byte emoji 1`] = `
+exports[`Canvas rendering > renders Canvas variation: four byte emoji 1`] = `
 [
   <canvas
     height="128"
@@ -63,7 +63,7 @@ exports[`Canvas rendering renders Canvas variation: four byte emoji 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: imageSettings crossOrigin anonymous 1`] = `
+exports[`Canvas rendering > renders Canvas variation: imageSettings crossOrigin anonymous 1`] = `
 [
   <canvas
     height="128"
@@ -79,7 +79,7 @@ exports[`Canvas rendering renders Canvas variation: imageSettings crossOrigin an
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: imageSettings crossOrigin empty string 1`] = `
+exports[`Canvas rendering > renders Canvas variation: imageSettings crossOrigin empty string 1`] = `
 [
   <canvas
     height="128"
@@ -95,7 +95,7 @@ exports[`Canvas rendering renders Canvas variation: imageSettings crossOrigin em
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: imageSettings crossOrigin undefined 1`] = `
+exports[`Canvas rendering > renders Canvas variation: imageSettings crossOrigin undefined 1`] = `
 [
   <canvas
     height="128"
@@ -110,7 +110,7 @@ exports[`Canvas rendering renders Canvas variation: imageSettings crossOrigin un
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: imageSettings crossOrigin use-credentials 1`] = `
+exports[`Canvas rendering > renders Canvas variation: imageSettings crossOrigin use-credentials 1`] = `
 [
   <canvas
     height="128"
@@ -126,7 +126,7 @@ exports[`Canvas rendering renders Canvas variation: imageSettings crossOrigin us
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: imageSettings data URI 1`] = `
+exports[`Canvas rendering > renders Canvas variation: imageSettings data URI 1`] = `
 [
   <canvas
     height="128"
@@ -141,7 +141,7 @@ exports[`Canvas rendering renders Canvas variation: imageSettings data URI 1`] =
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: imageSettings excavate false 1`] = `
+exports[`Canvas rendering > renders Canvas variation: imageSettings excavate false 1`] = `
 [
   <canvas
     height="128"
@@ -156,7 +156,7 @@ exports[`Canvas rendering renders Canvas variation: imageSettings excavate false
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: imageSettings excavate true 1`] = `
+exports[`Canvas rendering > renders Canvas variation: imageSettings excavate true 1`] = `
 [
   <canvas
     height="128"
@@ -171,7 +171,7 @@ exports[`Canvas rendering renders Canvas variation: imageSettings excavate true 
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: includeMargin false 1`] = `
+exports[`Canvas rendering > renders Canvas variation: includeMargin false 1`] = `
 [
   <canvas
     height="128"
@@ -182,7 +182,7 @@ exports[`Canvas rendering renders Canvas variation: includeMargin false 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: includeMargin false, marginSize 6.5 1`] = `
+exports[`Canvas rendering > renders Canvas variation: includeMargin false, marginSize 6.5 1`] = `
 [
   <canvas
     height="128"
@@ -193,7 +193,7 @@ exports[`Canvas rendering renders Canvas variation: includeMargin false, marginS
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: includeMargin false, marginSize 8 1`] = `
+exports[`Canvas rendering > renders Canvas variation: includeMargin false, marginSize 8 1`] = `
 [
   <canvas
     height="128"
@@ -204,7 +204,7 @@ exports[`Canvas rendering renders Canvas variation: includeMargin false, marginS
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: includeMargin true 1`] = `
+exports[`Canvas rendering > renders Canvas variation: includeMargin true 1`] = `
 [
   <canvas
     height="128"
@@ -215,7 +215,7 @@ exports[`Canvas rendering renders Canvas variation: includeMargin true 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: includeMargin true, marginSize 0 1`] = `
+exports[`Canvas rendering > renders Canvas variation: includeMargin true, marginSize 0 1`] = `
 [
   <canvas
     height="128"
@@ -226,7 +226,7 @@ exports[`Canvas rendering renders Canvas variation: includeMargin true, marginSi
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: includeMargin true, marginSize 10 1`] = `
+exports[`Canvas rendering > renders Canvas variation: includeMargin true, marginSize 10 1`] = `
 [
   <canvas
     height="128"
@@ -237,7 +237,7 @@ exports[`Canvas rendering renders Canvas variation: includeMargin true, marginSi
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: level H 1`] = `
+exports[`Canvas rendering > renders Canvas variation: level H 1`] = `
 [
   <canvas
     height="128"
@@ -248,7 +248,7 @@ exports[`Canvas rendering renders Canvas variation: level H 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: level L 1`] = `
+exports[`Canvas rendering > renders Canvas variation: level L 1`] = `
 [
   <canvas
     height="128"
@@ -259,7 +259,7 @@ exports[`Canvas rendering renders Canvas variation: level L 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: level L, boostLevel false 1`] = `
+exports[`Canvas rendering > renders Canvas variation: level L, boostLevel false 1`] = `
 [
   <canvas
     height="128"
@@ -270,7 +270,7 @@ exports[`Canvas rendering renders Canvas variation: level L, boostLevel false 1`
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: level M 1`] = `
+exports[`Canvas rendering > renders Canvas variation: level M 1`] = `
 [
   <canvas
     height="128"
@@ -281,7 +281,7 @@ exports[`Canvas rendering renders Canvas variation: level M 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: level Q 1`] = `
+exports[`Canvas rendering > renders Canvas variation: level Q 1`] = `
 [
   <canvas
     height="128"
@@ -292,7 +292,7 @@ exports[`Canvas rendering renders Canvas variation: level Q 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: minVersion 22 1`] = `
+exports[`Canvas rendering > renders Canvas variation: minVersion 22 1`] = `
 [
   <canvas
     height="128"
@@ -303,7 +303,7 @@ exports[`Canvas rendering renders Canvas variation: minVersion 22 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: multiple segments 1`] = `
+exports[`Canvas rendering > renders Canvas variation: multiple segments 1`] = `
 [
   <canvas
     height="128"
@@ -314,7 +314,7 @@ exports[`Canvas rendering renders Canvas variation: multiple segments 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: negative marginSize 1`] = `
+exports[`Canvas rendering > renders Canvas variation: negative marginSize 1`] = `
 [
   <canvas
     height="128"
@@ -325,7 +325,7 @@ exports[`Canvas rendering renders Canvas variation: negative marginSize 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: numeric value 1`] = `
+exports[`Canvas rendering > renders Canvas variation: numeric value 1`] = `
 [
   <canvas
     height="128"
@@ -336,7 +336,7 @@ exports[`Canvas rendering renders Canvas variation: numeric value 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: single byte emoji 1`] = `
+exports[`Canvas rendering > renders Canvas variation: single byte emoji 1`] = `
 [
   <canvas
     height="128"
@@ -347,7 +347,7 @@ exports[`Canvas rendering renders Canvas variation: single byte emoji 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders Canvas variation: title 1`] = `
+exports[`Canvas rendering > renders Canvas variation: title 1`] = `
 [
   <canvas
     height="128"
@@ -359,7 +359,7 @@ exports[`Canvas rendering renders Canvas variation: title 1`] = `
 ]
 `;
 
-exports[`Canvas rendering renders basic Canvas correctly 1`] = `
+exports[`Canvas rendering > renders basic Canvas correctly 1`] = `
 <canvas
   height="128"
   role="img"
@@ -368,7 +368,7 @@ exports[`Canvas rendering renders basic Canvas correctly 1`] = `
 />
 `;
 
-exports[`SVG rendering renders SVG variation: CJK value 1`] = `
+exports[`SVG rendering > renders SVG variation: CJK value 1`] = `
 <svg
   height="128"
   role="img"
@@ -388,7 +388,7 @@ exports[`SVG rendering renders SVG variation: CJK value 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: double byte emoji 1`] = `
+exports[`SVG rendering > renders SVG variation: double byte emoji 1`] = `
 <svg
   height="128"
   role="img"
@@ -408,7 +408,7 @@ exports[`SVG rendering renders SVG variation: double byte emoji 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: four byte emoji 1`] = `
+exports[`SVG rendering > renders SVG variation: four byte emoji 1`] = `
 <svg
   height="128"
   role="img"
@@ -428,7 +428,7 @@ exports[`SVG rendering renders SVG variation: four byte emoji 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: imageSettings crossOrigin anonymous 1`] = `
+exports[`SVG rendering > renders SVG variation: imageSettings crossOrigin anonymous 1`] = `
 <svg
   height="128"
   role="img"
@@ -458,7 +458,7 @@ exports[`SVG rendering renders SVG variation: imageSettings crossOrigin anonymou
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: imageSettings crossOrigin empty string 1`] = `
+exports[`SVG rendering > renders SVG variation: imageSettings crossOrigin empty string 1`] = `
 <svg
   height="128"
   role="img"
@@ -488,7 +488,7 @@ exports[`SVG rendering renders SVG variation: imageSettings crossOrigin empty st
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: imageSettings crossOrigin undefined 1`] = `
+exports[`SVG rendering > renders SVG variation: imageSettings crossOrigin undefined 1`] = `
 <svg
   height="128"
   role="img"
@@ -517,7 +517,7 @@ exports[`SVG rendering renders SVG variation: imageSettings crossOrigin undefine
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: imageSettings crossOrigin use-credentials 1`] = `
+exports[`SVG rendering > renders SVG variation: imageSettings crossOrigin use-credentials 1`] = `
 <svg
   height="128"
   role="img"
@@ -547,7 +547,7 @@ exports[`SVG rendering renders SVG variation: imageSettings crossOrigin use-cred
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: imageSettings data URI 1`] = `
+exports[`SVG rendering > renders SVG variation: imageSettings data URI 1`] = `
 <svg
   height="128"
   role="img"
@@ -576,7 +576,7 @@ exports[`SVG rendering renders SVG variation: imageSettings data URI 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: imageSettings excavate false 1`] = `
+exports[`SVG rendering > renders SVG variation: imageSettings excavate false 1`] = `
 <svg
   height="128"
   role="img"
@@ -605,7 +605,7 @@ exports[`SVG rendering renders SVG variation: imageSettings excavate false 1`] =
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: imageSettings excavate true 1`] = `
+exports[`SVG rendering > renders SVG variation: imageSettings excavate true 1`] = `
 <svg
   height="128"
   role="img"
@@ -634,7 +634,7 @@ exports[`SVG rendering renders SVG variation: imageSettings excavate true 1`] = 
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: includeMargin false 1`] = `
+exports[`SVG rendering > renders SVG variation: includeMargin false 1`] = `
 <svg
   height="128"
   role="img"
@@ -654,7 +654,7 @@ exports[`SVG rendering renders SVG variation: includeMargin false 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: includeMargin false, marginSize 6.5 1`] = `
+exports[`SVG rendering > renders SVG variation: includeMargin false, marginSize 6.5 1`] = `
 <svg
   height="128"
   role="img"
@@ -674,7 +674,7 @@ exports[`SVG rendering renders SVG variation: includeMargin false, marginSize 6.
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: includeMargin false, marginSize 8 1`] = `
+exports[`SVG rendering > renders SVG variation: includeMargin false, marginSize 8 1`] = `
 <svg
   height="128"
   role="img"
@@ -694,7 +694,7 @@ exports[`SVG rendering renders SVG variation: includeMargin false, marginSize 8 
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: includeMargin true 1`] = `
+exports[`SVG rendering > renders SVG variation: includeMargin true 1`] = `
 <svg
   height="128"
   role="img"
@@ -714,7 +714,7 @@ exports[`SVG rendering renders SVG variation: includeMargin true 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: includeMargin true, marginSize 0 1`] = `
+exports[`SVG rendering > renders SVG variation: includeMargin true, marginSize 0 1`] = `
 <svg
   height="128"
   role="img"
@@ -734,7 +734,7 @@ exports[`SVG rendering renders SVG variation: includeMargin true, marginSize 0 1
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: includeMargin true, marginSize 10 1`] = `
+exports[`SVG rendering > renders SVG variation: includeMargin true, marginSize 10 1`] = `
 <svg
   height="128"
   role="img"
@@ -754,7 +754,7 @@ exports[`SVG rendering renders SVG variation: includeMargin true, marginSize 10 
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: level H 1`] = `
+exports[`SVG rendering > renders SVG variation: level H 1`] = `
 <svg
   height="128"
   role="img"
@@ -774,7 +774,7 @@ exports[`SVG rendering renders SVG variation: level H 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: level L 1`] = `
+exports[`SVG rendering > renders SVG variation: level L 1`] = `
 <svg
   height="128"
   role="img"
@@ -794,7 +794,7 @@ exports[`SVG rendering renders SVG variation: level L 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: level L, boostLevel false 1`] = `
+exports[`SVG rendering > renders SVG variation: level L, boostLevel false 1`] = `
 <svg
   height="128"
   role="img"
@@ -814,7 +814,7 @@ exports[`SVG rendering renders SVG variation: level L, boostLevel false 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: level M 1`] = `
+exports[`SVG rendering > renders SVG variation: level M 1`] = `
 <svg
   height="128"
   role="img"
@@ -834,7 +834,7 @@ exports[`SVG rendering renders SVG variation: level M 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: level Q 1`] = `
+exports[`SVG rendering > renders SVG variation: level Q 1`] = `
 <svg
   height="128"
   role="img"
@@ -854,7 +854,7 @@ exports[`SVG rendering renders SVG variation: level Q 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: minVersion 22 1`] = `
+exports[`SVG rendering > renders SVG variation: minVersion 22 1`] = `
 <svg
   height="128"
   role="img"
@@ -874,7 +874,7 @@ exports[`SVG rendering renders SVG variation: minVersion 22 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: multiple segments 1`] = `
+exports[`SVG rendering > renders SVG variation: multiple segments 1`] = `
 <svg
   height="128"
   role="img"
@@ -894,7 +894,7 @@ exports[`SVG rendering renders SVG variation: multiple segments 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: negative marginSize 1`] = `
+exports[`SVG rendering > renders SVG variation: negative marginSize 1`] = `
 <svg
   height="128"
   role="img"
@@ -914,7 +914,7 @@ exports[`SVG rendering renders SVG variation: negative marginSize 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: numeric value 1`] = `
+exports[`SVG rendering > renders SVG variation: numeric value 1`] = `
 <svg
   height="128"
   role="img"
@@ -934,7 +934,7 @@ exports[`SVG rendering renders SVG variation: numeric value 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: single byte emoji 1`] = `
+exports[`SVG rendering > renders SVG variation: single byte emoji 1`] = `
 <svg
   height="128"
   role="img"
@@ -954,7 +954,7 @@ exports[`SVG rendering renders SVG variation: single byte emoji 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders SVG variation: title 1`] = `
+exports[`SVG rendering > renders SVG variation: title 1`] = `
 <svg
   height="128"
   role="img"
@@ -977,7 +977,7 @@ exports[`SVG rendering renders SVG variation: title 1`] = `
 </svg>
 `;
 
-exports[`SVG rendering renders basic SVG correctly 1`] = `
+exports[`SVG rendering > renders basic SVG correctly 1`] = `
 <svg
   height="128"
   role="img"
